@@ -208,12 +208,33 @@ var App = (function () {
         ' data-falar="' + frase.replace(/"/g, '') + '">🔊</button>';
       lista.appendChild(li);
     });
+    ladoDaFicha = 'a';
     $('#planet-sheet').hidden = false;
     falarFicha(astro);
     fichaAberta = astro;
   }
 
   var fichaAberta = null;
+  var ladoDaFicha = 'a';
+
+  /* Cada astro tem duas artes. Na Terra as duas são de verdade o outro
+     lado do planeta; nos demais é outro ângulo e outra luz. */
+  function girarFicha() {
+    if (!fichaAberta) return;
+    var caixa = $('#sheet-art');
+    var img = caixa.querySelector('.orbe');
+    if (!img) return;
+    ladoDaFicha = ladoDaFicha === 'a' ? 'b' : 'a';
+    var novo = 'img/planeta-' + fichaAberta.id + (ladoDaFicha === 'b' ? '-b' : '') + '.webp';
+    Som.tocar('zap');
+    caixa.classList.add('is-trocando');
+    setTimeout(function () {
+      img.onerror = function () { img.src = 'img/planeta-' + fichaAberta.id + '.webp'; ladoDaFicha = 'a'; };
+      img.src = novo;
+      caixa.classList.remove('is-trocando');
+    }, 280);
+  }
+
   function falarFicha(astro) {
     var texto = astro.nome + '. ' + astro.tag + '. ' +
                 astro.fatos.map(function (f) { return f.replace(/^\S+\s/, ''); }).join(' ');
@@ -273,6 +294,7 @@ var App = (function () {
     /* ficha do planeta */
     $$('[data-close-sheet]').forEach(function (b) { b.addEventListener('click', fecharFicha); });
     $('#sheet-speak').addEventListener('click', function () { if (fichaAberta) falarFicha(fichaAberta); });
+    $('#sheet-girar').addEventListener('click', girarFicha);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !$('#planet-sheet').hidden) fecharFicha();
     });

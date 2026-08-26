@@ -412,6 +412,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .screen--quiz.is-space .speak-btn,.sheet .speak-btn{background:rgba(255,255,255,.16);box-shadow:none;color:#fff}
 .speak-btn:active{transform:translateY(3px);box-shadow:none}
 .speak-btn--wide{width:100%;height:60px;border-radius:20px;font-size:18px;font-weight:800;gap:8px}
+.sheet__botoes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet__botoes .speak-btn--wide{font-size:16px;height:56px;gap:6px}
+.sheet__art .orbe{transition:opacity .28s ease, transform .28s ease}
+.sheet__art.is-trocando .orbe{opacity:0;transform:scale(.94)}
 
 .options{display:flex;flex-direction:column;gap:12px;padding-bottom:4px}
 .opt-linha{display:flex;align-items:stretch;gap:10px}

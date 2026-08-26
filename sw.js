@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v8';
+var CACHE = 'mundo-da-lara-v9';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -27,14 +27,23 @@ var ARQUIVOS = [
   'img/fundo-home.webp',
   'img/fundo-inicio.webp',
   'img/fundo-velha.webp',
+  'img/planeta-jupiter-b.webp',
   'img/planeta-jupiter.webp',
+  'img/planeta-marte-b.webp',
   'img/planeta-marte.webp',
+  'img/planeta-mercurio-b.webp',
   'img/planeta-mercurio.webp',
+  'img/planeta-netuno-b.webp',
   'img/planeta-netuno.webp',
+  'img/planeta-saturno-b.webp',
   'img/planeta-saturno.webp',
+  'img/planeta-sol-b.webp',
   'img/planeta-sol.webp',
+  'img/planeta-terra-b.webp',
   'img/planeta-terra.webp',
+  'img/planeta-urano-b.webp',
   'img/planeta-urano.webp',
+  'img/planeta-venus-b.webp',
   'img/planeta-venus.webp'
 ];
 
