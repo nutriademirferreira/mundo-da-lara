@@ -88,6 +88,21 @@ var Jogo = (function () {
 
   var POR_SESSAO = 10;
 
+  /* coleção: quais palavras ela já viu alguma vez (não zera entre sessões) */
+  function palavrasVistas() {
+    try {
+      var v = JSON.parse(localStorage.getItem('lara.palavras.vistas') || '[]');
+      return Array.isArray(v) ? v.filter(function (i) { return typeof i === 'number'; }) : [];
+    } catch (e) { return []; }
+  }
+  function marcarVista(indice) {
+    var v = palavrasVistas();
+    if (v.indexOf(indice) === -1) {
+      v.push(indice);
+      try { localStorage.setItem('lara.palavras.vistas', JSON.stringify(v)); } catch (e) {}
+    }
+  }
+
   /* Baralho das 30 palavras: cada sessão tira 10 de cima e guarda o resto.
      Assim ela passa pelas 30 sem repetir antes de o baralho virar de novo. */
   function sortearFases() {
@@ -103,6 +118,7 @@ var Jogo = (function () {
     }
 
     var escolhidas = deck.slice(0, POR_SESSAO);
+    escolhidas.forEach(marcarVista);
     try { localStorage.setItem('lara.palavras.baralho', JSON.stringify(deck.slice(POR_SESSAO))); } catch (e) {}
     return escolhidas.map(function (i) { return Palavras.FASES[i]; });
   }
@@ -313,10 +329,23 @@ var Jogo = (function () {
     var caixa = $('#result-stars');
     caixa.innerHTML = '';
     for (var i = 0; i < acertos; i++) {
-      var s = document.createElement('span');
-      s.textContent = '⭐';
+      var s = document.createElement('img');
+      s.src = 'img/estrela.webp'; s.alt = '';
       s.style.animationDelay = (i * 0.09) + 's';
       caixa.appendChild(s);
+    }
+
+    /* coleção de palavras: quantas das 30 ela já conheceu */
+    var colecao = $('#result-colecao');
+    if (colecao) {
+      if (estado.tipo === 'palavras') {
+        var vistas = palavrasVistas();
+        colecao.hidden = false;
+        colecao.textContent = 'Você já conheceu ' + vistas.length + ' das ' +
+                              Palavras.FASES.length + ' palavras';
+      } else {
+        colecao.hidden = true;
+      }
     }
 
     var fala = perfeito
@@ -341,6 +370,7 @@ var Jogo = (function () {
     iniciar: iniciar, tipoAtual: tipoAtual, repetirFala: repetirFala,
     pintarEstrelas: pintarEstrelas, confete: confete, embaralhar: embaralhar,
     cancelarRodada: function () { clearTimeout(proximaRodada); },
+    palavrasVistas: palavrasVistas,
     ganharEstrela: guardarEstrela
   };
 })();

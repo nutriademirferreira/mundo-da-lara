@@ -33,6 +33,7 @@
       <img class="start-lara" src="img/lara-oi.webp" alt="" draggable="false">
       <h1 class="start-title">Mundo da<br><span>Lara</span></h1>
       <p class="start-sub">Jogos para aprender brincando</p>
+      <p class="aviso-voz" id="aviso-voz" hidden></p>
       <button class="btn-start" id="btn-start" type="button">
         <span class="btn-start__icon">▶</span>
         <span>Começar</span>
@@ -54,7 +55,7 @@
 
     <div class="star-linha">
       <div class="star-bar">
-        <span class="star-bar__star">⭐</span>
+        <img class="estrela-icone estrela-icone--grande" src="img/estrela.webp" alt="">
         <span class="star-bar__count" id="star-total">0</span>
         <span class="star-bar__label">estrelinhas</span>
       </div>
@@ -108,7 +109,7 @@
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Corpo Humano</h2>
-      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
 
     <div class="grupo">
@@ -178,7 +179,7 @@
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Sistema Solar</h2>
-      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
     <div class="modes">
       <div class="mode-wrap">
@@ -275,7 +276,7 @@
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Jogo da Velha</h2>
-      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
     <div class="modes">
       <div class="mode-wrap">
@@ -304,7 +305,7 @@
     <header class="bar">
       <button class="icon-btn" data-go="velha-menu" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title" id="velha-titulo">Jogo da Velha</h2>
-      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
 
     <div class="placar" id="velha-placar">
@@ -331,7 +332,7 @@
     <header class="bar">
       <button class="icon-btn" id="quiz-back" type="button" aria-label="Voltar">←</button>
       <div class="progress" id="quiz-progress"></div>
-      <span class="bar__stars">⭐ <b id="quiz-stars">0</b></span>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b id="quiz-stars">0</b></span>
     </header>
 
     <div class="quiz-stage" id="quiz-stage"></div>
@@ -351,6 +352,7 @@
       <div class="result-emoji" id="result-emoji">🏆</div>
       <h2 id="result-title">Muito bem, Lara!</h2>
       <p class="result-score"><b id="result-hits">0</b> de <b id="result-total">10</b> certinhas</p>
+      <p class="result-colecao" id="result-colecao" hidden></p>
       <div class="result-stars" id="result-stars"></div>
       <button class="som-btn som-btn--mini" id="result-som" type="button"
               data-falar="Muito bem, Lara!" aria-label="Ouvir o resultado">🔊</button>

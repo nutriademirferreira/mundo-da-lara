@@ -1,11 +1,11 @@
 {
- "sol": 0.8843,
- "mercurio": 0.9957,
- "venus": 0.9957,
- "terra": 0.8,
- "marte": 0.9957,
- "jupiter": 0.9957,
- "saturno": 0.4557,
- "urano": 0.7729,
- "netuno": 0.8314
+ "sol": 0.9862,
+ "mercurio": 0.9402,
+ "venus": 0.9868,
+ "terra": 0.989,
+ "marte": 0.9638,
+ "jupiter": 0.7869,
+ "saturno": 0.9204,
+ "urano": 0.8905,
+ "netuno": 0.9863
 }

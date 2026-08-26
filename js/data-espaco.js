@@ -124,15 +124,15 @@ var Espaco = (function () {
   /* Diâmetro real em km e quanto da altura do quadro a bola ocupa em cada
      arte — sem isso a proporção entre os planetas viraria mentira. */
   var REAIS = {
-    sol:      { km: 1392700, bola: 0.884 },
-    mercurio: { km:    4879, bola: 0.996 },
-    venus:    { km:   12104, bola: 0.996 },
-    terra:    { km:   12742, bola: 0.800 },
-    marte:    { km:    6779, bola: 0.996 },
-    jupiter:  { km:  139820, bola: 0.996 },
-    saturno:  { km:  116460, bola: 0.456 },
-    urano:    { km:   50724, bola: 0.773 },
-    netuno:   { km:   49244, bola: 0.831 }
+    sol:      { km: 1392700, bola: 0.9862 },
+    mercurio: { km:    4879, bola: 0.9402 },
+    venus:    { km:   12104, bola: 0.9868 },
+    terra:    { km:   12742, bola: 0.989 },
+    marte:    { km:    6779, bola: 0.9638 },
+    jupiter:  { km:  139820, bola: 0.7869 },
+    saturno:  { km:  116460, bola: 0.631 },
+    urano:    { km:   50724, bola: 0.8905 },
+    netuno:   { km:   49244, bola: 0.9863 }
   };
 
   /* Distância média até o Sol, em milhões de km, e quanto tempo levaria

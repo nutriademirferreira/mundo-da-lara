@@ -74,6 +74,17 @@ var App = (function () {
     fundoAtivo = fundoAtivo === 'a' ? 'b' : 'a';
   }
 
+  function atualizarColecao() {
+    var botao = document.querySelector('.tile--words');
+    if (!botao) return;
+    var falante = botao.parentNode.querySelector('[data-falar]');
+    if (!falante) return;
+    var vistas = Jogo.palavrasVistas().length;
+    falante.dataset.falar = 'Palavras. Complete a palavra com a letra que está faltando. ' +
+      (vistas ? 'Você já conheceu ' + vistas + ' de ' + Palavras.FASES.length + ' palavras.'
+              : 'São trinta palavras pra descobrir.');
+  }
+
   function ir(nome) {
     if (!TELAS[nome]) return;
     Som.calar();
@@ -84,6 +95,7 @@ var App = (function () {
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
     telaAtual = nome;
     if (nome !== 'quiz') { pintarFundo(nome); Jogo.cancelarRodada(); }
+    if (nome === 'home') atualizarColecao();
     Jogo.pintarEstrelas();
   }
 
@@ -466,12 +478,37 @@ var App = (function () {
   /* =========================================================
      Boot
      ========================================================= */
+  /* Se o aparelho não tiver voz em português, o app fica mudo sem avisar.
+     Melhor dizer isso ao adulto na tela de abertura do que a Lara achar
+     que o alto-falante está quebrado. */
+  function conferirVoz() {
+    if (!('speechSynthesis' in window)) return mostrarAviso(
+      'Este navegador não fala em voz alta. No iPhone, abra pelo Safari.');
+    var checar = function () {
+      var vozes = speechSynthesis.getVoices() || [];
+      if (!vozes.length) return;                       /* ainda carregando */
+      var temPt = vozes.some(function (v) { return /^pt/i.test(v.lang || ''); });
+      if (!temPt) mostrarAviso('Este aparelho não tem voz em português instalada — ' +
+        'o app vai falar com sotaque. Dá pra baixar em Ajustes › Acessibilidade › Conteúdo Falado.');
+    };
+    checar();
+    speechSynthesis.onvoiceschanged = checar;
+    setTimeout(checar, 1200);
+  }
+  function mostrarAviso(texto) {
+    var el = $('#aviso-voz');
+    if (!el) return;
+    el.textContent = texto; el.hidden = false;
+  }
+
   function iniciar() {
     pintarFundo('start');           /* a tela de abertura já nasce ativa, sem passar por ir() */
+    conferirVoz();
     ligarAltoFalantes();
     ligarNavegacao();
     ligarBotoes();
     Jogo.pintarEstrelas();
+    atualizarColecao();
     if ('serviceWorker' in navigator) {
       /* se já existia uma versão instalada no aparelho e chega uma nova,
          recarrega uma vez sozinho — ela não precisa fechar e abrir o app */
