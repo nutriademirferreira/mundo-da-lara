@@ -36,15 +36,18 @@ var App = (function () {
     'result':           { foto:'fundo-home',   veu:'claro'  }
   };
 
+  /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
+     (título, texto solto) ganha sombra própria no CSS, não uma camada
+     branca por cima da arte inteira. */
   var VEUS = {
-    claro:  'linear-gradient(180deg, rgba(255,246,251,.74) 0%, rgba(252,244,255,.52) 38%, rgba(244,236,255,.80) 100%)',
-    escuro: 'linear-gradient(180deg, rgba(20,12,44,.55), rgba(12,8,30,.78))',
-    espaco: 'linear-gradient(180deg, rgba(8,10,32,.62), rgba(5,6,22,.80))',
-    meio:   'linear-gradient(180deg, rgba(255,246,240,.58) 0%, rgba(255,242,232,.44) 40%, rgba(255,238,225,.78) 100%)',
-    quiz:   'linear-gradient(180deg, rgba(255,248,252,.90), rgba(245,238,255,.94))',
-    /* cenário aparece em cima, onde está o desenho; some embaixo, onde ela lê e escolhe */
-    cena:   'linear-gradient(180deg, rgba(255,250,253,.34) 0%, rgba(255,249,253,.52) 42%, rgba(250,244,255,.92) 72%)'
+    claro:  'linear-gradient(180deg, rgba(255,248,252,.34) 0%, rgba(252,246,255,.16) 40%, rgba(246,238,255,.42) 100%)',
+    escuro: 'linear-gradient(180deg, rgba(16,10,38,.34), rgba(10,6,26,.55))',
+    espaco: 'linear-gradient(180deg, rgba(8,10,32,.28), rgba(5,6,22,.52))',
+    meio:   'linear-gradient(180deg, rgba(255,248,242,.20) 0%, rgba(255,246,238,.10) 45%, rgba(255,240,228,.36) 100%)',
+    quiz:   'linear-gradient(180deg, rgba(255,248,252,.30), rgba(245,238,255,.48))',
+    cena:   'linear-gradient(180deg, rgba(255,250,253,.14) 0%, rgba(255,249,253,.24) 42%, rgba(250,244,255,.62) 74%)'
   };
+
 
   var fundoAtivo = 'a';
   function pintarFundo(nome, extra) {
@@ -52,15 +55,19 @@ var App = (function () {
     var veu = $('#fundo-veu');
     if (!cfg) { veu.style.background = ''; $('#fundo-a').classList.remove('is-on'); $('#fundo-b').classList.remove('is-on'); return; }
 
-    var alvo = fundoAtivo === 'a' ? $('#fundo-b') : $('#fundo-a');
     var url = 'url("img/' + cfg.foto + '.webp")';
-    if (alvo.style.backgroundImage !== url) {
-      alvo.style.backgroundImage = url;
-      alvo.classList.add('is-on');
-      (fundoAtivo === 'a' ? $('#fundo-a') : $('#fundo-b')).classList.remove('is-on');
-      fundoAtivo = fundoAtivo === 'a' ? 'b' : 'a';
-    }
+    var visivel = fundoAtivo === 'a' ? $('#fundo-a') : $('#fundo-b');
     veu.style.background = VEUS[cfg.veu] || VEUS.claro;
+
+    /* já é essa a imagem no ar? não faz nada. (antes eu comparava com a
+       camada de trás e a troca era engolida quando a foto se repetia) */
+    if (visivel.style.backgroundImage === url) return;
+
+    var alvo = fundoAtivo === 'a' ? $('#fundo-b') : $('#fundo-a');
+    alvo.style.backgroundImage = url;
+    alvo.classList.add('is-on');
+    visivel.classList.remove('is-on');
+    fundoAtivo = fundoAtivo === 'a' ? 'b' : 'a';
   }
 
   function ir(nome) {

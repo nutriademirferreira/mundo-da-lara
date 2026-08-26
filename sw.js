@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v9';
+var CACHE = 'mundo-da-lara-v11';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -27,6 +27,17 @@ var ARQUIVOS = [
   'img/fundo-home.webp',
   'img/fundo-inicio.webp',
   'img/fundo-velha.webp',
+  'img/icone-espaco.webp',
+  'img/lara-astronauta.webp',
+  'img/lara-cientista.webp',
+  'img/lara-corpo.webp',
+  'img/lara-espaco.webp',
+  'img/lara-festa.webp',
+  'img/lara-oi.webp',
+  'img/lara-palavras.webp',
+  'img/lara-princesa.webp',
+  'img/lara-unicornio.webp',
+  'img/lara-velha.webp',
   'img/planeta-jupiter-b.webp',
   'img/planeta-jupiter.webp',
   'img/planeta-marte-b.webp',
