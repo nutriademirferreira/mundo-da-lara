@@ -200,6 +200,15 @@
                 data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?">🔊</button>
       </div>
       <div class="mode-wrap">
+        <button class="mode mode--viagem" data-go="viagem" type="button">
+          <span class="mode__emoji">🚀</span>
+          <strong>A Viagem</strong>
+          <small>Sinta como o espaço é vazio e enorme</small>
+        </button>
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
+                data-falar="A viagem. Sinta como o espaço é vazio e enorme.">🔊</button>
+      </div>
+      <div class="mode-wrap">
         <button class="mode mode--tamanho" data-go="tamanho" type="button">
           <span class="mode__emoji">📏</span>
           <strong>Tamanho de Verdade</strong>
@@ -240,6 +249,25 @@
               data-falar="Aqui os planetas estão no tamanho certo, um do lado do outro. Arraste pro lado.">🔊</button>
     </div>
     <div class="tamanho-scroll" id="tamanho-scroll"></div>
+  </section>
+
+  <!-- ============ A VIAGEM ============ -->
+  <section class="screen screen--space" id="screen-viagem">
+    <header class="bar bar--onspace">
+      <button class="icon-btn" data-go="espaco-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">A Viagem</h2>
+      <span class="bar__spacer"></span>
+    </header>
+    <div class="space-hint">
+      <span>Aqui vale a distância — arraste até Netuno 👉</span>
+      <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir"
+              data-falar="Aqui o que vale é a distância. Arraste o dedo pra viajar do Sol até Netuno.">🔊</button>
+    </div>
+    <div class="viagem-scroll" id="viagem-scroll"></div>
+    <div class="viagem-barra">
+      <div class="viagem-barra__trilho"><i class="viagem-barra__foguete" id="viagem-foguete">🚀</i></div>
+      <span class="viagem-barra__texto" id="viagem-texto">Saindo do Sol</span>
+    </div>
   </section>
 
   <!-- ============ MENU: JOGO DA VELHA ============ -->

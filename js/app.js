@@ -13,6 +13,7 @@ var App = (function () {
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
     'tamanho':          'screen-tamanho',
+    'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
     'velha':            'screen-velha',
     'quiz':             'screen-quiz',
@@ -33,6 +34,7 @@ var App = (function () {
     'espaco-menu':      { foto:'fundo-espaco', veu:'escuro' },
     'espaco-explorar':  { foto:'fundo-espaco', veu:'espaco' },
     'tamanho':          { foto:'fundo-espaco', veu:'espaco' },
+    'viagem':           { foto:'fundo-espaco', veu:'espaco' },
     'velha-menu':       { foto:'fundo-velha',  veu:'escuro' },
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
     'result':           { foto:'fundo-home',   veu:'claro'  }
@@ -156,6 +158,7 @@ var App = (function () {
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
+        if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
       });
     });
@@ -277,6 +280,66 @@ var App = (function () {
       trilha.appendChild(item);
     });
     trilha.scrollLeft = 0;
+  }
+
+  /* =========================================================
+     A VIAGEM
+     Distância real do Sol até cada planeta, na mesma escala.
+     O tamanho aqui é arbitrário de propósito — se as duas coisas
+     fossem reais ao mesmo tempo, a Terra viraria pó invisível.
+     ========================================================= */
+  function montarViagem() {
+    var trilha = $('#viagem-scroll');
+    var PX_POR_MILHAO = 0.78;                 /* Netuno cai a ~3.500px, umas 9 telas */
+    var margemFinal = 150;
+    var fim = Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + margemFinal;
+
+    var pista = document.createElement('div');
+    pista.className = 'viagem-pista';
+    pista.style.width = Math.round(fim) + 'px';
+    pista.innerHTML = '<div class="viagem-sol"></div><span class="viagem-sol__nome">O Sol</span>';
+
+    ['mercurio','venus','terra','marte','jupiter','saturno','urano','netuno'].forEach(function (id) {
+      var astro = Espaco.porId(id);
+      var d = Espaco.DISTANCIAS[id];
+      var tam = id === 'jupiter' || id === 'saturno' ? 84 : (id === 'urano' || id === 'netuno' ? 70 : 58);
+      var real = Espaco.REAIS[id];
+      var quadro = Math.round(tam / real.bola);
+
+      var parada = document.createElement('div');
+      parada.className = 'viagem-parada';
+      parada.style.left = Math.round(d.milhoes * PX_POR_MILHAO) + 'px';
+      parada.innerHTML =
+        '<img src="img/planeta-' + id + '.webp" alt="' + astro.nome + '" style="width:' + quadro + 'px" draggable="false">' +
+        '<span class="viagem-parada__nome">' + astro.nome + '</span>' +
+        '<span class="viagem-parada__tempo">' + d.viagem + '</span>';
+      parada.addEventListener('click', function () { abrirFicha(astro); });
+      pista.appendChild(parada);
+    });
+
+    trilha.innerHTML = '';
+    trilha.appendChild(pista);
+    trilha.scrollLeft = 0;
+    atualizarFoguete();
+    trilha.onscroll = atualizarFoguete;
+  }
+
+  function atualizarFoguete() {
+    var trilha = $('#viagem-scroll');
+    var vao = trilha.scrollWidth - trilha.clientWidth;
+    var andado = vao > 0 ? trilha.scrollLeft / vao : 0;
+    $('#viagem-foguete').style.left = Math.round(andado * 100) + '%';
+
+    /* qual foi a última parada que ela já passou */
+    var frente = trilha.scrollLeft + 40;   /* a beirada do foguete, não o meio da tela */
+    var ultima = 'Saindo do Sol';
+    var ordem = ['mercurio','venus','terra','marte','jupiter','saturno','urano','netuno'];
+    for (var i = 0; i < ordem.length; i++) {
+      var x = Espaco.DISTANCIAS[ordem[i]].milhoes * 0.78;
+      if (frente >= x) ultima = 'Passando por ' + Espaco.porId(ordem[i]).nome;
+    }
+    if (andado > 0.985) ultima = 'Chegou em Netuno! 🎉';
+    $('#viagem-texto').textContent = ultima;
   }
 
   function abrirFicha(astro) {

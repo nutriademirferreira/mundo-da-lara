@@ -180,6 +180,19 @@ var Espaco = (function () {
     netuno:   { km:   49244, bola: 0.831 }
   };
 
+  /* Distância média até o Sol, em milhões de km, e quanto tempo levaria
+     num foguete rápido (40 mil km/h) indo em linha reta. */
+  var DISTANCIAS = {
+    mercurio: { milhoes:  58, viagem: '2 meses de foguete' },
+    venus:    { milhoes: 108, viagem: '3 meses de foguete' },
+    terra:    { milhoes: 150, viagem: '5 meses de foguete' },
+    marte:    { milhoes: 228, viagem: '8 meses de foguete' },
+    jupiter:  { milhoes: 778, viagem: '2 anos de foguete'  },
+    saturno:  { milhoes:1430, viagem: '4 anos de foguete'  },
+    urano:    { milhoes:2870, viagem: '8 anos de foguete'  },
+    netuno:   { milhoes:4500, viagem: '13 anos de foguete' }
+  };
+
   function comArtigo(a) { return (a.artigo ? a.artigo + ' ' : '') + a.nome; }
 
   function porId(id) {
@@ -187,5 +200,5 @@ var Espaco = (function () {
     return null;
   }
 
-  return { ASTROS: ASTROS, REAIS: REAIS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
+  return { ASTROS: ASTROS, REAIS: REAIS, DISTANCIAS: DISTANCIAS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
 })();
