@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Mundo da Lara</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Jogos educativos para a Lara: corpo humano e sistema solar.">
+<meta name="theme-color" content="#2B1B54">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mundo da Lara">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app" class="app">
+
+  <!-- ============ PORTA DE ENTRADA (destrava o som) ============ -->
+  <section class="screen screen--start is-active" id="screen-start">
+    <div class="start-sky" aria-hidden="true"></div>
+    <div class="start-body">
+      <div class="start-badge">✨</div>
+      <h1 class="start-title">Mundo da<br><span>Lara</span></h1>
+      <p class="start-sub">Jogos para aprender brincando</p>
+      <button class="btn-start" id="btn-start" type="button">
+        <span class="btn-start__icon">▶</span>
+        <span>Começar</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ HOME ============ -->
+  <section class="screen screen--home" id="screen-home">
+    <header class="home-top">
+      <div class="hello">
+        <span class="hello__hi">Oi, Lara!</span>
+        <span class="hello__q">O que vamos aprender hoje?</span>
+      </div>
+      <button class="icon-btn" id="btn-sound" type="button" aria-label="Ligar ou desligar o som">
+        <span id="sound-icon">🔊</span>
+      </button>
+    </header>
+
+    <div class="star-bar">
+      <span class="star-bar__star">⭐</span>
+      <span class="star-bar__count" id="star-total">0</span>
+      <span class="star-bar__label">estrelinhas</span>
+    </div>
+
+    <div class="menu">
+      <button class="tile tile--body" data-go="corpo-menu" type="button">
+        <div class="tile__art">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-kid"></use></svg>
+        </div>
+        <div class="tile__text">
+          <strong>Corpo Humano</strong>
+          <span>As partes do corpo, uma a uma</span>
+        </div>
+        <span class="tile__go">▶</span>
+      </button>
+
+      <button class="tile tile--space" data-go="espaco-menu" type="button">
+        <div class="tile__art">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-planet"></use></svg>
+        </div>
+        <div class="tile__text">
+          <strong>Sistema Solar</strong>
+          <span>O Sol e os 8 planetas</span>
+        </div>
+        <span class="tile__go">▶</span>
+      </button>
+    </div>
+
+    <p class="home-foot">Feito com carinho pro papai brincar com a Lara 💛</p>
+  </section>
+
+  <!-- ============ MENU: CORPO ============ -->
+  <section class="screen screen--submenu" id="screen-corpo-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Corpo Humano</h2>
+      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <button class="mode mode--learn" data-go="corpo-aprender" type="button">
+        <span class="mode__emoji">👀</span>
+        <strong>Aprender</strong>
+        <small>Toque nas partes e ouça o nome</small>
+      </button>
+      <button class="mode mode--play" data-go="corpo-jogar" type="button">
+        <span class="mode__emoji">🎯</span>
+        <strong>Jogar Quiz</strong>
+        <small>10 perguntas · ache o nome certo</small>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ APRENDER: CORPO ============ -->
+  <section class="screen screen--stage" id="screen-corpo-aprender">
+    <header class="bar">
+      <button class="icon-btn" data-go="corpo-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Toque numa parte</h2>
+      <span class="bar__spacer"></span>
+    </header>
+    <div class="stage" id="corpo-stage-learn"></div>
+    <div class="label-card" id="corpo-label">
+      <span class="label-card__hint">Toque na Lara para descobrir 👆</span>
+    </div>
+  </section>
+
+  <!-- ============ MENU: ESPAÇO ============ -->
+  <section class="screen screen--submenu screen--dark" id="screen-espaco-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Sistema Solar</h2>
+      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <button class="mode mode--learn" data-go="espaco-explorar" type="button">
+        <span class="mode__emoji">🚀</span>
+        <strong>Explorar</strong>
+        <small>Viaje do Sol até Netuno</small>
+      </button>
+      <button class="mode mode--play" data-go="espaco-jogar" type="button">
+        <span class="mode__emoji">🎯</span>
+        <strong>Jogar Quiz</strong>
+        <small>9 perguntas · que planeta é esse?</small>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORAR: ESPAÇO ============ -->
+  <section class="screen screen--space" id="screen-espaco-explorar">
+    <div class="stars-bg" aria-hidden="true"></div>
+    <header class="bar bar--onspace">
+      <button class="icon-btn" data-go="espaco-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Viagem Espacial</h2>
+      <span class="bar__spacer"></span>
+    </header>
+    <p class="space-hint">Arraste para o lado e toque num planeta 👉</p>
+    <div class="orbit-scroll" id="orbit-scroll"></div>
+  </section>
+
+  <!-- ============ QUIZ (compartilhado) ============ -->
+  <section class="screen screen--quiz" id="screen-quiz">
+    <header class="bar">
+      <button class="icon-btn" id="quiz-back" type="button" aria-label="Voltar">←</button>
+      <div class="progress" id="quiz-progress"></div>
+      <span class="bar__stars">⭐ <b id="quiz-stars">0</b></span>
+    </header>
+
+    <div class="quiz-stage" id="quiz-stage"></div>
+
+    <div class="quiz-ask">
+      <h3 id="quiz-question">Que parte é essa?</h3>
+      <button class="speak-btn" id="quiz-speak" type="button" aria-label="Ouvir de novo">🔊</button>
+    </div>
+
+    <div class="options" id="quiz-options"></div>
+  </section>
+
+  <!-- ============ RESULTADO ============ -->
+  <section class="screen screen--result" id="screen-result">
+    <div class="result-card">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <h2 id="result-title">Muito bem, Lara!</h2>
+      <p class="result-score"><b id="result-hits">0</b> de <b id="result-total">10</b> certinhas</p>
+      <div class="result-stars" id="result-stars"></div>
+      <button class="btn-big btn-big--go" id="result-again" type="button">Jogar de novo</button>
+      <button class="btn-big btn-big--ghost" id="result-home" type="button">Voltar pro início</button>
+    </div>
+  </section>
+
+  <!-- camada de festinha -->
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <!-- ficha do planeta -->
+  <div class="sheet" id="planet-sheet" hidden>
+    <div class="sheet__backdrop" data-close-sheet></div>
+    <div class="sheet__card" role="dialog" aria-modal="true" aria-labelledby="sheet-name">
+      <button class="sheet__close" data-close-sheet type="button" aria-label="Fechar">✕</button>
+      <div class="sheet__art" id="sheet-art"></div>
+      <h3 id="sheet-name">Planeta</h3>
+      <p class="sheet__tag" id="sheet-tag"></p>
+      <ul class="sheet__facts" id="sheet-facts"></ul>
+      <button class="speak-btn speak-btn--wide" id="sheet-speak" type="button">🔊 Ouvir de novo</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- sprites -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="mini-kid" viewBox="0 0 120 120">
+      <circle cx="60" cy="42" r="26" fill="#FFD9BE"/>
+      <path d="M32 46 C32 16 44 6 60 6 C76 6 88 16 88 46 C83 26 74 20 60 25 C46 30 36 32 32 46 Z" fill="#6B3E26"/>
+      <circle cx="50" cy="44" r="4" fill="#3A2A20"/><circle cx="70" cy="44" r="4" fill="#3A2A20"/>
+      <path d="M52 55q8 7 16 0" stroke="#3A2A20" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M38 112 44 76a17 17 0 0 1 32 0l6 36Z" fill="#FF7BAC"/>
+      <circle cx="34" cy="86" r="7" fill="#FFD9BE"/><circle cx="86" cy="86" r="7" fill="#FFD9BE"/>
+    </symbol>
+    <symbol id="mini-planet" viewBox="0 0 120 120">
+      <circle cx="58" cy="58" r="32" fill="#F5A742"/>
+      <ellipse cx="58" cy="50" rx="24" ry="7" fill="#FFD08A" opacity=".55"/>
+      <ellipse cx="58" cy="68" rx="27" ry="6" fill="#D9762B" opacity=".5"/>
+      <ellipse cx="58" cy="60" rx="52" ry="13" fill="none" stroke="#FFE9B0" stroke-width="6" opacity=".9" transform="rotate(-18 58 60)"/>
+      <circle cx="98" cy="22" r="4" fill="#FFF3C4"/><circle cx="18" cy="26" r="3" fill="#FFF3C4"/>
+      <circle cx="24" cy="98" r="3.5" fill="#FFF3C4"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="js/audio.js"></script>
+<script src="js/data-corpo.js"></script>
+<script src="js/data-espaco.js"></script>
+<script src="js/game.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
