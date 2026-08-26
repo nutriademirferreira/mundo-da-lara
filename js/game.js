@@ -26,6 +26,11 @@ var Jogo = (function () {
   function pintarEstrelas() {
     var n = totalEstrelas();
     var alvo = $('#star-total'); if (alvo) alvo.textContent = n;
+    var falaEstrela = $('#star-som');
+    if (falaEstrela) {
+      falaEstrela.dataset.falar = n === 0 ? 'Você ainda não tem estrelinhas. Vamos jogar?'
+        : (n === 1 ? 'Você tem uma estrelinha!' : 'Você tem ' + n + ' estrelinhas!');
+    }
     var espelhos = document.querySelectorAll('[data-star-mirror]');
     for (var i = 0; i < espelhos.length; i++) espelhos[i].textContent = n;
     var noQuiz = $('#quiz-stars'); if (noQuiz) noQuiz.textContent = n;
@@ -122,13 +127,27 @@ var Jogo = (function () {
     var caixa = $('#quiz-options');
     caixa.innerHTML = '';
     r.opcoes.forEach(function (o) {
+      var linha = document.createElement('div');
+      linha.className = 'opt-linha';
+
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'opt';
       b.textContent = o.texto;
       b.dataset.id = o.id;
       b.addEventListener('click', function () { responder(b, o.id); });
-      caixa.appendChild(b);
+
+      /* ela ainda não lê: o alto-falante diz o que está escrito naquele botão */
+      var som = document.createElement('button');
+      som.type = 'button';
+      som.className = 'som-btn';
+      som.textContent = '🔊';
+      som.setAttribute('aria-label', 'Ouvir ' + o.texto);
+      som.dataset.falar = o.texto;
+
+      linha.appendChild(b);
+      linha.appendChild(som);
+      caixa.appendChild(linha);
     });
 
     Som.falar(r.fala, { atraso: 260 });
@@ -212,12 +231,16 @@ var Jogo = (function () {
       caixa.appendChild(s);
     }
 
+    var fala = perfeito
+      ? 'Parabéns Lara! Você acertou tudo!'
+      : 'Muito bem Lara! Você acertou ' + acertos + ' de ' + total + '.';
+    var botaoSom = $('#result-som');
+    if (botaoSom) botaoSom.dataset.falar = fala;
+
     App.ir('result');
     Som.tocar('fanfarra');
     confete(46);
-    Som.falar(perfeito
-      ? 'Parabéns Lara! Você acertou tudo!'
-      : 'Muito bem Lara! Você acertou ' + acertos + ' de ' + total + '.', { atraso: 700 });
+    Som.falar(fala, { atraso: 700 });
   }
 
   function tipoAtual() { return estado ? estado.tipo : 'corpo'; }

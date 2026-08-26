@@ -27,10 +27,39 @@ var App = (function () {
     Jogo.pintarEstrelas();
   }
 
+  /* =========================================================
+     ALTO-FALANTE — vale pra qualquer botão com data-falar,
+     inclusive os que nascem depois (opções do quiz, planetas)
+     ========================================================= */
+  function ligarAltoFalantes() {
+    document.addEventListener('click', function (e) {
+      var botao = e.target.closest && e.target.closest('[data-falar]');
+      if (!botao) return;
+      e.preventDefault();
+      e.stopPropagation();
+      falarBotao(botao);
+    });
+  }
+
+  function falarBotao(botao) {
+    var texto = botao.dataset.falar;
+    if (!texto) return;
+    $$('.som-btn.is-falando').forEach(function (b) { b.classList.remove('is-falando'); });
+    Som.tocar('toque');
+    Som.falar(texto);
+    if (!Som.estaLigado()) return;
+    botao.classList.add('is-falando');
+    clearTimeout(botao._temporizador);
+    botao._temporizador = setTimeout(function () {
+      botao.classList.remove('is-falando');
+    }, Math.min(700 + texto.length * 72, 6000));
+  }
+
   /* ---------- roteamento por data-go ---------- */
   function ligarNavegacao() {
     $$('[data-go]').forEach(function (b) {
-      b.addEventListener('click', function () {
+      b.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('[data-falar]')) return;
         var destino = b.dataset.go;
         Som.tocar('toque');
         if (destino === 'corpo-jogar')       { ir('quiz'); Jogo.iniciar('corpo'); return; }
@@ -60,9 +89,14 @@ var App = (function () {
         $$('.hit', svg).forEach(function (o) { o.classList.remove('is-on'); });
         area.classList.add('is-on');
 
+        var falaCompleta = parte.artigo + ' ' + parte.nome + '. ' + parte.dica;
         ficha.innerHTML =
-          '<div><div class="label-card__name">' + parte.artigo + ' ' + parte.nome + '</div>' +
-          '<div class="label-card__tip">' + parte.dica + '</div></div>';
+          '<div class="label-card__texto">' +
+            '<div class="label-card__name">' + parte.artigo + ' ' + parte.nome + '</div>' +
+            '<div class="label-card__tip">' + parte.dica + '</div>' +
+          '</div>' +
+          '<button class="som-btn" type="button" aria-label="Ouvir de novo" data-falar="' +
+            falaCompleta.replace(/"/g, '') + '">🔊</button>';
 
         Som.tocar('zap');
         Som.falar(parte.artigo + ' ' + parte.nome, { atraso: 120 });
@@ -78,14 +112,22 @@ var App = (function () {
     var trilha = $('#orbit-scroll');
     trilha.innerHTML = '';
     Espaco.ASTROS.forEach(function (astro) {
-      var card = document.createElement('button');
-      card.type = 'button';
+      var card = document.createElement('div');
       card.className = 'planet-card';
       card.innerHTML =
-        '<span class="planet-card__orb">' + Espaco.orbe(astro, astro.tam) + '</span>' +
-        '<span class="planet-card__name">' + astro.nome + '</span>' +
+        '<button class="planet-card__toque" type="button">' +
+          '<span class="planet-card__orb">' + Espaco.orbe(astro, astro.tam) + '</span>' +
+        '</button>' +
+        '<span class="planet-card__linha">' +
+          '<span class="planet-card__name">' + astro.nome + '</span>' +
+          '<button class="som-btn som-btn--mini" type="button" aria-label="Ouvir ' + astro.nome + '"' +
+            ' data-falar="' + astro.nome + '">🔊</button>' +
+        '</span>' +
         '<span class="planet-card__pos">' + astro.legenda + '</span>';
-      card.addEventListener('click', function () { abrirFicha(astro); });
+      card.addEventListener('click', function (e) {
+        if (e.target.closest('[data-falar]')) return;
+        abrirFicha(astro);
+      });
       trilha.appendChild(card);
     });
     trilha.scrollLeft = 0;
@@ -95,6 +137,7 @@ var App = (function () {
     Som.tocar('zap');
     $('#sheet-art').innerHTML = Espaco.orbe(astro, 152);
     $('#sheet-name').textContent = astro.nome;
+    $('#sheet-nome-som').dataset.falar = astro.nome;
     $('#sheet-tag').textContent = astro.tag;
     var lista = $('#sheet-facts');
     lista.innerHTML = '';
@@ -102,7 +145,10 @@ var App = (function () {
       var li = document.createElement('li');
       var partes = f.split(' ');
       var emoji = partes.shift();
-      li.innerHTML = '<b>' + emoji + '</b><span>' + partes.join(' ') + '</span>';
+      var frase = partes.join(' ');
+      li.innerHTML = '<b>' + emoji + '</b><span>' + frase + '</span>' +
+        '<button class="som-btn som-btn--mini" type="button" aria-label="Ouvir a curiosidade"' +
+        ' data-falar="' + frase.replace(/"/g, '') + '">🔊</button>';
       lista.appendChild(li);
     });
     $('#planet-sheet').hidden = false;
@@ -138,7 +184,7 @@ var App = (function () {
     var botaoSom = $('#btn-sound');
     function pintarSom() {
       var on = Som.estaLigado();
-      $('#sound-icon').textContent = on ? '🔊' : '🔇';
+      $('#sound-icon').textContent = on ? '🎵' : '🔇';
       botaoSom.classList.toggle('is-muted', !on);
     }
     botaoSom.addEventListener('click', function () { Som.alternar(); pintarSom(); });
@@ -174,6 +220,7 @@ var App = (function () {
      Boot
      ========================================================= */
   function iniciar() {
+    ligarAltoFalantes();
     ligarNavegacao();
     ligarBotoes();
     Jogo.pintarEstrelas();

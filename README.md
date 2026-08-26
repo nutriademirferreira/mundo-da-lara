@@ -15,6 +15,14 @@ pode ser instalado na tela de início como se fosse um aplicativo (PWA, funciona
 - *Explorar*: viagem lateral do Sol até Netuno; toca no astro e ouve o nome + 2 curiosidades.
 - *Jogar Quiz*: 9 rodadas — aparece o astro desenhado e a criança escolhe entre 3 nomes.
 
+**Tudo é ouvível.** Como a Lara ainda não lê, todo lugar com informação escrita tem um
+alto-falante do lado: cada uma das 3 opções do quiz, os cartões da tela inicial, os modos de
+jogo, o nome de cada planeta, cada curiosidade da ficha, a contagem de estrelinhas e o
+resultado final. Tocar no alto-falante de uma opção **não responde** a pergunta — só lê em voz
+alta o que está escrito ali, para ela comparar com o que vê na tela.
+
+O botão 🎵 no topo da tela inicial é outra coisa: liga e desliga todo o som do app.
+
 Cada acerto de primeira vale uma estrelinha, guardada no próprio aparelho.
 Errar não tira ponto nem trava nada: o app fala "quase, tenta de novo" e deixa tentar.
 

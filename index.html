@@ -40,39 +40,49 @@
         <span class="hello__hi">Oi, Lara!</span>
         <span class="hello__q">O que vamos aprender hoje?</span>
       </div>
-      <button class="icon-btn" id="btn-sound" type="button" aria-label="Ligar ou desligar o som">
-        <span id="sound-icon">🔊</span>
+      <button class="icon-btn icon-btn--som" id="btn-sound" type="button" aria-label="Ligar ou desligar o som">
+        <span id="sound-icon">🎵</span>
       </button>
     </header>
 
-    <div class="star-bar">
-      <span class="star-bar__star">⭐</span>
-      <span class="star-bar__count" id="star-total">0</span>
-      <span class="star-bar__label">estrelinhas</span>
+    <div class="star-linha">
+      <div class="star-bar">
+        <span class="star-bar__star">⭐</span>
+        <span class="star-bar__count" id="star-total">0</span>
+        <span class="star-bar__label">estrelinhas</span>
+      </div>
+      <button class="som-btn som-btn--mini" id="star-som" type="button"
+              data-falar="Você ainda não tem estrelinhas." aria-label="Ouvir quantas estrelinhas">🔊</button>
     </div>
 
     <div class="menu">
-      <button class="tile tile--body" data-go="corpo-menu" type="button">
-        <div class="tile__art">
-          <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-kid"></use></svg>
-        </div>
-        <div class="tile__text">
-          <strong>Corpo Humano</strong>
-          <span>As partes do corpo, uma a uma</span>
-        </div>
-        <span class="tile__go">▶</span>
-      </button>
+      <div class="tile-wrap">
+        <button class="tile tile--body" data-go="corpo-menu" type="button">
+          <div class="tile__art">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-kid"></use></svg>
+          </div>
+          <div class="tile__text">
+            <strong>Corpo Humano</strong>
+            <span>As partes do corpo, uma a uma</span>
+          </div>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Corpo Humano"
+                data-falar="Corpo Humano. As partes do corpo, uma a uma.">🔊</button>
+      </div>
 
-      <button class="tile tile--space" data-go="espaco-menu" type="button">
-        <div class="tile__art">
-          <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-planet"></use></svg>
-        </div>
-        <div class="tile__text">
-          <strong>Sistema Solar</strong>
-          <span>O Sol e os 8 planetas</span>
-        </div>
-        <span class="tile__go">▶</span>
-      </button>
+      <div class="tile-wrap">
+        <button class="tile tile--space" data-go="espaco-menu" type="button">
+          <div class="tile__art">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-planet"></use></svg>
+          </div>
+          <div class="tile__text">
+            <strong>Sistema Solar</strong>
+            <span>O Sol e os 8 planetas</span>
+          </div>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Sistema Solar"
+                data-falar="Sistema Solar. O Sol e os oito planetas.">🔊</button>
+      </div>
     </div>
 
     <p class="home-foot">Feito com carinho pro papai brincar com a Lara 💛</p>
@@ -86,16 +96,24 @@
       <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
     </header>
     <div class="modes">
-      <button class="mode mode--learn" data-go="corpo-aprender" type="button">
-        <span class="mode__emoji">👀</span>
-        <strong>Aprender</strong>
-        <small>Toque nas partes e ouça o nome</small>
-      </button>
-      <button class="mode mode--play" data-go="corpo-jogar" type="button">
-        <span class="mode__emoji">🎯</span>
-        <strong>Jogar Quiz</strong>
-        <small>10 perguntas · ache o nome certo</small>
-      </button>
+      <div class="mode-wrap">
+        <button class="mode mode--learn" data-go="corpo-aprender" type="button">
+          <span class="mode__emoji">👀</span>
+          <strong>Aprender</strong>
+          <small>Toque nas partes e ouça o nome</small>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Aprender"
+                data-falar="Aprender. Toque nas partes do corpo e ouça o nome.">🔊</button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="corpo-jogar" type="button">
+          <span class="mode__emoji">🎯</span>
+          <strong>Jogar Quiz</strong>
+          <small>10 perguntas · ache o nome certo</small>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Jogar Quiz"
+                data-falar="Jogar quiz. Dez perguntas. Ache o nome certo.">🔊</button>
+      </div>
     </div>
   </section>
 
@@ -120,16 +138,24 @@
       <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
     </header>
     <div class="modes">
-      <button class="mode mode--learn" data-go="espaco-explorar" type="button">
-        <span class="mode__emoji">🚀</span>
-        <strong>Explorar</strong>
-        <small>Viaje do Sol até Netuno</small>
-      </button>
-      <button class="mode mode--play" data-go="espaco-jogar" type="button">
-        <span class="mode__emoji">🎯</span>
-        <strong>Jogar Quiz</strong>
-        <small>9 perguntas · que planeta é esse?</small>
-      </button>
+      <div class="mode-wrap">
+        <button class="mode mode--learn" data-go="espaco-explorar" type="button">
+          <span class="mode__emoji">🚀</span>
+          <strong>Explorar</strong>
+          <small>Viaje do Sol até Netuno</small>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Explorar"
+                data-falar="Explorar. Viaje do Sol até Netuno.">🔊</button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="espaco-jogar" type="button">
+          <span class="mode__emoji">🎯</span>
+          <strong>Jogar Quiz</strong>
+          <small>9 perguntas · que planeta é esse?</small>
+        </button>
+        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Jogar Quiz"
+                data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?">🔊</button>
+      </div>
     </div>
   </section>
 
@@ -141,7 +167,11 @@
       <h2 class="bar__title">Viagem Espacial</h2>
       <span class="bar__spacer"></span>
     </header>
-    <p class="space-hint">Arraste para o lado e toque num planeta 👉</p>
+    <div class="space-hint">
+      <span>Arraste para o lado e toque num planeta 👉</span>
+      <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir a dica"
+              data-falar="Arraste para o lado e toque num planeta.">🔊</button>
+    </div>
     <div class="orbit-scroll" id="orbit-scroll"></div>
   </section>
 
@@ -170,6 +200,8 @@
       <h2 id="result-title">Muito bem, Lara!</h2>
       <p class="result-score"><b id="result-hits">0</b> de <b id="result-total">10</b> certinhas</p>
       <div class="result-stars" id="result-stars"></div>
+      <button class="som-btn som-btn--mini" id="result-som" type="button"
+              data-falar="Muito bem, Lara!" aria-label="Ouvir o resultado">🔊</button>
       <button class="btn-big btn-big--go" id="result-again" type="button">Jogar de novo</button>
       <button class="btn-big btn-big--ghost" id="result-home" type="button">Voltar pro início</button>
     </div>
@@ -184,7 +216,11 @@
     <div class="sheet__card" role="dialog" aria-modal="true" aria-labelledby="sheet-name">
       <button class="sheet__close" data-close-sheet type="button" aria-label="Fechar">✕</button>
       <div class="sheet__art" id="sheet-art"></div>
-      <h3 id="sheet-name">Planeta</h3>
+      <div class="sheet__titulo">
+        <h3 id="sheet-name">Planeta</h3>
+        <button class="som-btn som-btn--mini" id="sheet-nome-som" type="button"
+                aria-label="Ouvir o nome" data-falar="">🔊</button>
+      </div>
       <p class="sheet__tag" id="sheet-tag"></p>
       <ul class="sheet__facts" id="sheet-facts"></ul>
       <button class="speak-btn speak-btn--wide" id="sheet-speak" type="button">🔊 Ouvir de novo</button>
