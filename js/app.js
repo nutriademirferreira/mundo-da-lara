@@ -83,7 +83,7 @@ var App = (function () {
     var el = document.getElementById(TELAS[nome]);
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
     telaAtual = nome;
-    if (nome !== 'quiz') pintarFundo(nome);
+    if (nome !== 'quiz') { pintarFundo(nome); Jogo.cancelarRodada(); }
     Jogo.pintarEstrelas();
   }
 
@@ -316,6 +316,14 @@ var App = (function () {
       parada.addEventListener('click', function () { abrirFicha(astro); });
       pista.appendChild(parada);
     });
+
+    /* a chegada: ela esperando em Netuno, no fim da viagem */
+    var chegada = document.createElement('div');
+    chegada.className = 'viagem-chegada';
+    chegada.style.left = Math.round(Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + 180) + 'px';
+    chegada.innerHTML = '<img src="img/lara-espaco.webp" alt="">' +
+                        '<span class="viagem-parada__nome">Chegamos!</span>';
+    pista.appendChild(chegada);
 
     trilha.innerHTML = '';
     trilha.appendChild(pista);

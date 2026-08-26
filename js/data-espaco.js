@@ -121,51 +121,6 @@ var Espaco = (function () {
            'width="' + tam + '" height="' + tam + '" draggable="false" loading="eager">';
   }
 
-  /* --- versão vetorial antiga, guardada como reserva --- */
-  function orbeVetor(astro, tam) {
-    var u = 'a' + (++seq);
-    var brilho = astro.estrela
-      ? '<circle cx="60" cy="60" r="56" fill="url(#glow' + u + ')"/>'
-      : '';
-    var defs = '' +
-      '<clipPath id="cp' + u + '"><circle cx="60" cy="60" r="40"/></clipPath>' +
-      '<radialGradient id="luz' + u + '" cx="33%" cy="27%" r="80%">' +
-        '<stop offset="0" stop-color="#fff" stop-opacity=".45"/>' +
-        '<stop offset="55%" stop-color="#fff" stop-opacity="0"/></radialGradient>' +
-      '<radialGradient id="bor' + u + '" cx="50%" cy="50%" r="50%">' +
-        '<stop offset="62%" stop-color="#000" stop-opacity="0"/>' +
-        '<stop offset="100%" stop-color="#04061A" stop-opacity="' + (astro.estrela ? '.10' : '.55') + '"/></radialGradient>' +
-      (astro.estrela
-        ? '<radialGradient id="glow' + u + '" cx="50%" cy="50%" r="50%">' +
-          '<stop offset="55%" stop-color="#FFD23F" stop-opacity=".55"/>' +
-          '<stop offset="100%" stop-color="#FF8A00" stop-opacity="0"/></radialGradient>'
-        : '');
-
-    var aneisAtras = '', aneisFrente = '';
-    if (astro.aneis) {
-      aneisAtras = '<g transform="rotate(-17 60 60)">' +
-        '<ellipse cx="60" cy="60" rx="57" ry="15" fill="none" stroke="#F0DDB4" stroke-width="7" opacity=".9"/>' +
-        '<ellipse cx="60" cy="60" rx="47" ry="12" fill="none" stroke="#C8A971" stroke-width="3" opacity=".85"/></g>';
-      aneisFrente = '<g transform="rotate(-17 60 60)" clip-path="url(#frente' + u + ')">' +
-        '<ellipse cx="60" cy="60" rx="57" ry="15" fill="none" stroke="#F7E8C6" stroke-width="7"/>' +
-        '<ellipse cx="60" cy="60" rx="47" ry="12" fill="none" stroke="#D8BC85" stroke-width="3"/></g>';
-      defs += '<clipPath id="frente' + u + '"><rect x="-10" y="60" width="140" height="70"/></clipPath>';
-    }
-    if (astro.aneisVerticais) {
-      aneisAtras = '<ellipse cx="60" cy="60" rx="12" ry="55" fill="none" stroke="#BFEFF6" stroke-width="2.5" opacity=".55" transform="rotate(8 60 60)"/>';
-    }
-
-    return '<svg viewBox="0 0 120 120" width="' + tam + '" height="' + tam + '" ' +
-             'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + astro.nome + '">' +
-             '<defs>' + defs + '</defs>' + brilho + aneisAtras +
-             '<circle cx="60" cy="60" r="40" fill="' + astro.base + '"/>' +
-             '<g clip-path="url(#cp' + u + ')">' + astro.detalhe() + '</g>' +
-             '<circle cx="60" cy="60" r="40" fill="url(#luz' + u + ')"/>' +
-             '<circle cx="60" cy="60" r="40" fill="url(#bor' + u + ')"/>' +
-             aneisFrente +
-           '</svg>';
-  }
-
   /* Diâmetro real em km e quanto da altura do quadro a bola ocupa em cada
      arte — sem isso a proporção entre os planetas viraria mentira. */
   var REAIS = {
@@ -200,5 +155,5 @@ var Espaco = (function () {
     return null;
   }
 
-  return { ASTROS: ASTROS, REAIS: REAIS, DISTANCIAS: DISTANCIAS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
+  return { ASTROS: ASTROS, REAIS: REAIS, DISTANCIAS: DISTANCIAS, orbe: orbe, porId: porId, comArtigo: comArtigo };
 })();

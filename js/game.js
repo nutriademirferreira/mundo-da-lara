@@ -3,6 +3,7 @@
    ========================================================= */
 var Jogo = (function () {
   var estado = null;
+  var proximaRodada = null;
 
   /* ---------- utilidades ---------- */
   function $(s, raiz) { return (raiz || document).querySelector(s); }
@@ -16,7 +17,10 @@ var Jogo = (function () {
   }
 
   /* ---------- estrelinhas ---------- */
-  function totalEstrelas() { return parseInt(localStorage.getItem('lara.estrelas') || '0', 10); }
+  function totalEstrelas() {
+    var n = parseInt(localStorage.getItem('lara.estrelas'), 10);
+    return (isNaN(n) || n < 0) ? 0 : n;      /* dado corrompido não vira "NaN" na tela */
+  }
   function guardarEstrela() {
     var n = totalEstrelas() + 1;
     localStorage.setItem('lara.estrelas', String(n));
@@ -273,7 +277,10 @@ var Jogo = (function () {
       confete(estado.errouNaRodada ? 10 : 20);
       if (!estado.errouNaRodada) { estado.acertos++; guardarEstrela(); }
 
-      setTimeout(function () {
+      clearTimeout(proximaRodada);
+      proximaRodada = setTimeout(function () {
+        /* se ela saiu do quiz nesses 2 segundos, não arrasta ela pro resultado */
+        if (!document.getElementById('screen-quiz').classList.contains('is-active')) return;
         estado.indice++;
         if (estado.indice >= estado.rodadas.length) terminar();
         else desenharRodada();
@@ -333,6 +340,7 @@ var Jogo = (function () {
   return {
     iniciar: iniciar, tipoAtual: tipoAtual, repetirFala: repetirFala,
     pintarEstrelas: pintarEstrelas, confete: confete, embaralhar: embaralhar,
+    cancelarRodada: function () { clearTimeout(proximaRodada); },
     ganharEstrela: guardarEstrela
   };
 })();
