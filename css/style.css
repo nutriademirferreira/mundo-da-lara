@@ -233,6 +233,23 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .mode--learn{border-left:8px solid var(--mint)}
 .mode--play{border-left:8px solid var(--sun)}
 
+/* corpo: dois grupos (por fora / por dentro) com dois botões cada */
+.grupo{margin-bottom:20px}
+.grupo__titulo{
+  display:flex;align-items:center;gap:10px;margin:0 4px 10px;
+  font-size:17px;font-weight:900;letter-spacing:-.2px;
+}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.duo>.mode-wrap{min-width:0}
+.mode--curto{
+  min-height:118px;padding:16px 12px;align-items:center;justify-content:center;
+  text-align:center;gap:4px;border-left:0;border-top:8px solid var(--mint);
+}
+.mode--curto.mode--play{border-top-color:var(--sun)}
+.mode--curto .mode__emoji{font-size:32px}
+.mode--curto strong{font-size:20px}
+
+
 /* ===========================================================
    PALCO — personagem
    =========================================================== */

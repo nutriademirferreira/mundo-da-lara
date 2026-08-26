@@ -53,15 +53,16 @@ var Jogo = (function () {
   }
 
   /* ---------- montagem das rodadas ---------- */
-  function rodadasCorpo() {
-    var partes = embaralhar(Corpo.PARTES);
-    return partes.map(function (alvo) {
-      var outros = embaralhar(Corpo.PARTES.filter(function (p) { return p.id !== alvo.id; })).slice(0, 2);
+  function rodadasCorpo(tipo) {
+    var todos = Corpo.lista(tipo);
+    var orgao = tipo === 'orgaos';
+    return embaralhar(todos).map(function (alvo) {
+      var outros = embaralhar(todos.filter(function (p) { return p.id !== alvo.id; })).slice(0, 2);
       return {
         alvo: alvo,
         opcoes: embaralhar([alvo].concat(outros)).map(function (p) { return { id: p.id, texto: p.nome }; }),
-        pergunta: 'Que parte é essa?',
-        fala: 'Que parte do corpo é essa?',
+        pergunta: orgao ? 'Que órgão é esse?' : 'Que parte é essa?',
+        fala: orgao ? 'Que órgão é esse?' : 'Que parte do corpo é essa?',
         acertou: 'Isso! É ' + alvo.artigo + ' ' + alvo.nome + '.'
       };
     });
@@ -81,9 +82,31 @@ var Jogo = (function () {
     });
   }
 
+  var POR_SESSAO = 10;
+
+  /* Baralho das 30 palavras: cada sessão tira 10 de cima e guarda o resto.
+     Assim ela passa pelas 30 sem repetir antes de o baralho virar de novo. */
+  function sortearFases() {
+    var deck = [];
+    try { deck = JSON.parse(localStorage.getItem('lara.palavras.baralho') || '[]'); } catch (e) { deck = []; }
+    if (!Array.isArray(deck)) deck = [];
+    deck = deck.filter(function (i) { return typeof i === 'number' && i >= 0 && i < Palavras.FASES.length; });
+
+    if (deck.length < POR_SESSAO) {
+      var novas = [];
+      for (var i = 0; i < Palavras.FASES.length; i++) if (deck.indexOf(i) === -1) novas.push(i);
+      deck = deck.concat(embaralhar(novas));   // resto do baralho velho vem primeiro
+    }
+
+    var escolhidas = deck.slice(0, POR_SESSAO);
+    try { localStorage.setItem('lara.palavras.baralho', JSON.stringify(deck.slice(POR_SESSAO))); } catch (e) {}
+    return escolhidas.map(function (i) { return Palavras.FASES[i]; });
+  }
+
   function rodadasPalavras() {
-    var total = Palavras.FASES.length;
-    return Palavras.FASES.map(function (fase, i) {
+    var sorteadas = sortearFases();
+    var total = sorteadas.length;
+    return sorteadas.map(function (fase, i) {
       var letra = fase.palavra.charAt(fase.falta);
       var dita = fase.palavra.charAt(0) + fase.palavra.slice(1).toLowerCase();
       var opcoes = embaralhar([letra].concat(fase.erradas)).map(function (l) {
@@ -124,7 +147,7 @@ var Jogo = (function () {
   function iniciar(tipo) {
     estado = {
       tipo: tipo,
-      rodadas: tipo === 'corpo' ? rodadasCorpo()
+      rodadas: (tipo === 'corpo' || tipo === 'orgaos') ? rodadasCorpo(tipo)
              : tipo === 'palavras' ? rodadasPalavras()
              : rodadasEspaco(),
       indice: 0,
@@ -156,8 +179,8 @@ var Jogo = (function () {
     progresso();
 
     var palco = $('#quiz-stage');
-    if (estado.tipo === 'corpo') {
-      palco.innerHTML = '<div class="kid">' + Corpo.desenho('quiz') + '</div>';
+    if (estado.tipo === 'corpo' || estado.tipo === 'orgaos') {
+      palco.innerHTML = '<div class="kid">' + Corpo.arte(estado.tipo, 'quiz') + '</div>';
       apontarParte(palco, r.alvo);
     } else if (estado.tipo === 'palavras') {
       palco.innerHTML = r.palco;
@@ -214,7 +237,9 @@ var Jogo = (function () {
     var recorte = svg.querySelector('.spot-hole');
     if (recorte) {
       recorte.setAttribute('cx', a.cx); recorte.setAttribute('cy', a.cy);
-      recorte.setAttribute('rx', a.rx + 16); recorte.setAttribute('ry', a.ry + 16);
+      /* folga proporcional: órgão pequeno e espremido não pode acender o vizinho */
+      recorte.setAttribute('rx', a.rx + Math.min(16, a.rx * 0.4));
+      recorte.setAttribute('ry', a.ry + Math.min(16, a.ry * 0.4));
       if (a.rot) recorte.setAttribute('transform', 'rotate(' + a.rot + ' ' + a.cx + ' ' + a.cy + ')');
     }
     if (boneca) boneca.classList.add('is-focando');

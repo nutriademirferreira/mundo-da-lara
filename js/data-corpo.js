@@ -30,6 +30,30 @@ var Corpo = (function () {
       dica:'Os pés levam a Lara pra todo lugar.' }
   ];
 
+  /* --- os 10 órgãos: mesma mecânica, só que por dentro --- */
+  var ORGAOS = [
+    { id:'cerebro',   nome:'cérebro',   artigo:'o', area:{cx:150,cy:64,rx:34,ry:28},
+      dica:'O cérebro pensa, sonha e manda em todo o corpo.' },
+    { id:'pulmao',    nome:'pulmão',    artigo:'o', area:{cx:124,cy:188,rx:21,ry:32},
+      dica:'Os pulmões enchem de ar quando a gente respira.' },
+    { id:'coracao',   nome:'coração',   artigo:'o', area:{cx:156,cy:194,rx:22,ry:22},
+      dica:'O coração bate e empurra o sangue pro corpo todo.' },
+    { id:'figado',    nome:'fígado',    artigo:'o', area:{cx:128,cy:222,rx:28,ry:20},
+      dica:'O fígado limpa o sangue e guarda energia.' },
+    { id:'estomago',  nome:'estômago',  artigo:'o', area:{cx:178,cy:224,rx:18,ry:22},
+      dica:'No estômago a comida vira um mingauzinho.' },
+    { id:'baco',      nome:'baço',      artigo:'o', area:{cx:189,cy:238,rx:13,ry:13},
+      dica:'O baço ajuda a defender o corpo dos micróbios.' },
+    { id:'pancreas',  nome:'pâncreas',  artigo:'o', area:{cx:152,cy:252,rx:34,ry:11},
+      dica:'O pâncreas ajuda a digerir e cuida do açúcar do sangue.' },
+    { id:'rim',       nome:'rim',       artigo:'o', area:{cx:122,cy:270,rx:15,ry:18},
+      dica:'Os rins limpam o sangue e fazem o xixi.' },
+    { id:'intestino', nome:'intestino', artigo:'o', area:{cx:150,cy:306,rx:42,ry:28},
+      dica:'No intestino o corpo pega as vitaminas da comida.' },
+    { id:'bexiga',    nome:'bexiga',    artigo:'a', area:{cx:150,cy:342,rx:19,ry:15},
+      dica:'A bexiga guarda o xixi até a hora do banheiro.' }
+  ];
+
   function areaSvg(p, classe, id) {
     var a = p.area;
     var rot = a.rot ? ' transform="rotate(' + a.rot + ' ' + a.cx + ' ' + a.cy + ')"' : '';
@@ -122,10 +146,96 @@ var Corpo = (function () {
     '</svg>';
   }
 
-  function porId(id) {
-    for (var i = 0; i < PARTES.length; i++) if (PARTES[i].id === id) return PARTES[i];
+  /* --- o mesmo corpo, agora visto por dentro --- */
+  function desenhoOrgaos(sufixo) {
+    var hits = ORGAOS.map(function (p) { return areaSvg(p, 'hit'); }).join('');
+
+    return '' +
+    '<svg class="kid-svg" viewBox="0 0 300 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Corpo por dentro">' +
+      '<defs>' +
+        '<clipPath id="foco-' + sufixo + '">' +
+          '<ellipse class="spot-hole" cx="-500" cy="-500" rx="0" ry="0"/></clipPath>' +
+      '</defs>' +
+
+      '<g class="art" id="art-' + sufixo + '">' +
+      '<ellipse cx="150" cy="452" rx="90" ry="12" fill="#2B1B54" opacity=".08"/>' +
+
+      /* silhueta translúcida */
+      '<g fill="#FFD9BE" opacity=".55">' +
+        '<ellipse cx="150" cy="78" rx="46" ry="50"/>' +
+        '<rect x="134" y="112" width="32" height="30" rx="12"/>' +
+        '<path d="M104 134 C110 126 190 126 196 134 L204 296 C208 340 194 362 150 362 ' +
+                'C106 362 92 340 96 296 Z"/>' +
+        '<path d="M112 146 C92 180 84 246 80 300" stroke="#FFD9BE" stroke-width="26" fill="none" stroke-linecap="round"/>' +
+        '<path d="M188 146 C208 180 216 246 220 300" stroke="#FFD9BE" stroke-width="26" fill="none" stroke-linecap="round"/>' +
+        '<path d="M128 360 L124 444" stroke="#FFD9BE" stroke-width="30" fill="none" stroke-linecap="round"/>' +
+        '<path d="M172 360 L176 444" stroke="#FFD9BE" stroke-width="30" fill="none" stroke-linecap="round"/>' +
+      '</g>' +
+      '<g fill="none" stroke="#E8A87F" stroke-width="3" opacity=".65">' +
+        '<ellipse cx="150" cy="78" rx="46" ry="50"/>' +
+        '<path d="M104 134 C110 126 190 126 196 134 L204 296 C208 340 194 362 150 362 ' +
+                'C106 362 92 340 96 296 Z"/>' +
+      '</g>' +
+
+      /* pulmões */
+      '<path d="M140 156 C118 158 104 182 107 204 C110 222 128 228 138 216 C144 208 143 176 140 156 Z" fill="#F0919F"/>' +
+      '<path d="M160 156 C182 158 196 182 193 204 C190 222 172 228 162 216 C156 208 157 176 160 156 Z" fill="#F0919F"/>' +
+      '<g stroke="#D96C7D" stroke-width="3" fill="none" opacity=".8">' +
+        '<path d="M128 172 v40 M120 186 h14 M172 172 v40 M166 186 h14"/></g>' +
+
+      /* coração */
+      '<path d="M157 176 c-10 -15 -31 -7 -31 10 c0 15 19 26 31 36 c12 -10 31 -21 31 -36 c0 -17 -21 -25 -31 -10 Z" fill="#E23B4E"/>' +
+      '<path d="M148 190 q8 6 14 -2" stroke="#fff" stroke-width="4" fill="none" opacity=".45" stroke-linecap="round"/>' +
+
+      /* fígado e estômago */
+      '<path d="M102 208 C108 200 150 200 157 212 C161 221 148 236 128 240 C110 243 101 231 102 208 Z" fill="#A85434"/>' +
+      '<path d="M130 214 C140 210 150 212 155 216" stroke="#8C4028" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<path d="M170 206 C188 200 198 216 194 232 C190 246 174 252 167 243 C161 234 170 228 168 219 C167 212 166 208 170 206 Z" fill="#E8A05C"/>' +
+
+      /* baço */
+      '<path d="M184 228 c9 -3 14 6 12 15 c-2 9 -11 12 -15 5 c-4 -7 -3 -18 3 -20 Z" fill="#8E4A6B"/>' +
+
+      /* pâncreas */
+      '<path d="M120 250 C142 241 172 243 187 250 C191 257 180 261 164 259 C144 256 128 261 120 257 Z" fill="#E8C35C"/>' +
+
+      /* rins */
+      '<path d="M116 256 c11 -5 18 4 18 15 c0 11 -7 18 -16 15 c-9 -3 -11 -26 -2 -30 Z" fill="#B4543F"/>' +
+      '<path d="M184 256 c-11 -5 -18 4 -18 15 c0 11 7 18 16 15 c9 -3 11 -26 2 -30 Z" fill="#B4543F"/>' +
+
+      /* intestino */
+      '<path d="M118 284 h62 a11 11 0 0 1 0 22 h-58 a11 11 0 0 0 0 22 h50" ' +
+              'stroke="#E8905C" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M118 284 h62 a11 11 0 0 1 0 22 h-58 a11 11 0 0 0 0 22 h50" ' +
+              'stroke="#F5B58A" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+
+      /* bexiga */
+      '<path d="M134 334 c2 -9 30 -9 32 0 c2 11 -5 20 -16 20 c-11 0 -18 -9 -16 -20 Z" fill="#F0C24A"/>' +
+
+      /* cérebro */
+      '<ellipse cx="150" cy="64" rx="32" ry="26" fill="#F2A0B5"/>' +
+      '<g stroke="#D3728C" stroke-width="3.4" fill="none" stroke-linecap="round">' +
+        '<path d="M150 40 v48"/><path d="M132 46 q10 8 0 16 q-10 8 0 16"/><path d="M168 46 q-10 8 0 16 q10 8 0 16"/>' +
+      '</g>' +
+      '</g>' +
+
+      '<use class="foco" href="#art-' + sufixo + '" xlink:href="#art-' + sufixo + '" clip-path="url(#foco-' + sufixo + ')"/>' +
+      '<g class="hits">' + hits + '</g>' +
+      '<text class="qmark" x="-500" y="-500">?</text>' +
+    '</svg>';
+  }
+
+  function lista(tipo) { return tipo === 'orgaos' ? ORGAOS : PARTES; }
+  function arte(tipo, sufixo) { return tipo === 'orgaos' ? desenhoOrgaos(sufixo) : desenho(sufixo); }
+
+  function porId(id, tipo) {
+    var alvo = lista(tipo);
+    for (var i = 0; i < alvo.length; i++) if (alvo[i].id === id) return alvo[i];
     return null;
   }
 
-  return { PARTES: PARTES, desenho: desenho, porId: porId };
+  return {
+    PARTES: PARTES, ORGAOS: ORGAOS,
+    desenho: desenho, desenhoOrgaos: desenhoOrgaos,
+    lista: lista, arte: arte, porId: porId
+  };
 })();

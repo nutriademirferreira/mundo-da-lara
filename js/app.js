@@ -65,11 +65,13 @@ var App = (function () {
         var destino = b.dataset.go;
         Som.tocar('toque');
         if (destino === 'corpo-jogar')       { ir('quiz'); Jogo.iniciar('corpo'); return; }
+        if (destino === 'orgaos-jogar')      { ir('quiz'); Jogo.iniciar('orgaos'); return; }
+        if (destino === 'orgaos-aprender')   { montarAprender('orgaos'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-jogar')      { ir('quiz'); Jogo.iniciar('espaco'); return; }
         if (destino === 'palavras-jogar')    { ir('quiz'); Jogo.iniciar('palavras'); return; }
         if (destino === 'velha-app')         { ir('velha'); Velha.iniciar('app'); return; }
         if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois'); return; }
-        if (destino === 'corpo-aprender')    { montarAprender(); ir('corpo-aprender'); return; }
+        if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         ir(destino);
       });
@@ -79,16 +81,19 @@ var App = (function () {
   /* =========================================================
      APRENDER — toca na Lara e ouve o nome da parte
      ========================================================= */
-  function montarAprender() {
+  function montarAprender(tipo) {
+    var orgao = tipo === 'orgaos';
     var palco = $('#corpo-stage-learn');
-    palco.innerHTML = '<div class="kid">' + Corpo.desenho('aprender') + '</div>';
+    palco.innerHTML = '<div class="kid">' + Corpo.arte(tipo, 'aprender') + '</div>';
     var svg = palco.querySelector('svg');
     var ficha = $('#corpo-label');
-    ficha.innerHTML = '<span class="label-card__hint">Toque na Lara para descobrir 👆</span>';
+    $('#corpo-aprender-titulo').textContent = orgao ? 'Toque num órgão' : 'Toque numa parte';
+    ficha.innerHTML = '<span class="label-card__hint">' +
+      (orgao ? 'Toque no corpo pra ver o que tem dentro 👆' : 'Toque na Lara para descobrir 👆') + '</span>';
 
     $$('.hit', svg).forEach(function (area) {
       area.addEventListener('click', function () {
-        var parte = Corpo.porId(area.dataset.parte);
+        var parte = Corpo.porId(area.dataset.parte, tipo);
         if (!parte) return;
 
         $$('.hit', svg).forEach(function (o) { o.classList.remove('is-on'); });
@@ -199,7 +204,8 @@ var App = (function () {
     $('#quiz-back').addEventListener('click', function () {
       Som.tocar('toque');
       var tipo = Jogo.tipoAtual();
-      ir(tipo === 'corpo' ? 'corpo-menu' : tipo === 'espaco' ? 'espaco-menu' : 'home');
+      ir((tipo === 'corpo' || tipo === 'orgaos') ? 'corpo-menu'
+         : tipo === 'espaco' ? 'espaco-menu' : 'home');
     });
 
     /* jogo da velha */

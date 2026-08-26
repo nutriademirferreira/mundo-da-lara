@@ -103,24 +103,52 @@
       <h2 class="bar__title">Corpo Humano</h2>
       <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
     </header>
-    <div class="modes">
-      <div class="mode-wrap">
-        <button class="mode mode--learn" data-go="corpo-aprender" type="button">
-          <span class="mode__emoji">👀</span>
-          <strong>Aprender</strong>
-          <small>Toque nas partes e ouça o nome</small>
-        </button>
-        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Aprender"
-                data-falar="Aprender. Toque nas partes do corpo e ouça o nome.">🔊</button>
+
+    <div class="grupo">
+      <h3 class="grupo__titulo">
+        <span>Por fora 👧</span>
+        <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+                data-falar="Por fora. As partes do corpo que dá pra ver: olho, boca, mão, pé.">🔊</button>
+      </h3>
+      <div class="duo">
+        <div class="mode-wrap">
+          <button class="mode mode--learn mode--curto" data-go="corpo-aprender" type="button">
+            <span class="mode__emoji">👀</span><strong>Aprender</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Aprender as partes do corpo por fora.">🔊</button>
+        </div>
+        <div class="mode-wrap">
+          <button class="mode mode--play mode--curto" data-go="corpo-jogar" type="button">
+            <span class="mode__emoji">🎯</span><strong>Jogar</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Jogar o quiz das partes do corpo. Dez perguntas.">🔊</button>
+        </div>
       </div>
-      <div class="mode-wrap">
-        <button class="mode mode--play" data-go="corpo-jogar" type="button">
-          <span class="mode__emoji">🎯</span>
-          <strong>Jogar Quiz</strong>
-          <small>10 perguntas · ache o nome certo</small>
-        </button>
-        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Jogar Quiz"
-                data-falar="Jogar quiz. Dez perguntas. Ache o nome certo.">🔊</button>
+    </div>
+
+    <div class="grupo">
+      <h3 class="grupo__titulo">
+        <span>Por dentro 🫀</span>
+        <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+                data-falar="Por dentro. Os órgãos que ficam escondidos: coração, pulmão, estômago, rim.">🔊</button>
+      </h3>
+      <div class="duo">
+        <div class="mode-wrap">
+          <button class="mode mode--learn mode--curto" data-go="orgaos-aprender" type="button">
+            <span class="mode__emoji">🔎</span><strong>Aprender</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Aprender os órgãos que ficam dentro do corpo.">🔊</button>
+        </div>
+        <div class="mode-wrap">
+          <button class="mode mode--play mode--curto" data-go="orgaos-jogar" type="button">
+            <span class="mode__emoji">🎯</span><strong>Jogar</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Jogar o quiz dos órgãos. Dez perguntas.">🔊</button>
+        </div>
       </div>
     </div>
   </section>
@@ -129,7 +157,7 @@
   <section class="screen screen--stage" id="screen-corpo-aprender">
     <header class="bar">
       <button class="icon-btn" data-go="corpo-menu" type="button" aria-label="Voltar">←</button>
-      <h2 class="bar__title">Toque numa parte</h2>
+      <h2 class="bar__title" id="corpo-aprender-titulo">Toque numa parte</h2>
       <span class="bar__spacer"></span>
     </header>
     <div class="stage" id="corpo-stage-learn"></div>

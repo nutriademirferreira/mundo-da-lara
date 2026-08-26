@@ -7,17 +7,23 @@ pode ser instalado na tela de início como se fosse um aplicativo (PWA, funciona
 
 ## O que tem hoje
 
-**Corpo Humano**
-- *Aprender*: toca em qualquer parte da boneca, o nome aparece grandão e é falado em voz alta.
-- *Jogar Quiz*: 10 rodadas — a parte acende no corpo e a criança escolhe entre 3 nomes escritos.
+**Corpo Humano** — dois grupos
+- *Por fora*: as 10 partes visíveis (cabelo, olho, orelha, nariz, boca, braço, mão, barriga, perna, pé).
+- *Por dentro*: os 10 órgãos (cérebro, pulmão, coração, fígado, estômago, baço, pâncreas, rim,
+  intestino, bexiga), num corpo translúcido com os órgãos no lugar certo.
+- Cada grupo tem *Aprender* (toca e ouve o nome + o que aquilo faz) e *Jogar Quiz* (10 rodadas,
+  a parte acende e a criança escolhe entre 3 nomes escritos).
 
 **Sistema Solar**
 - *Explorar*: viagem lateral do Sol até Netuno; toca no astro e ouve o nome + 2 curiosidades.
 - *Jogar Quiz*: 9 rodadas — aparece o astro desenhado e a criança escolhe entre 3 nomes.
 
-**Palavras** — 10 fases
-- Aparece o desenho (bola, gato, sol, lua, pato, casa, bolo, sapo, flor, peixe), a palavra em
-  letra bastão com uma letra faltando, e 3 letras pra escolher. Acertou, a letra cai na lacuna.
+**Palavras** — 10 fases por sessão, sorteadas de um banco de 30
+- Aparece o desenho, a palavra em letra bastão com uma letra faltando, e 3 letras pra escolher.
+  Acertou, a letra cai na lacuna.
+- O banco tem 30 palavras com 30 desenhos. Cada sessão tira 10 de um baralho embaralhado e
+  guarda o resto: em 3 sessões ela passa pelas 30 sem repetir nenhuma, e só então o baralho
+  vira de novo.
 
 **Jogo da Velha**
 - Contra o app (que joga fácil de propósito) ou dois jogadores no mesmo celular.
@@ -40,9 +46,10 @@ Tudo é HTML/CSS/JS puro, sem build e sem dependência externa.
 
 | Quero... | Mexo em |
 |---|---|
-| Trocar/incluir parte do corpo | `js/data-corpo.js` — lista `PARTES` (nome, artigo, área da elipse, dica) |
+| Trocar/incluir parte do corpo ou órgão | `js/data-corpo.js` — listas `PARTES` e `ORGAOS` (nome, artigo, área da elipse, dica) |
 | Trocar/incluir planeta ou curiosidade | `js/data-espaco.js` — lista `ASTROS` |
-| Criar fase nova de palavra | `js/data-palavras.js` — lista `FASES` (palavra, posição da letra que some, 2 letras erradas, desenho) |
+| Criar palavra nova | `js/data-palavras.js` — lista `FASES` (palavra, posição da letra que some, 2 letras erradas, desenho). O sorteio se ajusta sozinho ao tamanho do banco |
+| Mudar quantas palavras saem por sessão | `js/game.js` — `POR_SESSAO` |
 | Mudar a dificuldade do jogo da velha | `js/velha.js` — a chance de jogada esperta em `jogadaDoApp()` (hoje 35%) |
 | Mudar as regras do quiz | `js/game.js` |
 | Mudar cor, tamanho de botão, layout | `css/style.css` |
