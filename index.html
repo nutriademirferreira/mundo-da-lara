@@ -58,30 +58,38 @@
     <div class="menu">
       <div class="tile-wrap">
         <button class="tile tile--body" data-go="corpo-menu" type="button">
-          <div class="tile__art">
-            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-kid"></use></svg>
-          </div>
-          <div class="tile__text">
-            <strong>Corpo Humano</strong>
-            <span>As partes do corpo, uma a uma</span>
-          </div>
+          <span class="tile__art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-kid"></use></svg></span>
+          <strong>Corpo Humano</strong>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Corpo Humano"
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Corpo Humano"
                 data-falar="Corpo Humano. As partes do corpo, uma a uma.">🔊</button>
       </div>
 
       <div class="tile-wrap">
         <button class="tile tile--space" data-go="espaco-menu" type="button">
-          <div class="tile__art">
-            <svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-planet"></use></svg>
-          </div>
-          <div class="tile__text">
-            <strong>Sistema Solar</strong>
-            <span>O Sol e os 8 planetas</span>
-          </div>
+          <span class="tile__art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-planet"></use></svg></span>
+          <strong>Sistema Solar</strong>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Sistema Solar"
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Sistema Solar"
                 data-falar="Sistema Solar. O Sol e os oito planetas.">🔊</button>
+      </div>
+
+      <div class="tile-wrap">
+        <button class="tile tile--words" data-go="palavras-jogar" type="button">
+          <span class="tile__art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-letras"></use></svg></span>
+          <strong>Palavras</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Palavras"
+                data-falar="Palavras. Complete a palavra com a letra que está faltando. São dez fases.">🔊</button>
+      </div>
+
+      <div class="tile-wrap">
+        <button class="tile tile--tic" data-go="velha-menu" type="button">
+          <span class="tile__art"><svg viewBox="0 0 120 120" aria-hidden="true"><use href="#mini-velha"></use></svg></span>
+          <strong>Jogo da Velha</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
+                data-falar="Jogo da velha. Jogue com o app ou com o papai.">🔊</button>
       </div>
     </div>
 
@@ -102,7 +110,7 @@
           <strong>Aprender</strong>
           <small>Toque nas partes e ouça o nome</small>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Aprender"
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Aprender"
                 data-falar="Aprender. Toque nas partes do corpo e ouça o nome.">🔊</button>
       </div>
       <div class="mode-wrap">
@@ -111,7 +119,7 @@
           <strong>Jogar Quiz</strong>
           <small>10 perguntas · ache o nome certo</small>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Jogar Quiz"
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Jogar Quiz"
                 data-falar="Jogar quiz. Dez perguntas. Ache o nome certo.">🔊</button>
       </div>
     </div>
@@ -144,7 +152,7 @@
           <strong>Explorar</strong>
           <small>Viaje do Sol até Netuno</small>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Explorar"
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Explorar"
                 data-falar="Explorar. Viaje do Sol até Netuno.">🔊</button>
       </div>
       <div class="mode-wrap">
@@ -153,7 +161,7 @@
           <strong>Jogar Quiz</strong>
           <small>9 perguntas · que planeta é esse?</small>
         </button>
-        <button class="som-btn som-flutuante" type="button" aria-label="Ouvir Jogar Quiz"
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Jogar Quiz"
                 data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?">🔊</button>
       </div>
     </div>
@@ -173,6 +181,54 @@
               data-falar="Arraste para o lado e toque num planeta.">🔊</button>
     </div>
     <div class="orbit-scroll" id="orbit-scroll"></div>
+  </section>
+
+  <!-- ============ MENU: JOGO DA VELHA ============ -->
+  <section class="screen screen--submenu" id="screen-velha-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Jogo da Velha</h2>
+      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="velha-app" type="button">
+          <span class="mode__emoji">🤖</span>
+          <strong>Jogar com o app</strong>
+          <small>A Lara é o ✗ e começa jogando</small>
+        </button>
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
+                data-falar="Jogar com o app. A Lara é o xis e começa jogando.">🔊</button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--learn" data-go="velha-dois" type="button">
+          <span class="mode__emoji">👨‍👧</span>
+          <strong>Jogar com o papai</strong>
+          <small>Dois jogadores no mesmo celular</small>
+        </button>
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
+                data-falar="Jogar com o papai. Dois jogadores no mesmo celular.">🔊</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TABULEIRO ============ -->
+  <section class="screen screen--velha" id="screen-velha">
+    <header class="bar">
+      <button class="icon-btn" data-go="velha-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title" id="velha-titulo">Jogo da Velha</h2>
+      <span class="bar__stars">⭐ <b data-star-mirror>0</b></span>
+    </header>
+
+    <div class="velha-linha">
+      <span class="velha-status" id="velha-status">Sua vez, Lara! ✗</span>
+      <button class="som-btn som-btn--mini" id="velha-som" type="button"
+              aria-label="Ouvir de quem é a vez" data-falar="Sua vez, Lara!">🔊</button>
+    </div>
+
+    <div class="velha-tab" id="velha-tab"></div>
+
+    <button class="btn-big btn-big--go" id="velha-denovo" type="button">Jogar de novo</button>
   </section>
 
   <!-- ============ QUIZ (compartilhado) ============ -->
@@ -248,13 +304,35 @@
       <circle cx="98" cy="22" r="4" fill="#FFF3C4"/><circle cx="18" cy="26" r="3" fill="#FFF3C4"/>
       <circle cx="24" cy="98" r="3.5" fill="#FFF3C4"/>
     </symbol>
+    <symbol id="mini-letras" viewBox="0 0 120 120">
+      <rect x="6" y="34" width="34" height="34" rx="9" fill="#12A87E"/>
+      <rect x="43" y="26" width="34" height="34" rx="9" fill="#2ED3A3"/>
+      <rect x="80" y="34" width="34" height="34" rx="9" fill="#12A87E"/>
+      <text x="23" y="59" font-size="26" font-weight="900" text-anchor="middle" fill="#fff">A</text>
+      <text x="60" y="51" font-size="26" font-weight="900" text-anchor="middle" fill="#08543F">B</text>
+      <text x="97" y="59" font-size="26" font-weight="900" text-anchor="middle" fill="#fff">C</text>
+      <rect x="24" y="82" width="72" height="9" rx="4.5" fill="#fff" opacity=".55"/>
+      <rect x="38" y="97" width="44" height="9" rx="4.5" fill="#fff" opacity=".35"/>
+    </symbol>
+    <symbol id="mini-velha" viewBox="0 0 120 120">
+      <g stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".65">
+        <path d="M46 16 v88 M74 16 v88 M16 46 h88 M16 74 h88"/>
+      </g>
+      <g stroke="#FFF3B0" stroke-width="8" stroke-linecap="round" fill="none">
+        <path d="M23 23 L39 39 M39 23 L23 39"/>
+        <circle cx="83" cy="83" r="11"/>
+        <path d="M83 23 L99 39 M99 23 L83 39"/>
+      </g>
+    </symbol>
   </defs>
 </svg>
 
 <script src="js/audio.js"></script>
 <script src="js/data-corpo.js"></script>
 <script src="js/data-espaco.js"></script>
+<script src="js/data-palavras.js"></script>
 <script src="js/game.js"></script>
+<script src="js/velha.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

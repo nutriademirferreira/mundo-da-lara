@@ -12,6 +12,8 @@ var App = (function () {
     'corpo-aprender':   'screen-corpo-aprender',
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
+    'velha-menu':       'screen-velha-menu',
+    'velha':            'screen-velha',
     'quiz':             'screen-quiz',
     'result':           'screen-result'
   };
@@ -64,6 +66,9 @@ var App = (function () {
         Som.tocar('toque');
         if (destino === 'corpo-jogar')       { ir('quiz'); Jogo.iniciar('corpo'); return; }
         if (destino === 'espaco-jogar')      { ir('quiz'); Jogo.iniciar('espaco'); return; }
+        if (destino === 'palavras-jogar')    { ir('quiz'); Jogo.iniciar('palavras'); return; }
+        if (destino === 'velha-app')         { ir('velha'); Velha.iniciar('app'); return; }
+        if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois'); return; }
         if (destino === 'corpo-aprender')    { montarAprender(); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         ir(destino);
@@ -193,7 +198,14 @@ var App = (function () {
     /* quiz */
     $('#quiz-back').addEventListener('click', function () {
       Som.tocar('toque');
-      ir(Jogo.tipoAtual() === 'corpo' ? 'corpo-menu' : 'espaco-menu');
+      var tipo = Jogo.tipoAtual();
+      ir(tipo === 'corpo' ? 'corpo-menu' : tipo === 'espaco' ? 'espaco-menu' : 'home');
+    });
+
+    /* jogo da velha */
+    $('#velha-denovo').addEventListener('click', function () {
+      Som.tocar('toque');
+      Velha.reiniciar();
     });
     $('#quiz-speak').addEventListener('click', function () { Jogo.repetirFala(); });
 

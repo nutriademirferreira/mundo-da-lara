@@ -81,11 +81,52 @@ var Jogo = (function () {
     });
   }
 
+  function rodadasPalavras() {
+    var total = Palavras.FASES.length;
+    return Palavras.FASES.map(function (fase, i) {
+      var letra = fase.palavra.charAt(fase.falta);
+      var dita = fase.palavra.charAt(0) + fase.palavra.slice(1).toLowerCase();
+      var opcoes = embaralhar([letra].concat(fase.erradas)).map(function (l) {
+        return { id: l, texto: l, fala: Palavras.falaDaLetra(l) };
+      });
+
+      var pecas = '';
+      for (var k = 0; k < fase.palavra.length; k++) {
+        pecas += (k === fase.falta)
+          ? '<span class="letra letra--vazia">?</span>'
+          : '<span class="letra">' + fase.palavra.charAt(k) + '</span>';
+      }
+
+      return {
+        alvo: { id: letra },
+        opcoes: opcoes,
+        layout: 'letras',
+        palco: '<div class="palco-palavra">' +
+                 '<span class="fase-tag">Fase ' + (i + 1) + ' de ' + total + '</span>' +
+                 Palavras.figura(fase) +
+                 '<div class="palavra">' + pecas + '</div>' +
+               '</div>',
+        pergunta: 'Que letra está faltando?',
+        fala: dita + '. Que letra está faltando?',
+        acertou: 'Isso! ' + Palavras.falaDaLetra(letra) + ' de ' + dita + '!',
+        aoAcertar: function () {
+          var vazia = document.querySelector('#quiz-stage .letra--vazia');
+          if (!vazia) return;
+          vazia.textContent = letra;
+          vazia.classList.remove('letra--vazia');
+          vazia.classList.add('letra--acertou');
+        }
+      };
+    });
+  }
+
   /* ---------- ciclo do jogo ---------- */
   function iniciar(tipo) {
     estado = {
       tipo: tipo,
-      rodadas: tipo === 'corpo' ? rodadasCorpo() : rodadasEspaco(),
+      rodadas: tipo === 'corpo' ? rodadasCorpo()
+             : tipo === 'palavras' ? rodadasPalavras()
+             : rodadasEspaco(),
       indice: 0,
       acertos: 0,
       errouNaRodada: false,
@@ -118,21 +159,25 @@ var Jogo = (function () {
     if (estado.tipo === 'corpo') {
       palco.innerHTML = '<div class="kid">' + Corpo.desenho('quiz') + '</div>';
       apontarParte(palco, r.alvo);
+    } else if (estado.tipo === 'palavras') {
+      palco.innerHTML = r.palco;
     } else {
       palco.innerHTML = '<div class="planeta-quiz">' + Espaco.orbe(r.alvo, 220) + '</div>';
     }
 
     $('#quiz-question').textContent = r.pergunta;
 
+    var letras = r.layout === 'letras';
     var caixa = $('#quiz-options');
+    caixa.className = 'options' + (letras ? ' options--letras' : '');
     caixa.innerHTML = '';
     r.opcoes.forEach(function (o) {
       var linha = document.createElement('div');
-      linha.className = 'opt-linha';
+      linha.className = letras ? 'opt-coluna' : 'opt-linha';
 
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'opt';
+      b.className = 'opt' + (letras ? ' opt--letra' : '');
       b.textContent = o.texto;
       b.dataset.id = o.id;
       b.addEventListener('click', function () { responder(b, o.id); });
@@ -142,8 +187,9 @@ var Jogo = (function () {
       som.type = 'button';
       som.className = 'som-btn';
       som.textContent = '🔊';
-      som.setAttribute('aria-label', 'Ouvir ' + o.texto);
-      som.dataset.falar = o.texto;
+      som.className += letras ? ' som-btn--mini' : '';
+      som.setAttribute('aria-label', 'Ouvir ' + (o.fala || o.texto));
+      som.dataset.falar = o.fala || o.texto;
 
       linha.appendChild(b);
       linha.appendChild(som);
@@ -191,6 +237,7 @@ var Jogo = (function () {
       var todos = document.querySelectorAll('#quiz-options .opt');
       for (var i = 0; i < todos.length; i++) if (todos[i] !== botao) todos[i].classList.add('is-off');
 
+      if (r.aoAcertar) r.aoAcertar();
       Som.tocar('acerto');
       Som.falar(r.acertou, { atraso: 420 });
       confete(estado.errouNaRodada ? 10 : 20);
@@ -251,6 +298,7 @@ var Jogo = (function () {
 
   return {
     iniciar: iniciar, tipoAtual: tipoAtual, repetirFala: repetirFala,
-    pintarEstrelas: pintarEstrelas, confete: confete, embaralhar: embaralhar
+    pintarEstrelas: pintarEstrelas, confete: confete, embaralhar: embaralhar,
+    ganharEstrela: guardarEstrela
   };
 })();

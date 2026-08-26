@@ -15,6 +15,14 @@ pode ser instalado na tela de início como se fosse um aplicativo (PWA, funciona
 - *Explorar*: viagem lateral do Sol até Netuno; toca no astro e ouve o nome + 2 curiosidades.
 - *Jogar Quiz*: 9 rodadas — aparece o astro desenhado e a criança escolhe entre 3 nomes.
 
+**Palavras** — 10 fases
+- Aparece o desenho (bola, gato, sol, lua, pato, casa, bolo, sapo, flor, peixe), a palavra em
+  letra bastão com uma letra faltando, e 3 letras pra escolher. Acertou, a letra cai na lacuna.
+
+**Jogo da Velha**
+- Contra o app (que joga fácil de propósito) ou dois jogadores no mesmo celular.
+  A Lara é o ✗ e sempre começa. Vitória dela vale estrelinha.
+
 **Tudo é ouvível.** Como a Lara ainda não lê, todo lugar com informação escrita tem um
 alto-falante do lado: cada uma das 3 opções do quiz, os cartões da tela inicial, os modos de
 jogo, o nome de cada planeta, cada curiosidade da ficha, a contagem de estrelinhas e o
@@ -34,6 +42,8 @@ Tudo é HTML/CSS/JS puro, sem build e sem dependência externa.
 |---|---|
 | Trocar/incluir parte do corpo | `js/data-corpo.js` — lista `PARTES` (nome, artigo, área da elipse, dica) |
 | Trocar/incluir planeta ou curiosidade | `js/data-espaco.js` — lista `ASTROS` |
+| Criar fase nova de palavra | `js/data-palavras.js` — lista `FASES` (palavra, posição da letra que some, 2 letras erradas, desenho) |
+| Mudar a dificuldade do jogo da velha | `js/velha.js` — a chance de jogada esperta em `jogadaDoApp()` (hoje 35%) |
 | Mudar as regras do quiz | `js/game.js` |
 | Mudar cor, tamanho de botão, layout | `css/style.css` |
 
