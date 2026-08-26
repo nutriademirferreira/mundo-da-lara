@@ -157,7 +157,7 @@ var Jogo = (function () {
     /* interrogação sempre na lateral vazia, nunca por cima do rosto */
     var q = svg.querySelector('.qmark');
     if (q) {
-      q.setAttribute('x', a.cx < 110 ? 32 : 264);
+      q.setAttribute('x', a.cx < 150 ? 32 : 264);
       q.setAttribute('y', a.cy + 14);
     }
   }
