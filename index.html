@@ -30,7 +30,7 @@
   <section class="screen screen--start is-active" id="screen-start">
     <div class="start-sky" aria-hidden="true"></div>
     <div class="start-body">
-      <div class="start-badge">✨</div>
+      <img class="start-lara" src="img/lara-oi.webp" alt="" draggable="false">
       <h1 class="start-title">Mundo da<br><span>Lara</span></h1>
       <p class="start-sub">Jogos para aprender brincando</p>
       <button class="btn-start" id="btn-start" type="button">
@@ -199,6 +199,15 @@
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Jogar Quiz"
                 data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?">🔊</button>
       </div>
+      <div class="mode-wrap">
+        <button class="mode mode--tamanho" data-go="tamanho" type="button">
+          <span class="mode__emoji">📏</span>
+          <strong>Tamanho de Verdade</strong>
+          <small>Veja quem é gigante e quem é pequenininho</small>
+        </button>
+        <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
+                data-falar="Tamanho de verdade. Veja quem é gigante e quem é pequenininho.">🔊</button>
+      </div>
     </div>
   </section>
 
@@ -216,6 +225,21 @@
               data-falar="Arraste para o lado e toque num planeta.">🔊</button>
     </div>
     <div class="orbit-scroll" id="orbit-scroll"></div>
+  </section>
+
+  <!-- ============ TAMANHO DE VERDADE ============ -->
+  <section class="screen screen--space" id="screen-tamanho">
+    <header class="bar bar--onspace">
+      <button class="icon-btn" data-go="espaco-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Tamanho de Verdade</h2>
+      <span class="bar__spacer"></span>
+    </header>
+    <div class="space-hint">
+      <span>Do menorzinho ao maior — arraste 👉</span>
+      <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir"
+              data-falar="Aqui os planetas estão no tamanho certo, um do lado do outro. Arraste pro lado.">🔊</button>
+    </div>
+    <div class="tamanho-scroll" id="tamanho-scroll"></div>
   </section>
 
   <!-- ============ MENU: JOGO DA VELHA ============ -->
@@ -295,6 +319,7 @@
   <!-- ============ RESULTADO ============ -->
   <section class="screen screen--result" id="screen-result">
     <div class="result-card">
+      <img class="result-lara" id="result-lara" src="img/lara-festa.webp" alt="" draggable="false">
       <div class="result-emoji" id="result-emoji">🏆</div>
       <h2 id="result-title">Muito bem, Lara!</h2>
       <p class="result-score"><b id="result-hits">0</b> de <b id="result-total">10</b> certinhas</p>
@@ -305,6 +330,9 @@
       <button class="btn-big btn-big--ghost" id="result-home" type="button">Voltar pro início</button>
     </div>
   </section>
+
+  <!-- a Lara entrando de lado ao abrir cada mundo -->
+  <div class="passagem" id="passagem" aria-hidden="true"><img id="passagem-img" src="" alt=""></div>
 
   <!-- camada de festinha -->
   <div class="confetti" id="confetti" aria-hidden="true"></div>

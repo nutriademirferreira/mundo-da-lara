@@ -166,6 +166,20 @@ var Espaco = (function () {
            '</svg>';
   }
 
+  /* Diâmetro real em km e quanto da altura do quadro a bola ocupa em cada
+     arte — sem isso a proporção entre os planetas viraria mentira. */
+  var REAIS = {
+    sol:      { km: 1392700, bola: 0.884 },
+    mercurio: { km:    4879, bola: 0.996 },
+    venus:    { km:   12104, bola: 0.996 },
+    terra:    { km:   12742, bola: 0.800 },
+    marte:    { km:    6779, bola: 0.996 },
+    jupiter:  { km:  139820, bola: 0.996 },
+    saturno:  { km:  116460, bola: 0.456 },
+    urano:    { km:   50724, bola: 0.773 },
+    netuno:   { km:   49244, bola: 0.831 }
+  };
+
   function comArtigo(a) { return (a.artigo ? a.artigo + ' ' : '') + a.nome; }
 
   function porId(id) {
@@ -173,5 +187,5 @@ var Espaco = (function () {
     return null;
   }
 
-  return { ASTROS: ASTROS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
+  return { ASTROS: ASTROS, REAIS: REAIS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
 })();

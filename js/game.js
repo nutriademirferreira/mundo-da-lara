@@ -296,6 +296,10 @@ var Jogo = (function () {
     $('#result-total').textContent = total;
 
     var perfeito = acertos === total;
+    var cartao = document.querySelector('.result-card');
+    var lara = $('#result-lara');
+    if (lara) lara.src = perfeito ? 'img/lara-unicornio.webp' : 'img/lara-festa.webp';
+    if (cartao) cartao.classList.toggle('is-perfeito', perfeito);
     $('#result-emoji').textContent = perfeito ? '🏆' : (acertos >= total / 2 ? '🌟' : '💪');
     $('#result-title').textContent = perfeito ? 'Perfeito, Lara!' : (acertos >= total / 2 ? 'Muito bem, Lara!' : 'Boa, Lara!');
 

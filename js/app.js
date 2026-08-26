@@ -12,6 +12,7 @@ var App = (function () {
     'corpo-aprender':   'screen-corpo-aprender',
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
+    'tamanho':          'screen-tamanho',
     'velha-menu':       'screen-velha-menu',
     'velha':            'screen-velha',
     'quiz':             'screen-quiz',
@@ -31,6 +32,7 @@ var App = (function () {
     'corpo-aprender':   { foto:'fundo-corpo',  veu:'claro'  },
     'espaco-menu':      { foto:'fundo-espaco', veu:'escuro' },
     'espaco-explorar':  { foto:'fundo-espaco', veu:'espaco' },
+    'tamanho':          { foto:'fundo-espaco', veu:'espaco' },
     'velha-menu':       { foto:'fundo-velha',  veu:'escuro' },
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
     'result':           { foto:'fundo-home',   veu:'claro'  }
@@ -111,6 +113,31 @@ var App = (function () {
     }, Math.min(700 + texto.length * 72, 6000));
   }
 
+  /* =========================================================
+     PASSAGEM — a Lara entra deslizando ao abrir cada mundo.
+     Um segundo, sem travar nada: o jogo já está carregando por baixo.
+     A versão crescida abre a porta do mundo; a pequena brinca junto.
+     ========================================================= */
+  var PASSAGENS = {
+    'corpo-menu':    'lara-cientista',
+    'espaco-menu':   'lara-astronauta',
+    'velha-menu':    'lara-princesa',
+    'palavras-jogar':'lara-palavras'
+  };
+  var passagemNoAr = null;
+
+  function passar(qual) {
+    var arte = PASSAGENS[qual];
+    if (!arte) return;
+    var caixa = $('#passagem');
+    $('#passagem-img').src = 'img/' + arte + '.webp';
+    caixa.classList.remove('is-on');
+    void caixa.offsetWidth;               /* reinicia a animação */
+    caixa.classList.add('is-on');
+    clearTimeout(passagemNoAr);
+    passagemNoAr = setTimeout(function () { caixa.classList.remove('is-on'); }, 1500);
+  }
+
   /* ---------- roteamento por data-go ---------- */
   function ligarNavegacao() {
     $$('[data-go]').forEach(function (b) {
@@ -118,6 +145,7 @@ var App = (function () {
         if (e.target.closest && e.target.closest('[data-falar]')) return;
         var destino = b.dataset.go;
         Som.tocar('toque');
+        passar(destino);
         if (destino === 'corpo-jogar')       { ir('quiz'); Jogo.iniciar('corpo'); return; }
         if (destino === 'orgaos-jogar')      { ir('quiz'); Jogo.iniciar('orgaos'); return; }
         if (destino === 'orgaos-aprender')   { montarAprender('orgaos'); ir('corpo-aprender'); return; }
@@ -127,6 +155,7 @@ var App = (function () {
         if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois', true); return; }
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
+        if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         ir(destino);
       });
     });
@@ -193,6 +222,59 @@ var App = (function () {
         abrirFicha(astro);
       });
       trilha.appendChild(card);
+    });
+    trilha.scrollLeft = 0;
+  }
+
+  /* =========================================================
+     TAMANHO DE VERDADE
+     Uma escala só pra todos: o maior planeta ocupa a altura da
+     faixa, e todo o resto sai dessa mesma régua. Por isso
+     Mercúrio vira um pontinho — e é essa a lição.
+     ========================================================= */
+  function montarTamanho() {
+    var trilha = $('#tamanho-scroll');
+    var altura = trilha.clientHeight || Math.round(innerHeight * 0.52);
+    var util = Math.max(180, altura - 78);            /* sobra pro nome e a medida */
+    var escala = util / Espaco.REAIS.jupiter.km;      /* Júpiter é a régua */
+
+    var terraKm = Espaco.REAIS.terra.km;
+    trilha.innerHTML = '';
+
+    /* o Sol primeiro: no mesmo tamanho ele teria mais de 4 mil pixels */
+    /* o Sol teria milhares de pixels: mostro só a beirada curva,
+       o suficiente pra ela ver que é uma bola que não cabe */
+    var solPx = Math.round(Espaco.REAIS.sol.km * escala);
+    var mostra = 168;
+    var sol = document.createElement('div');
+    sol.className = 'tam-sol';
+    sol.innerHTML =
+      '<div class="tam-sol__arco" style="width:' + solPx + 'px;height:' + solPx + 'px;' +
+        'margin-left:' + (mostra - solPx) + 'px"></div>' +
+      '<div class="tam-sol__rotulo"><b>O Sol</b>' +
+      '<span>tão grande que nem cabe aqui — 109 Terras de largura</span></div>';
+    trilha.appendChild(sol);
+
+    var ordem = ['mercurio','marte','venus','terra','urano','netuno','saturno','jupiter'];
+    ordem.forEach(function (id) {
+      var astro = Espaco.porId(id);
+      var real = Espaco.REAIS[id];
+      var bolaPx = real.km * escala;                   /* tamanho da BOLA na tela */
+      var quadroPx = Math.max(14, Math.round(bolaPx / real.bola));  /* a arte é maior que a bola */
+      var vezes = (real.km / terraKm);
+      var medida = vezes >= 1.6 ? (vezes.toFixed(1).replace('.', ',') + '× a Terra')
+                 : vezes <= 0.62 ? ('cabe ' + Math.round(1 / vezes) + '× na Terra')
+                 : 'quase igual à Terra';
+
+      var item = document.createElement('div');
+      item.className = 'tam-item';
+      item.innerHTML =
+        '<span class="tam-item__bola"><img src="img/planeta-' + id + '.webp" alt="' + astro.nome + '"' +
+          ' style="width:' + quadroPx + 'px" draggable="false"></span>' +
+        '<span class="tam-item__nome">' + astro.nome + '</span>' +
+        '<span class="tam-item__medida">' + medida + '</span>';
+      item.addEventListener('click', function () { abrirFicha(astro); });
+      trilha.appendChild(item);
     });
     trilha.scrollLeft = 0;
   }
