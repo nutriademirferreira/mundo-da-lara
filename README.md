@@ -1,5 +1,7 @@
 # Mundo da Lara 🌈
 
+**No ar:** https://nutriademirferreira.github.io/mundo-da-lara/
+
 App de jogos educativos feito para a Lara (5 anos). Roda no navegador do celular e
 pode ser instalado na tela de início como se fosse um aplicativo (PWA, funciona offline).
 
