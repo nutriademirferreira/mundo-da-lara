@@ -63,7 +63,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    Duas fotos empilhadas pra trocar com fade, e um véu por cima
    que garante que texto e botão continuem legíveis.
    =========================================================== */
-.fundo{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+/* fixo na janela, não dentro do app: assim nunca sobra faixa da cor do body
+   quando a barra do navegador entra e sai no iPhone */
+.fundo{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .fundo__foto{
   position:absolute;inset:0;opacity:0;
   background-size:cover;background-position:center;
@@ -175,9 +177,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile--words{background:linear-gradient(140deg,#5CE8BC,#12A87E 60%,#0B7A5C)}
 .tile--tic{background:linear-gradient(140deg,#FFC155,#F0761F)}
 .tile__art{
-  flex:1;min-height:0;width:100%;display:grid;place-items:center;padding:0;
+  flex:1;min-height:0;width:100%;display:grid;place-items:center;padding:0;overflow:hidden;
 }
-.tile__foto{max-height:100%;max-width:88%;width:auto;height:auto;object-fit:contain;
+.tile__foto{max-height:100%;max-width:86%;width:auto;height:auto;min-height:0;object-fit:contain;
   filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}
 
 
@@ -221,7 +223,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 
 .star-linha{display:flex;align-items:center;gap:10px;margin:16px 0 18px}
-.tile-wrap,.mode-wrap{position:relative;display:flex}
+.tile-wrap,.mode-wrap{position:relative;display:flex;min-height:0;min-width:0}
 .tile-wrap>.tile,.mode-wrap>.mode{flex:1}
 
 /* ===========================================================
@@ -243,8 +245,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .mode{
   display:flex;flex-direction:column;align-items:flex-start;gap:4px;
   min-height:132px;padding:20px 88px 20px 20px;border-radius:var(--radius);text-align:left;
-  background:#fff;color:var(--ink);box-shadow:var(--shadow);
+  background:rgba(255,255,255,.62);color:var(--ink);
+  border:1px solid rgba(255,255,255,.75);backdrop-filter:blur(9px) saturate(1.2);
+  box-shadow:0 8px 0 rgba(43,27,84,.10),0 14px 28px rgba(43,27,84,.14);
 }
+.mode strong,.mode small{text-shadow:0 1px 6px rgba(255,255,255,.95)}
 .screen--dark .mode{background:rgba(255,255,255,.10);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.16)}
 .mode:active{transform:translateY(5px)}
 .mode__emoji{font-size:48px;line-height:1}
@@ -462,15 +467,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    =========================================================== */
 .screen--result{align-items:center;justify-content:center}
 .result-card{
-  width:100%;background:#fff;border-radius:34px;padding:28px 22px;text-align:center;
-  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;align-items:center;
+  width:100%;max-height:100%;background:#fff;border-radius:34px;padding:20px 20px;text-align:center;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;align-items:center;
+  overflow:hidden;
 }
-.result-emoji{font-size:76px;animation:pop 1.6s ease-in-out infinite}
-.result-card h2{font-size:28px;font-weight:900;letter-spacing:-.5px}
+.result-emoji{font-size:56px;line-height:1;animation:pop 1.6s ease-in-out infinite}
+.result-card h2{font-size:25px;font-weight:900;letter-spacing:-.5px}
 .result-score{font-size:18px;color:var(--ink-soft)}
 .result-score b{color:var(--pink-dark);font-size:24px}
-.result-stars{font-size:30px;letter-spacing:4px;min-height:40px}
-#result-som{margin:2px auto 4px}
+.result-stars{font-size:26px;letter-spacing:2px;min-height:0;line-height:1}
+#result-som{margin:0 auto}
 .result-stars span{display:inline-block;animation:zoomIn .4s cubic-bezier(.2,.9,.3,1.6) backwards}
 .btn-big{
   width:100%;min-height:var(--tap);border-radius:22px;font-size:22px;font-weight:900;
@@ -620,11 +626,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 
 .result-lara{
-  width:auto;height:min(30dvh,230px);object-fit:contain;margin-bottom:-14px;
+  width:auto;height:min(24dvh,190px);min-height:0;object-fit:contain;margin-bottom:-10px;
   filter:drop-shadow(0 12px 24px rgba(43,27,84,.30));
   animation:float 3.4s ease-in-out infinite;
 }
-.result-card.is-perfeito .result-lara{height:min(34dvh,260px)}
+.result-card.is-perfeito .result-lara{height:min(27dvh,215px)}
 .result-card.is-perfeito .result-emoji{display:none}
 
 
@@ -651,6 +657,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    planetas cai na mesma linha e a comparação de tamanho fica honesta */
 .tam-item__bola{flex:1;min-height:0;display:grid;place-items:center}
 .tam-item__bola img{display:block;height:auto;filter:drop-shadow(0 8px 22px rgba(0,0,0,.5))}
+.tam-item__linha{display:flex;align-items:center;gap:7px}
 .tam-item__nome{
   font-size:14px;font-weight:900;letter-spacing:-.2px;white-space:nowrap;
   background:rgba(13,18,52,.82);border:1px solid rgba(255,255,255,.16);
@@ -694,15 +701,21 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .viagem-parada{
   position:absolute;top:50%;transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;gap:8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
 }
+/* rótulo alternado: os planetas de dentro estão perto demais pra
+   caber tudo numa linha só de nomes */
+.viagem-parada--baixo{flex-direction:column-reverse}
+.viagem-parada--baixo .viagem-parada__tempo{order:-1}
 .viagem-parada img{display:block;width:auto;filter:drop-shadow(0 8px 20px rgba(0,0,0,.55))}
 .viagem-parada__nome{
-  font-size:14px;font-weight:900;white-space:nowrap;
-  background:rgba(13,18,52,.86);border:1px solid rgba(255,255,255,.18);
-  padding:5px 13px;border-radius:999px;
+  font-size:13px;font-weight:900;white-space:nowrap;
+  background:rgba(13,18,52,.9);border:1px solid rgba(255,255,255,.18);
+  padding:4px 10px;border-radius:999px;
 }
-.viagem-parada__tempo{font-size:11px;opacity:.85;white-space:nowrap;text-shadow:0 2px 6px rgba(0,0,0,.9)}
+.viagem-parada__tempo{font-size:11px;font-weight:800;opacity:.9;white-space:nowrap;
+  background:rgba(13,18,52,.72);padding:2px 8px;border-radius:999px;
+  text-shadow:0 2px 6px rgba(0,0,0,.9)}
 .viagem-sol{
   position:absolute;top:50%;left:0;transform:translate(-58%,-50%);
   width:190px;height:190px;border-radius:50%;
@@ -744,7 +757,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   filter:drop-shadow(0 2px 4px rgba(120,80,0,.35))}
 .estrela-icone--grande{width:34px;height:34px;vertical-align:-8px}
 .bar__stars{display:inline-flex;align-items:center;gap:5px}
-.result-stars img{width:34px;height:34px;object-fit:contain;margin:0 1px;
+.result-stars img{width:27px;height:27px;object-fit:contain;margin:0 1px;
   animation:zoomIn .4s cubic-bezier(.2,.9,.3,1.6) backwards}
 .result-colecao{font-size:14px;font-weight:800;color:var(--purple);
   background:#F2ECFF;padding:8px 16px;border-radius:999px}

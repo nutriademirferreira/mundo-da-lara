@@ -281,14 +281,26 @@ var App = (function () {
                  : vezes <= 0.62 ? ('cabe ' + Math.round(1 / vezes) + '× na Terra')
                  : 'quase igual à Terra';
 
+      var fala = astro.nome + '. ' +
+        (vezes >= 1.6 ? ('É ' + vezes.toFixed(1).replace('.', ' vírgula ') + ' vezes maior que a Terra.')
+       : vezes <= 0.62 ? ('Ele cabe ' + Math.round(1 / vezes) + ' vezes dentro da Terra.')
+       : 'É quase do tamanho da Terra.');
+
       var item = document.createElement('div');
       item.className = 'tam-item';
       item.innerHTML =
         '<span class="tam-item__bola"><img src="img/planeta-' + id + '.webp" alt="' + astro.nome + '"' +
           ' style="width:' + quadroPx + 'px" draggable="false"></span>' +
-        '<span class="tam-item__nome">' + astro.nome + '</span>' +
+        '<span class="tam-item__linha">' +
+          '<span class="tam-item__nome">' + astro.nome + '</span>' +
+          '<button class="som-btn som-btn--nano" type="button" aria-label="Ouvir ' + astro.nome + '"' +
+            ' data-falar="' + fala + '">🔊</button>' +
+        '</span>' +
         '<span class="tam-item__medida">' + medida + '</span>';
-      item.addEventListener('click', function () { abrirFicha(astro); });
+      item.addEventListener('click', function (e) {
+        if (e.target.closest('[data-falar]')) return;
+        abrirFicha(astro);
+      });
       trilha.appendChild(item);
     });
     trilha.scrollLeft = 0;
@@ -302,25 +314,30 @@ var App = (function () {
      ========================================================= */
   function montarViagem() {
     var trilha = $('#viagem-scroll');
-    var PX_POR_MILHAO = 0.78;                 /* Netuno cai a ~3.500px, umas 9 telas */
-    var margemFinal = 150;
-    var fim = Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + margemFinal;
+    /* escala maior e um empurrão inicial: os quatro de dentro ficam juntos de
+       verdade, mas amontoados na tela viram bagunça em vez de informação */
+    var PX_POR_MILHAO = 1.35;
+    var SAIDA = 170;                          /* espaço pro Sol não engolir Mercúrio */
+    var margemFinal = 260;
+    var fim = SAIDA + Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + margemFinal;
 
     var pista = document.createElement('div');
     pista.className = 'viagem-pista';
     pista.style.width = Math.round(fim) + 'px';
     pista.innerHTML = '<div class="viagem-sol"></div><span class="viagem-sol__nome">O Sol</span>';
 
-    ['mercurio','venus','terra','marte','jupiter','saturno','urano','netuno'].forEach(function (id) {
+    ['mercurio','venus','terra','marte','jupiter','saturno','urano','netuno'].forEach(function (id, i) {
       var astro = Espaco.porId(id);
       var d = Espaco.DISTANCIAS[id];
-      var tam = id === 'jupiter' || id === 'saturno' ? 84 : (id === 'urano' || id === 'netuno' ? 70 : 58);
+      var tam = id === 'jupiter' || id === 'saturno' ? 82 : (id === 'urano' || id === 'netuno' ? 66 : 42);
       var real = Espaco.REAIS[id];
       var quadro = Math.round(tam / real.bola);
 
       var parada = document.createElement('div');
-      parada.className = 'viagem-parada';
-      parada.style.left = Math.round(d.milhoes * PX_POR_MILHAO) + 'px';
+      /* nome alternado em cima e embaixo: com os de dentro tão perto,
+         os rótulos se atropelariam numa linha só */
+      parada.className = 'viagem-parada' + (i % 2 ? ' viagem-parada--baixo' : '');
+      parada.style.left = Math.round(SAIDA + d.milhoes * PX_POR_MILHAO) + 'px';
       parada.innerHTML =
         '<img src="img/planeta-' + id + '.webp" alt="' + astro.nome + '" style="width:' + quadro + 'px" draggable="false">' +
         '<span class="viagem-parada__nome">' + astro.nome + '</span>' +
@@ -332,7 +349,7 @@ var App = (function () {
     /* a chegada: ela esperando em Netuno, no fim da viagem */
     var chegada = document.createElement('div');
     chegada.className = 'viagem-chegada';
-    chegada.style.left = Math.round(Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + 180) + 'px';
+    chegada.style.left = Math.round(SAIDA + Espaco.DISTANCIAS.netuno.milhoes * PX_POR_MILHAO + 190) + 'px';
     chegada.innerHTML = '<img src="img/lara-espaco.webp" alt="">' +
                         '<span class="viagem-parada__nome">Chegamos!</span>';
     pista.appendChild(chegada);
@@ -355,7 +372,7 @@ var App = (function () {
     var ultima = 'Saindo do Sol';
     var ordem = ['mercurio','venus','terra','marte','jupiter','saturno','urano','netuno'];
     for (var i = 0; i < ordem.length; i++) {
-      var x = Espaco.DISTANCIAS[ordem[i]].milhoes * 0.78;
+      var x = 170 + Espaco.DISTANCIAS[ordem[i]].milhoes * 1.35;
       if (frente >= x) ultima = 'Passando por ' + Espaco.porId(ordem[i]).nome;
     }
     if (andado > 0.985) ultima = 'Chegou em Netuno! 🎉';
