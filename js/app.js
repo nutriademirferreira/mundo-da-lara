@@ -19,6 +19,50 @@ var App = (function () {
   };
   var telaAtual = 'start';
 
+  /* =========================================================
+     FUNDO DE CADA TELA
+     imagem + véu. O véu é o que mantém texto e botão legíveis:
+     tela clara ganha véu claro, tela escura ganha véu escuro.
+     ========================================================= */
+  var FUNDOS = {
+    'start':            { foto:'fundo-inicio', veu:'escuro' },
+    'home':             { foto:'fundo-home',   veu:'claro'  },
+    'corpo-menu':       { foto:'fundo-corpo',  veu:'claro'  },
+    'corpo-aprender':   { foto:'fundo-corpo',  veu:'claro'  },
+    'espaco-menu':      { foto:'fundo-espaco', veu:'escuro' },
+    'espaco-explorar':  { foto:'fundo-espaco', veu:'espaco' },
+    'velha-menu':       { foto:'fundo-velha',  veu:'escuro' },
+    'velha':            { foto:'fundo-velha',  veu:'meio'   },
+    'result':           { foto:'fundo-home',   veu:'claro'  }
+  };
+
+  var VEUS = {
+    claro:  'linear-gradient(180deg, rgba(255,246,251,.74) 0%, rgba(252,244,255,.52) 38%, rgba(244,236,255,.80) 100%)',
+    escuro: 'linear-gradient(180deg, rgba(20,12,44,.55), rgba(12,8,30,.78))',
+    espaco: 'linear-gradient(180deg, rgba(8,10,32,.62), rgba(5,6,22,.80))',
+    meio:   'linear-gradient(180deg, rgba(255,246,240,.58) 0%, rgba(255,242,232,.44) 40%, rgba(255,238,225,.78) 100%)',
+    quiz:   'linear-gradient(180deg, rgba(255,248,252,.90), rgba(245,238,255,.94))',
+    /* cenário aparece em cima, onde está o desenho; some embaixo, onde ela lê e escolhe */
+    cena:   'linear-gradient(180deg, rgba(255,250,253,.34) 0%, rgba(255,249,253,.52) 42%, rgba(250,244,255,.92) 72%)'
+  };
+
+  var fundoAtivo = 'a';
+  function pintarFundo(nome, extra) {
+    var cfg = extra || FUNDOS[nome];
+    var veu = $('#fundo-veu');
+    if (!cfg) { veu.style.background = ''; $('#fundo-a').classList.remove('is-on'); $('#fundo-b').classList.remove('is-on'); return; }
+
+    var alvo = fundoAtivo === 'a' ? $('#fundo-b') : $('#fundo-a');
+    var url = 'url("img/' + cfg.foto + '.webp")';
+    if (alvo.style.backgroundImage !== url) {
+      alvo.style.backgroundImage = url;
+      alvo.classList.add('is-on');
+      (fundoAtivo === 'a' ? $('#fundo-a') : $('#fundo-b')).classList.remove('is-on');
+      fundoAtivo = fundoAtivo === 'a' ? 'b' : 'a';
+    }
+    veu.style.background = VEUS[cfg.veu] || VEUS.claro;
+  }
+
   function ir(nome) {
     if (!TELAS[nome]) return;
     Som.calar();
@@ -28,6 +72,7 @@ var App = (function () {
     var el = document.getElementById(TELAS[nome]);
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
     telaAtual = nome;
+    if (nome !== 'quiz') pintarFundo(nome);
     Jogo.pintarEstrelas();
   }
 
@@ -240,6 +285,7 @@ var App = (function () {
      Boot
      ========================================================= */
   function iniciar() {
+    pintarFundo('start');           /* a tela de abertura já nasce ativa, sem passar por ir() */
     ligarAltoFalantes();
     ligarNavegacao();
     ligarBotoes();
@@ -262,5 +308,5 @@ var App = (function () {
 
   document.addEventListener('DOMContentLoaded', iniciar);
 
-  return { ir: ir };
+  return { ir: ir, pintarFundo: pintarFundo };
 })();

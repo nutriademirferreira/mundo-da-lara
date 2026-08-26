@@ -1,0 +1,173 @@
+{
+ "fundo-inicio": {
+  "origem": "u1743991164_magical_night_sky_over_rolling_hills_glowing_star_c2d39d48-8f05-4a70-8e05-e64989861828_2.png",
+  "variacao": 3,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 134
+ },
+ "fundo-home": {
+  "origem": "u1743991164_soft_daytime_sky_with_fluffy_rounded_clouds_paste_1fc67ddb-722b-4622-9886-d9da7b6cee67_2.png",
+  "variacao": 3,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 36
+ },
+ "fundo-corpo": {
+  "origem": "u1743991164_cozy_children_bedroom_seen_from_a_distance_blurre_b209f876-8f3c-469f-b5dd-b53421cea51c_3.png",
+  "variacao": 4,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 23
+ },
+ "fundo-espaco": {
+  "origem": "u1743991164_deep_space_nebula_purple_blue_and_magenta_gas_clo_d3f60d7e-0f1b-4c2b-be5f-4b5e443a9c47_0.png",
+  "variacao": 1,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 97
+ },
+ "fundo-velha": {
+  "origem": "u1743991164_interior_of_a_fairytale_castle_hall_warm_stone_wa_a4bf2773-2b1f-4fa2-b2aa-8ad88b2fabeb_0.png",
+  "variacao": 1,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 97
+ },
+ "cena-fazenda": {
+  "origem": "u1743991164_sunny_farm_yard_green_grass_wooden_fence_small_re_0ef9d88f-1946-48e0-9c6b-69f792c04f2a_0.png",
+  "variacao": 1,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 92
+ },
+ "cena-ceu": {
+  "origem": "u1743991164_wide_open_sky_at_golden_hour_gradient_from_warm_o_3f612108-25c8-4a99-ac14-787ea25db94a_3.png",
+  "variacao": 4,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 49
+ },
+ "cena-cozinha": {
+  "origem": "u1743991164_warm_wooden_kitchen_table_seen_from_the_front_coz_1192e3c0-a358-425f-89af-9f3943cdaee8_2.png",
+  "variacao": 3,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 54
+ },
+ "cena-agua": {
+  "origem": "u1743991164_calm_blue_lake_surface_with_gentle_ripples_soft_s_01bce489-0639-4b70-8398-243b719f0eef_3.png",
+  "variacao": 4,
+  "tamanho": [
+   816,
+   1456
+  ],
+  "kb": 48
+ },
+ "planeta-sol": {
+  "origem": "the_Sun_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_17a8c538-07d4-42a4-9ab9-7ee8fbdf7f0a_1.png",
+  "variacao": 2,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 26
+ },
+ "planeta-mercurio": {
+  "origem": "Mercury_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_bad1aa8f-13c0-43a4-ba81-6b8e111ffc4f_3.png",
+  "variacao": 4,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 68
+ },
+ "planeta-venus": {
+  "origem": "Venus_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_g_a13e5185-330e-4e37-919a-ce06650ca390_2.png",
+  "variacao": 3,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 23
+ },
+ "planeta-terra": {
+  "origem": "Earth_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_g_87761c42-ebb7-43ad-8785-9013ae5e33c9_3.png",
+  "variacao": 4,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 83
+ },
+ "planeta-marte": {
+  "origem": "Mars_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_gl_92de3bf5-399a-4465-bfbf-417c0227553c_2.png",
+  "variacao": 3,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 34
+ },
+ "planeta-jupiter": {
+  "origem": "Jupiter_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_bf3094aa-9abe-4ffe-8b9b-3f1ce85474d8_1.png",
+  "variacao": 2,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 40
+ },
+ "planeta-saturno": {
+  "origem": "u1743991164_Saturn_as_a_cute_3D_animated_planet_Pixar_style_s_a3b424c2-b923-44a2-a3e3-2d5d94c9f3f4_3.png",
+  "variacao": 4,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 27
+ },
+ "planeta-urano": {
+  "origem": "Uranus_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded__38e8396f-2d83-4eef-84fc-025893092db6_0.png",
+  "variacao": 1,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 21
+ },
+ "planeta-netuno": {
+  "origem": "Neptune_as_a_cute_3D_animated_planet_Pixar_style_soft_rounded_5c3423a6-3092-45e5-bbd9-71ecf7ad7646_2.png",
+  "variacao": 3,
+  "tamanho": [
+   700,
+   700
+  ],
+  "kb": 36
+ },
+ "estrela": {
+  "origem": "the_Sun_as_a_cute_3D_animated_star_Pixar_style_soft_rounded_g_36bec26a-c4b4-4236-bf95-17c28b43618e_3.png",
+  "variacao": 4,
+  "tamanho": [
+   420,
+   420
+  ],
+  "kb": 10
+ }
+}

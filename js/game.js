@@ -124,6 +124,8 @@ var Jogo = (function () {
         alvo: { id: letra },
         opcoes: opcoes,
         layout: 'letras',
+        /* 'quarto' ainda não foi gerado: o quartinho rosa serve de casa por enquanto */
+        cena: fase.cena === 'quarto' ? 'fundo-corpo' : 'cena-' + fase.cena,
         palco: '<div class="palco-palavra">' +
                  '<span class="fase-tag">Fase ' + (i + 1) + ' de ' + total + '</span>' +
                  Palavras.figura(fase) +
@@ -157,6 +159,8 @@ var Jogo = (function () {
     };
     var tela = $('#screen-quiz');
     tela.classList.toggle('is-space', tipo === 'espaco');
+    if (tipo === 'espaco') App.pintarFundo(null, { foto:'fundo-espaco', veu:'espaco' });
+    else if (tipo !== 'palavras') App.pintarFundo(null, { foto:'fundo-corpo', veu:'claro' });
     pintarEstrelas();
     desenharRodada();
   }
@@ -184,6 +188,7 @@ var Jogo = (function () {
       apontarParte(palco, r.alvo);
     } else if (estado.tipo === 'palavras') {
       palco.innerHTML = r.palco;
+      App.pintarFundo(null, { foto: r.cena, veu:'cena' });
     } else {
       palco.innerHTML = '<div class="planeta-quiz">' + Espaco.orbe(r.alvo, 220) + '</div>';
     }

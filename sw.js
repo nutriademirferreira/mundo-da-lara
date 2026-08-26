@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v7';
+var CACHE = 'mundo-da-lara-v8';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -16,7 +16,26 @@ var ARQUIVOS = [
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
-  'icons/apple-touch-icon.png'
+  'icons/apple-touch-icon.png',
+  'img/cena-agua.webp',
+  'img/cena-ceu.webp',
+  'img/cena-cozinha.webp',
+  'img/cena-fazenda.webp',
+  'img/estrela.webp',
+  'img/fundo-corpo.webp',
+  'img/fundo-espaco.webp',
+  'img/fundo-home.webp',
+  'img/fundo-inicio.webp',
+  'img/fundo-velha.webp',
+  'img/planeta-jupiter.webp',
+  'img/planeta-marte.webp',
+  'img/planeta-mercurio.webp',
+  'img/planeta-netuno.webp',
+  'img/planeta-saturno.webp',
+  'img/planeta-sol.webp',
+  'img/planeta-terra.webp',
+  'img/planeta-urano.webp',
+  'img/planeta-venus.webp'
 ];
 
 self.addEventListener('install', function (e) {

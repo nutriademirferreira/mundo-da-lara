@@ -57,10 +57,26 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   box-shadow:0 0 70px rgba(0,0,0,.45);
 }
 
+/* ===========================================================
+   CAMADA DE FUNDO
+   Duas fotos empilhadas pra trocar com fade, e um véu por cima
+   que garante que texto e botão continuem legíveis.
+   =========================================================== */
+.fundo{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.fundo__foto{
+  position:absolute;inset:0;opacity:0;
+  background-size:cover;background-position:center;
+  transition:opacity .5s ease;
+  will-change:opacity;
+}
+.fundo__foto.is-on{opacity:1}
+.fundo__veu{position:absolute;inset:0;transition:background .5s ease}
+
 /* ---------- telas ---------- */
 .screen{
   position:absolute;
   inset:0;
+  z-index:1;
   display:none;
   flex-direction:column;
   padding:calc(var(--safe-t) + 14px) 18px calc(var(--safe-b) + 16px);
@@ -71,18 +87,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .screen.is-active{display:flex;animation:screenIn .32s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
 
-.screen--dark,.screen--space{
-  background:radial-gradient(120% 80% at 50% 0%,#1D2A6B 0%,var(--space) 62%,#05081C 100%);
-  color:#fff;
-}
+.screen--dark,.screen--space{color:#fff}
 
 /* ===========================================================
    PORTA DE ENTRADA
    =========================================================== */
-.screen--start{
-  background:radial-gradient(120% 90% at 50% 10%,#4B2E93 0%,#2B1B54 55%,#170E33 100%);
-  color:#fff;align-items:center;justify-content:center;text-align:center;
-}
+.screen--start{color:#fff;align-items:center;justify-content:center;text-align:center}
 .start-sky{
   position:absolute;inset:0;
   background-image:
@@ -253,7 +263,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 /* ===========================================================
    PALCO — personagem
    =========================================================== */
-.screen--stage{background:linear-gradient(180deg,#FFF6FB 0%,#FFE9F4 60%,#F6E4FF 100%)}
+
 .stage{flex:1;min-height:0;padding:4px 0 10px}
 .stage .kid{height:100%}
 .kid{width:100%}
@@ -359,7 +369,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .sheet__close{position:absolute;top:14px;right:14px;width:46px;height:46px;border-radius:16px;
   background:rgba(255,255,255,.14);font-size:18px;font-weight:900}
 .sheet__art{display:grid;place-items:center;margin:2px 0 6px}
-.sheet__art svg{filter:drop-shadow(0 12px 30px rgba(0,0,0,.55))}
+
 .sheet__titulo{display:flex;align-items:center;justify-content:center;gap:10px}
 .sheet__card h3{font-size:30px;font-weight:900;letter-spacing:-.5px}
 .sheet__tag{font-size:15px;opacity:.75;margin-top:2px}
@@ -374,8 +384,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 /* ===========================================================
    QUIZ
    =========================================================== */
-.screen--quiz{background:linear-gradient(180deg,#FFF6FB 0%,#F1E9FF 100%)}
-.screen--quiz.is-space{background:radial-gradient(120% 80% at 50% 0%,#1D2A6B 0%,var(--space) 62%,#05081C 100%);color:#fff}
+.screen--quiz.is-space{color:#fff}
 
 .progress{flex:1;display:flex;gap:6px;justify-content:center;align-items:center}
 .progress i{width:10px;height:10px;border-radius:50%;background:rgba(124,77,255,.22)}
@@ -388,8 +397,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .quiz-stage{flex:1;min-height:0;padding:2px 0;position:relative}
 .quiz-stage .kid{height:100%}
 .planeta-quiz{height:100%;display:grid;place-items:center;animation:floatY 5s ease-in-out infinite}
-.planeta-quiz svg{width:auto;height:auto;max-width:min(74vw,100%);max-height:100%;display:block;
-  filter:drop-shadow(0 18px 34px rgba(0,0,0,.45))}
+.planeta-quiz svg,.planeta-quiz .orbe{width:auto;height:auto;max-width:min(74vw,100%);max-height:100%;
+  display:block;filter:drop-shadow(0 18px 34px rgba(0,0,0,.45))}
+.orbe{display:block;user-select:none;-webkit-user-drag:none}
+.planet-card__orb .orbe{filter:drop-shadow(0 10px 22px rgba(0,0,0,.45))}
+.sheet__art .orbe{filter:drop-shadow(0 12px 30px rgba(0,0,0,.55))}
 
 .quiz-ask{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 14px}
 .quiz-ask h3{font-size:22px;font-weight:900;letter-spacing:-.3px}
@@ -423,8 +435,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 /* ===========================================================
    RESULTADO
    =========================================================== */
-.screen--result{background:radial-gradient(120% 80% at 50% 0%,#FFD9EC 0%,#EFE3FF 60%,#E4DAFF 100%);
-  align-items:center;justify-content:center}
+.screen--result{align-items:center;justify-content:center}
 .result-card{
   width:100%;background:#fff;border-radius:34px;padding:28px 22px;text-align:center;
   box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;align-items:center;
@@ -475,7 +486,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 /* ===========================================================
    JOGO DA VELHA
    =========================================================== */
-.screen--velha{background:linear-gradient(180deg,#FFF6FB 0%,#FFEBD9 55%,#F3E6FF 100%)}
+
 .placar{
   display:flex;align-items:center;justify-content:center;gap:8px;
   margin:0 auto 10px;

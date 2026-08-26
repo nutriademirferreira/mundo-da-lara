@@ -115,8 +115,14 @@ var Espaco = (function () {
     }
   ];
 
-  /* --- monta o SVG de um astro no tamanho pedido --- */
+  /* --- imagem do astro (arte do Midjourney, fundo já recortado) --- */
   function orbe(astro, tam) {
+    return '<img class="orbe" src="img/planeta-' + astro.id + '.webp" alt="' + astro.nome + '" ' +
+           'width="' + tam + '" height="' + tam + '" draggable="false" loading="eager">';
+  }
+
+  /* --- versão vetorial antiga, guardada como reserva --- */
+  function orbeVetor(astro, tam) {
     var u = 'a' + (++seq);
     var brilho = astro.estrela
       ? '<circle cx="60" cy="60" r="56" fill="url(#glow' + u + ')"/>'
@@ -167,5 +173,5 @@ var Espaco = (function () {
     return null;
   }
 
-  return { ASTROS: ASTROS, orbe: orbe, porId: porId, comArtigo: comArtigo };
+  return { ASTROS: ASTROS, orbe: orbe, orbeVetor: orbeVetor, porId: porId, comArtigo: comArtigo };
 })();
