@@ -17,14 +17,15 @@
 </head>
 <body>
 
+<!-- camada de fundo: uma imagem por tela, com véu de legibilidade por cima -->
+<div class="fundo" id="fundo" aria-hidden="true">
+  <div class="fundo__foto" id="fundo-a"></div>
+  <div class="fundo__foto" id="fundo-b"></div>
+  <div class="fundo__veu" id="fundo-veu"></div>
+</div>
+
 <div id="app" class="app">
 
-  <!-- camada de fundo: uma imagem por tela, com véu de legibilidade por cima -->
-  <div class="fundo" id="fundo" aria-hidden="true">
-    <div class="fundo__foto" id="fundo-a"></div>
-    <div class="fundo__foto" id="fundo-b"></div>
-    <div class="fundo__veu" id="fundo-veu"></div>
-  </div>
 
   <!-- ============ PORTA DE ENTRADA (destrava o som) ============ -->
   <section class="screen screen--start is-active" id="screen-start">
@@ -266,7 +267,11 @@
     </div>
     <div class="viagem-scroll" id="viagem-scroll"></div>
     <div class="viagem-barra">
-      <div class="viagem-barra__trilho"><i class="viagem-barra__foguete" id="viagem-foguete">🚀</i></div>
+      <div class="viagem-barra__trilho">
+        <span class="viagem-barra__foguete" id="viagem-foguete">
+          <img src="img/lara-viajante.webp" alt="">
+        </span>
+      </div>
       <span class="viagem-barra__texto" id="viagem-texto">Saindo do Sol</span>
     </div>
   </section>

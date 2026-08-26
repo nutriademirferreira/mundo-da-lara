@@ -132,10 +132,12 @@ var App = (function () {
      Um segundo, sem travar nada: o jogo já está carregando por baixo.
      A versão crescida abre a porta do mundo; a pequena brinca junto.
      ========================================================= */
+  /* A Lalá pequena é a companheira de brincadeira — é ela que entra nos
+     mundos. A versão crescida ficou só no cartão do Sistema Solar. */
   var PASSAGENS = {
-    'corpo-menu':    'lara-cientista',
-    'espaco-menu':   'lara-astronauta',
-    'velha-menu':    'lara-princesa',
+    'corpo-menu':    'lara-corpo2',
+    'espaco-menu':   'lara-espaco2',
+    'velha-menu':    'lara-velha2',
     'palavras-jogar':'lara-palavras'
   };
   var passagemNoAr = null;
@@ -366,6 +368,7 @@ var App = (function () {
     var vao = trilha.scrollWidth - trilha.clientWidth;
     var andado = vao > 0 ? trilha.scrollLeft / vao : 0;
     $('#viagem-foguete').style.left = Math.round(andado * 100) + '%';
+    $('#viagem-foguete').classList.toggle('is-chegou', andado > 0.985);
 
     /* qual foi a última parada que ela já passou */
     var frente = trilha.scrollLeft + 40;   /* a beirada do foguete, não o meio da tela */
