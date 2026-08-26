@@ -225,6 +225,15 @@ var App = (function () {
     ligarBotoes();
     Jogo.pintarEstrelas();
     if ('serviceWorker' in navigator) {
+      /* se já existia uma versão instalada no aparelho e chega uma nova,
+         recarrega uma vez sozinho — ela não precisa fechar e abrir o app */
+      var jaTinhaVersao = !!navigator.serviceWorker.controller;
+      var jaRecarregou = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (!jaTinhaVersao || jaRecarregou) return;
+        jaRecarregou = true;
+        location.reload();
+      });
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('sw.js').catch(function () { /* sem offline, tudo bem */ });
       });
