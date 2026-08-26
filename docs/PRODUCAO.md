@@ -82,8 +82,15 @@ Começam com os planetas vetoriais atuais e recebem as artes novas quando a fase
 | 1 | ✅ **No ar** — camada de fundo, véus, 19 imagens em WebP, cenários das palavras |
 | 2 | ✅ **No ar** junto com a 1 — os 5 fundos e 4 das 5 cenas. Falta só `cena-quarto` |
 | 3 | ✅ **No ar** — os 9 planetas + Sol trocados. Falta parallax e o teste de morfagem |
-| 4 | Imagens da Lara geradas e escolhidas; falta recortar o fundo e ligar nas telas |
-| 5 | Não iniciada — Tamanho de Verdade e A Viagem |
+| 4 | ✅ **No ar** — a Lara na abertura, entrando em cada mundo, e comemorando nos parabéns |
+| 5 | 🟡 **Tamanho de Verdade no ar.** Falta "A Viagem" (distância com foguete) |
+
+## O que ainda depende de você
+
+| Item | Prompt |
+|---|---|
+| `cena-quarto` — chão de sala de brinquedos, pras palavras bola/casa/cama/livro/carro/trem | está em `docs/IMAGENS.md` |
+| **A Lua** — falta no sistema solar, e LUA já é palavra do jogo de letras | prompt mandado no chat |
 
 ## Onde ficam os arquivos
 
