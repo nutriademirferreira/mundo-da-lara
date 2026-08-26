@@ -22,6 +22,8 @@ var App = (function () {
   function ir(nome) {
     if (!TELAS[nome]) return;
     Som.calar();
+    /* placar da velha só vale enquanto ela está na tela do tabuleiro */
+    if (telaAtual === 'velha' && nome !== 'velha') Velha.zerarPlacar();
     $$('.screen').forEach(function (s) { s.classList.remove('is-active'); });
     var el = document.getElementById(TELAS[nome]);
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
@@ -69,8 +71,8 @@ var App = (function () {
         if (destino === 'orgaos-aprender')   { montarAprender('orgaos'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-jogar')      { ir('quiz'); Jogo.iniciar('espaco'); return; }
         if (destino === 'palavras-jogar')    { ir('quiz'); Jogo.iniciar('palavras'); return; }
-        if (destino === 'velha-app')         { ir('velha'); Velha.iniciar('app'); return; }
-        if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois'); return; }
+        if (destino === 'velha-app')         { ir('velha'); Velha.iniciar('app', true); return; }
+        if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois', true); return; }
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         ir(destino);

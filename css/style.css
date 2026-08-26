@@ -476,6 +476,23 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    JOGO DA VELHA
    =========================================================== */
 .screen--velha{background:linear-gradient(180deg,#FFF6FB 0%,#FFEBD9 55%,#F3E6FF 100%)}
+.placar{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin:0 auto 10px;
+}
+.placar__item{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;border-radius:999px;font-size:15px;font-weight:800;
+  background:#fff;box-shadow:0 3px 0 rgba(43,27,84,.10);
+}
+.placar__item b{font-size:20px;font-weight:900;line-height:1}
+.placar__item--x{color:var(--pink-dark)}
+.placar__item--o{color:var(--purple)}
+.placar__item--e{color:var(--ink-soft);font-size:13px}
+.placar__item.is-lider{transform:scale(1.06)}
+.placar__item--x.is-lider{background:linear-gradient(180deg,#FFD3E5,#FFB6D4);box-shadow:0 3px 0 #E7A0C0}
+.placar__item--o.is-lider{background:linear-gradient(180deg,#DCD2FF,#C4B4FF);box-shadow:0 3px 0 #A996E8}
+
 .velha-linha{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
 .velha-status{
   font-size:19px;font-weight:900;letter-spacing:-.2px;background:#fff;
@@ -523,6 +540,9 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   :root{--tap:66px}
   .opt{font-size:23px;border-radius:20px}
   .quiz-ask h3{font-size:19px}
+  .placar__item{padding:7px 11px;font-size:14px}
+  .placar__item b{font-size:18px}
+  .velha-status{font-size:17px;padding:10px 16px}
   .tile{min-height:146px;gap:8px}
   .tile__art{width:64px;height:64px}
   .tile strong{font-size:17px}

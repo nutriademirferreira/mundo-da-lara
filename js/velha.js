@@ -13,6 +13,8 @@ var Velha = (function () {
   ];
 
   var estado = null;
+  /* placar vale só enquanto ela fica na tela: sair zera */
+  var placar = { X: 0, O: 0, velha: 0 };
 
   function marca(sim) {
     if (sim === 'X') {
@@ -25,10 +27,12 @@ var Velha = (function () {
 
   function nome(sim) { return sim === 'X' ? 'xis' : 'bolinha'; }
 
-  function iniciar(modo) {
+  function iniciar(modo, sessaoNova) {
+    if (sessaoNova) placar = { X: 0, O: 0, velha: 0 };
     estado = { modo: modo, tab: ['','','','','','','','',''], vez: 'X', fim: false, travado: false };
     $('#velha-status').classList.remove('is-fim');
     $('#velha-denovo').classList.remove('is-forte');
+    pintarPlacar();
     var titulo = $('#velha-titulo');
     if (titulo) titulo.textContent = modo === 'app' ? 'Lara ✗  contra  App ◯' : 'Lara ✗  contra  Papai ◯';
     desenhar();
@@ -49,6 +53,27 @@ var Velha = (function () {
     });
   }
 
+  function pintarPlacar() {
+    $('#placar-x').textContent = placar.X;
+    $('#placar-o').textContent = placar.O;
+    $('#placar-e').textContent = placar.velha;
+
+    var chipX = document.querySelector('.placar__item--x');
+    var chipO = document.querySelector('.placar__item--o');
+    chipX.classList.toggle('is-lider', placar.X > placar.O);
+    chipO.classList.toggle('is-lider', placar.O > placar.X);
+
+    var som = $('#placar-som');
+    if (!som) return;
+    if (!placar.X && !placar.O && !placar.velha) {
+      som.dataset.falar = 'Ninguém ganhou ainda. Bora jogar!';
+      return;
+    }
+    var texto = 'Xis ' + placar.X + ', bolinha ' + placar.O;
+    if (placar.velha) texto += ', e ' + placar.velha + (placar.velha === 1 ? ' empate' : ' empates');
+    som.dataset.falar = texto + '.';
+  }
+
   function anunciar(falar) {
     var faixa = $('#velha-status');
     var texto;
@@ -63,8 +88,9 @@ var Velha = (function () {
     var fala = estado.modo === 'app'
       ? (estado.vez === 'X' ? 'Sua vez, Lara!' : 'Agora é a minha vez.')
       : 'Vez do ' + nome(estado.vez) + '.';
+    /* o botão fica ali pra ela ouvir se quiser, mas o app não fica repetindo
+       de quem é a vez a cada jogada — cansa. Só o fim de jogo é falado. */
     if (som) som.dataset.falar = fala;
-    if (falar) Som.falar(fala, { atraso: 300 });
   }
 
   function vencedor(tab) {
@@ -130,6 +156,9 @@ var Velha = (function () {
     var casas = document.querySelectorAll('#velha-tab .casa');
     fim.linha.forEach(function (i) { casas[i].classList.add('casa--ganhou'); });
 
+    if (fim.sim === 'velha') placar.velha++; else placar[fim.sim]++;
+    pintarPlacar();
+
     var texto, fala;
     if (fim.sim === 'velha') {
       texto = 'Deu velha! 🤝';
@@ -138,16 +167,16 @@ var Velha = (function () {
     } else if (estado.modo === 'app') {
       if (fim.sim === 'X') {
         texto = 'Você ganhou! 🏆';
-        fala = 'Você ganhou, Lara! Uhuul!';
+        fala = 'O xis ganhou! Você ganhou, Lara!';
         Som.tocar('fanfarra'); Jogo.confete(40); Jogo.ganharEstrela();
       } else {
-        texto = 'Eu ganhei dessa vez ◯';
-        fala = 'Eu ganhei dessa vez. Joga de novo comigo!';
+        texto = 'A ◯ ganhou dessa vez';
+        fala = 'A bolinha ganhou dessa vez. Joga de novo comigo!';
         Som.tocar('erro');
       }
     } else {
-      texto = (fim.sim === 'X' ? 'O ✗ ganhou!' : 'O ◯ ganhou!') + ' 🏆';
-      fala = 'O ' + nome(fim.sim) + ' ganhou!';
+      texto = (fim.sim === 'X' ? 'O ✗ ganhou!' : 'A ◯ ganhou!') + ' 🏆';
+      fala = (fim.sim === 'X' ? 'O xis ganhou!' : 'A bolinha ganhou!');
       Som.tocar('fanfarra'); Jogo.confete(40);
       if (fim.sim === 'X') Jogo.ganharEstrela();
     }
@@ -161,9 +190,11 @@ var Velha = (function () {
     $('#velha-denovo').classList.add('is-forte');
   }
 
-  function reiniciar() { iniciar(estado ? estado.modo : 'app'); }
+  function reiniciar() { iniciar(estado ? estado.modo : 'app', false); }
+
+  function zerarPlacar() { placar = { X: 0, O: 0, velha: 0 }; }
 
   function modoAtual() { return estado ? estado.modo : 'app'; }
 
-  return { iniciar: iniciar, reiniciar: reiniciar, modoAtual: modoAtual };
+  return { iniciar: iniciar, reiniciar: reiniciar, modoAtual: modoAtual, zerarPlacar: zerarPlacar };
 })();

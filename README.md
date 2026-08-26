@@ -28,6 +28,10 @@ pode ser instalado na tela de início como se fosse um aplicativo (PWA, funciona
 **Jogo da Velha**
 - Contra o app (que joga fácil de propósito) ou dois jogadores no mesmo celular.
   A Lara é o ✗ e sempre começa. Vitória dela vale estrelinha.
+- Placar de sessão no topo (✗ / empates / ◯): acumula enquanto ela fica na tela e zera
+  quando sai. "Jogar de novo" mantém o placar.
+- O app **não fala de quem é a vez** — só anuncia o fim: "o xis ganhou", "a bolinha ganhou"
+  ou "deu velha". Quem quiser ouvir a vez ou o placar toca no alto-falante.
 
 **Tudo é ouvível.** Como a Lara ainda não lê, todo lugar com informação escrita tem um
 alto-falante do lado: cada uma das 3 opções do quiz, os cartões da tela inicial, os modos de
