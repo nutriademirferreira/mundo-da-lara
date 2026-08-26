@@ -79,8 +79,18 @@ Começam com os planetas vetoriais atuais e recebem as artes novas quando a fase
 
 | Fase | Situação |
 |---|---|
-| 1 | Aguardando download da cozinha, água e Saturno |
-| 2 | Não iniciada |
-| 3 | Não iniciada |
-| 4 | Não iniciada |
-| 5 | Não iniciada |
+| 1 | ✅ **No ar** — camada de fundo, véus, 19 imagens em WebP, cenários das palavras |
+| 2 | ✅ **No ar** junto com a 1 — os 5 fundos e 4 das 5 cenas. Falta só `cena-quarto` |
+| 3 | ✅ **No ar** — os 9 planetas + Sol trocados. Falta parallax e o teste de morfagem |
+| 4 | Imagens da Lara geradas e escolhidas; falta recortar o fundo e ligar nas telas |
+| 5 | Não iniciada — Tamanho de Verdade e A Viagem |
+
+## Onde ficam os arquivos
+
+| Pasta | O quê |
+|---|---|
+| `~/Pictures/Mundo da Lara/brutas/` | as 123 imagens cruas do Midjourney |
+| `~/Pictures/Mundo da Lara/contato/` | folhas de contato pra comparar variações |
+| `~/Pictures/Lara/referencias/` | fotos da Lara — **nunca** vão pro repositório, que é público |
+| `mundo-da-lara/img/` | só os WebP finais que o app carrega |
+| `mundo-da-lara/img/manifesto.json` | qual variação foi escolhida em cada grupo |
