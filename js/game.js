@@ -127,7 +127,7 @@ var Jogo = (function () {
         palco: '<div class="palco-palavra">' +
                  '<span class="fase-tag">Fase ' + (i + 1) + ' de ' + total + '</span>' +
                  Palavras.figura(fase) +
-                 '<div class="palavra">' + pecas + '</div>' +
+                 '<div class="palavra" style="--n:' + fase.palavra.length + '">' + pecas + '</div>' +
                '</div>',
         pergunta: 'Que letra está faltando?',
         fala: dita + '. Que letra está faltando?',
