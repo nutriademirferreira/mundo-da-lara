@@ -77,8 +77,57 @@ var Som = (function () {
     }
   }
 
-  /* fala em português com voz de ritmo tranquilo pra criança */
+  /* =========================================================
+     VOZ GRAVADA
+     As frases do app sao finitas e conhecidas, entao cada uma tem
+     um arquivo pronto em audio/. O indice diz qual arquivo e o de
+     cada frase. Se a frase nao estiver no indice — palavra nova
+     que ainda nao foi gerada — cai no sintetizador do sistema, que
+     e feio mas nunca deixa a Lara no mudo.
+     ========================================================= */
+  var indiceVoz = null;                 /* null = ainda nao carregou */
+  var tocandoVoz = null;
+
+  fetch('audio/indice.json')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (j) { indiceVoz = j || {}; })
+    .catch(function () { indiceVoz = {}; });
+
+  function chaveVoz(texto) {
+    return String(texto).replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+
+  function pararVoz() {
+    if (tocandoVoz) { try { tocandoVoz.pause(); } catch (e) {} tocandoVoz = null; }
+  }
+
+  /* devolve true se conseguiu tocar a gravacao */
+  function falarGravado(texto, opcoes) {
+    if (!indiceVoz) return false;
+    var arq = indiceVoz[chaveVoz(texto)];
+    if (!arq) return false;
+    try {
+      if (!opcoes.enfileirar) { pararVoz(); speechSynthesis.cancel(); }
+      var a = new Audio('audio/' + arq);
+      a.volume = 1;
+      setTimeout(function () {
+        if (!ligado) return;
+        tocandoVoz = a;
+        a.play().catch(function () { falarSintetizado(texto, opcoes); });
+      }, opcoes.atraso || 0);
+      return true;
+    } catch (e) { return false; }
+  }
+
   function falar(texto, opcoes) {
+    if (!ligado || !texto) return;
+    opcoes = opcoes || {};
+    if (falarGravado(texto, opcoes)) return;
+    falarSintetizado(texto, opcoes);
+  }
+
+  /* fala em português com voz de ritmo tranquilo pra criança */
+  function falarSintetizado(texto, opcoes) {
     if (!ligado || !('speechSynthesis' in window) || !texto) return;
     opcoes = opcoes || {};
     try {
@@ -95,12 +144,21 @@ var Som = (function () {
   }
 
   function calar() {
+    pararVoz();
     if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
   }
 
   /* precisa de um toque do usuário pra destravar áudio no iOS */
   function destravar() {
     audioCtx();
+    /* o iOS tambem tranca o <audio>: um play mudo no primeiro toque
+       libera as gravacoes pras falas que comecam sozinhas na tela */
+    try {
+      var mudo = new Audio('data:audio/mp4;base64,AAAAHGZ0eXBNNEEgAAAAAE00QSBpc29tbXA0Mg==');
+      mudo.volume = 0;
+      var p = mudo.play();
+      if (p && p.catch) p.catch(function () {});
+    } catch (e) {}
     if ('speechSynthesis' in window) {
       try {
         var u = new SpeechSynthesisUtterance(' ');
@@ -112,6 +170,7 @@ var Som = (function () {
 
   function alternar() {
     ligado = !ligado;
+    if (!ligado) pararVoz();
     localStorage.setItem('lara.som', ligado ? 'on' : 'off');
     if (!ligado) calar(); else tocar('toque');
     return ligado;

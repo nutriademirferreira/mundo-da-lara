@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v22';
+var CACHE = 'mundo-da-lara-v23';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -18,6 +18,8 @@ var ARQUIVOS = [
   'icons/icon-512.png',
   'icons/apple-touch-icon.png',
   'img/cena-agua.webp',
+  'img/corpo-dentro.webp',
+  'img/corpo-fora.webp',
   'img/cena-ceu.webp',
   'img/cena-cozinha.webp',
   'img/cena-fazenda.webp',
@@ -62,11 +64,27 @@ var ARQUIVOS = [
   'img/planeta-venus.webp'
 ];
 
+/* As falas gravadas sao 228 arquivos — listar tudo aqui a mao ficaria
+   desatualizado no primeiro acrescimo. O indice diz quais existem, e o
+   proprio indice pode nao existir ainda: nesse caso o app fala pelo
+   sintetizador do sistema e nada quebra. */
+function arquivosDeVoz() {
+  return fetch('audio/indice.json')
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (j) {
+      return ['audio/indice.json'].concat(Object.keys(j).map(function (k) { return 'audio/' + j[k]; }));
+    })
+    .catch(function () { return []; });
+}
+
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open(CACHE)
-      .then(function (c) { return c.addAll(ARQUIVOS); })
-      .then(function () { return self.skipWaiting(); })
+    caches.open(CACHE).then(function (c) {
+      return c.addAll(ARQUIVOS).then(arquivosDeVoz).then(function (vozes) {
+        /* uma fala que falhe nao pode derrubar a instalacao inteira */
+        return Promise.all(vozes.map(function (u) { return c.add(u).catch(function () {}); }));
+      });
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
