@@ -4,9 +4,13 @@
 
    Uso:
      export ELEVENLABS_API_KEY="..."
-     node ferramentas/gerar-vozes.js <voice_id>            # lote completo
+     node ferramentas/gerar-vozes.js --faltam              # o que esta sem voz (nao gasta nada)
+     node ferramentas/gerar-vozes.js <voice_id>            # gera so o que falta
      node ferramentas/gerar-vozes.js <voice_id> --amostra  # so 6 frases
      node ferramentas/gerar-vozes.js <voice_id> --contar   # nao gera nada
+
+   Rode --faltam antes de publicar. Frase sem arquivo nao quebra nada (o app
+   cai no sintetizador do sistema), mas sai com a voz feia em vez da boa.
 
    A chave fica so na variavel de ambiente. Nunca entra no repositorio. */
 
@@ -27,6 +31,8 @@ function frases() {
   const F = new Set(), add = s => { if (s && String(s).trim()) F.add(String(s).trim()); };
 
   for (const tipo of ['partes', 'orgaos']) for (const p of Corpo.lista(tipo)) {
+    /* o nome pelado tambem e falado: e o texto das opcoes do quiz */
+    add(p.nome);
     add(p.artigo + ' ' + p.nome); add(p.dica); add('Isso! É ' + p.artigo + ' ' + p.nome + '.');
   }
   add('Que parte do corpo é essa?'); add('Que órgão é esse?');
@@ -44,9 +50,28 @@ function frases() {
   }
   for (const l of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') add(Palavras.falaDaLetra(l));
 
+  /* montada em js/app.js a partir de prefixo fixo + um ramo sem numero */
+  add('Palavras. Complete a palavra com a letra que está faltando. São trinta palavras pra descobrir.');
+
   for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) add(m[1]);
-  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js'])
-    for (const m of fs.readFileSync(path.join(RAIZ, f), 'utf8').matchAll(/Som\.falar\('([^']+)'/g)) add(m[1]);
+  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js']) {
+    const src = fs.readFileSync(path.join(RAIZ, f), 'utf8');
+    for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) add(m[1]);
+    /* dataset.falar = '...' nasce em JS e nao aparece no HTML. Faltava varrer
+       isso, e por causa disso cinco frases sairam com a voz do sistema.
+       Literal colado num + e pedaco de frase montada com numero ("Você tem "
+       + n + " estrelinhas!") — gerar audio pra pedaco e desperdicio, porque
+       o app nunca vai pedir o pedaco sozinho. */
+    for (const m of src.matchAll(/dataset\.falar\s*=[^;]*/g)) {
+      const expr = m[0];
+      for (const lit of expr.matchAll(/'([^']{4,})'/g)) {
+        const antes = expr.slice(0, lit.index).trimEnd();
+        const depois = expr.slice(lit.index + lit[0].length).trimStart();
+        if (antes.endsWith('+') || depois.startsWith('+')) continue;
+        add(lit[1]);
+      }
+    }
+  }
 
   return [...F].sort();
 }
@@ -71,6 +96,23 @@ async function gerar(texto, voz, apiKey) {
   const soContar = process.argv.includes('--contar');
   const todas = frases();
   const letras = todas.reduce((n, s) => n + s.length, 0);
+
+  /* --faltam: confere o que ainda nao tem arquivo. Sai com codigo 1 se faltar
+     alguma coisa, pra dar pra usar num gancho de pre-commit se um dia quiser. */
+  if (process.argv.includes('--faltam')) {
+    const indicePath = path.join(DESTINO, 'indice.json');
+    const indice = fs.existsSync(indicePath) ? JSON.parse(fs.readFileSync(indicePath, 'utf8')) : {};
+    const semVoz = todas.filter(t => {
+      const arq = indice[chave(t)];
+      return !arq || !fs.existsSync(path.join(DESTINO, arq));
+    });
+    if (!semVoz.length) { console.log(`Todas as ${todas.length} frases tem voz gravada.`); return; }
+    console.log(`${semVoz.length} de ${todas.length} frases estao sem voz (${semVoz.reduce((n, s) => n + s.length, 0)} creditos para gerar):\n`);
+    for (const t of semVoz) console.log('  ' + t);
+    console.log(`\nPara gerar: node ferramentas/gerar-vozes.js <voice_id>`);
+    process.exitCode = 1;
+    return;
+  }
 
   if (soContar || !voz) {
     console.log(`${todas.length} frases, ${letras} caracteres (~${letras} creditos)`);

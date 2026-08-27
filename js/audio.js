@@ -88,10 +88,10 @@ var Som = (function () {
   var indiceVoz = null;                 /* null = ainda nao carregou */
   var tocandoVoz = null;
 
-  fetch('audio/indice.json')
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (j) { indiceVoz = j || {}; })
-    .catch(function () { indiceVoz = {}; });
+  var carregandoVoz = fetch('audio/indice.json')
+    .then(function (r) { return r.ok ? r.json() : {}; })
+    .catch(function () { return {}; })
+    .then(function (j) { indiceVoz = j; return j; });
 
   function chaveVoz(texto) {
     return String(texto).replace(/\s+/g, ' ').trim().toLowerCase();
@@ -122,6 +122,26 @@ var Som = (function () {
   function falar(texto, opcoes) {
     if (!ligado || !texto) return;
     opcoes = opcoes || {};
+    if (indiceVoz) { escolherEFalar(texto, opcoes); return; }
+
+    /* o indice ainda esta baixando. Se desistir agora, as primeiras falas
+       do app — justo as de boas-vindas — saem sempre com a voz feia. Entao
+       espera ele chegar, com prazo curto pra nunca deixar a crianca no vacuo. */
+    var decidiu = false;
+    var prazo = setTimeout(function () {
+      if (decidiu) return;
+      decidiu = true;
+      falarSintetizado(texto, opcoes);
+    }, 1200);
+    carregandoVoz.then(function () {
+      if (decidiu) return;
+      decidiu = true;
+      clearTimeout(prazo);
+      escolherEFalar(texto, opcoes);
+    });
+  }
+
+  function escolherEFalar(texto, opcoes) {
     if (falarGravado(texto, opcoes)) return;
     falarSintetizado(texto, opcoes);
   }
