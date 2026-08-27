@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v25';
+var CACHE = 'mundo-da-lara-v26';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -77,22 +77,39 @@ function arquivosDeVoz() {
     .catch(function () { return []; });
 }
 
+/* A instalacao guarda so o essencial. As 252 falas somam ~3,7 MB e, quando
+   elas faziam parte da instalacao, cada versao nova so entrava no ar depois
+   de baixar tudo — no celular isso significava abrir o app e nao ver mudanca
+   nenhuma. Agora a versao troca na hora e a voz vai chegando depois; frase
+   que ainda nao chegou vem da rede, e sem rede cai no sintetizador. */
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open(CACHE).then(function (c) {
-      return c.addAll(ARQUIVOS).then(arquivosDeVoz).then(function (vozes) {
-        /* uma fala que falhe nao pode derrubar a instalacao inteira */
-        return Promise.all(vozes.map(function (u) { return c.add(u).catch(function () {}); }));
-      });
-    }).then(function () { return self.skipWaiting(); })
+    caches.open(CACHE)
+      .then(function (c) { return c.addAll(ARQUIVOS); })
+      .then(function () { return self.skipWaiting(); })
   );
 });
+
+function guardarVozesEmSegundoPlano() {
+  return caches.open(CACHE).then(function (c) {
+    return arquivosDeVoz().then(function (vozes) {
+      return vozes.reduce(function (fila, u) {
+        return fila.then(function () {
+          return c.match(u).then(function (tem) {
+            return tem ? null : c.add(u).catch(function () {});
+          });
+        });
+      }, Promise.resolve());
+    });
+  });
+}
 
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (chaves) {
       return Promise.all(chaves.map(function (k) { return k === CACHE ? null : caches.delete(k); }));
     }).then(function () { return self.clients.claim(); })
+      .then(function () { guardarVozesEmSegundoPlano(); })
   );
 });
 
