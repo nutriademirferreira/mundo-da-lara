@@ -48,7 +48,12 @@ function frases() {
   add('Que parte do corpo é essa?'); add('Que órgão é esse?');
 
   for (const a of Espaco.ASTROS) {
-    add(a.nome); add(Espaco.comArtigo(a)); add('Isso! É ' + Espaco.comArtigo(a) + '.'); add(a.fato);
+    add(a.nome); add(Espaco.comArtigo(a)); add('Isso! É ' + Espaco.comArtigo(a) + '.');
+    /* era add(a.fato), no singular — campo que nao existe. O dado se chama
+       'fatos' e e uma lista, entao isso aqui nunca acrescentou nada e a ficha
+       do planeta inteira ficou sem voz. Cada curiosidade tem alto-falante
+       proprio, e o emoji da frente nao e falado. */
+    for (const f of (a.fatos || [])) add(f.replace(/^\S+\s/, ''));
   }
   add('Que planeta é esse?'); add('Quem é esse?');
 
