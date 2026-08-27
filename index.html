@@ -30,6 +30,10 @@
   <!-- ============ PORTA DE ENTRADA (destrava o som) ============ -->
   <section class="screen screen--start is-active" id="screen-start">
     <div class="start-sky" aria-hidden="true"></div>
+    <!-- o céu em movimento. Entra por cima de fundo-inicio.webp e some se
+         não carregar: sem rede, a tela continua exatamente como antes. -->
+    <video class="start-video" id="ceu-video" aria-hidden="true"
+           muted playsinline loop preload="auto" disablepictureinpicture></video>
     <div class="start-body">
       <img class="start-lara" src="img/lara-oi.webp" alt="" draggable="false">
       <h1 class="start-title">Mundo da<br><span>Lara</span></h1>
@@ -420,6 +424,9 @@
   <section class="screen screen--result" id="screen-result">
     <div class="result-card">
       <img class="result-lara" id="result-lara" src="img/lara-festa.webp" alt="" draggable="false">
+      <!-- só no fim do quiz do espaço: a astronauta falando com ela -->
+      <video class="result-video" id="result-video" hidden
+             muted playsinline preload="none" disablepictureinpicture></video>
       <div class="result-emoji" id="result-emoji">🏆</div>
       <h2 id="result-title">Muito bem, Lara!</h2>
       <p class="result-score"><b id="result-hits">0</b> de <b id="result-total">10</b> certinhas</p>

@@ -313,6 +313,27 @@ var Jogo = (function () {
     }
   }
 
+  /* No fim do quiz do espaço a astronauta aparece falando, no lugar da
+     figura parada. O vídeo não tem som: quem fala é o app, por cima.
+     Sem rede o vídeo não carrega e a figura de sempre continua ali. */
+  function falarComElaNoEspaco(perfeito) {
+    var v = $('#result-video'), foto = $('#result-lara');
+    if (!v || !foto) return;
+    v.pause(); v.removeAttribute('src'); v.load();
+    v.hidden = true; foto.hidden = false;
+    if (estado.tipo !== 'espaco') return;
+
+    v.addEventListener('playing', function aoTocar() {
+      v.removeEventListener('playing', aoTocar);
+      v.hidden = false; foto.hidden = true;
+    });
+    v.addEventListener('error', function () { v.hidden = true; foto.hidden = false; });
+    v.muted = true; v.defaultMuted = true;
+    v.src = 'video/' + (perfeito ? 'lara-fala-perfeito' : 'lara-fala-bem') + '.mp4';
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { /* fica a figura parada */ });
+  }
+
   function terminar() {
     var total = estado.rodadas.length, acertos = estado.acertos;
     $('#result-hits').textContent = acertos;
@@ -322,6 +343,7 @@ var Jogo = (function () {
     var cartao = document.querySelector('.result-card');
     var lara = $('#result-lara');
     if (lara) lara.src = perfeito ? 'img/lara-unicornio.webp' : 'img/lara-festa.webp';
+    falarComElaNoEspaco(perfeito);
     if (cartao) cartao.classList.toggle('is-perfeito', perfeito);
     $('#result-emoji').textContent = perfeito ? '🏆' : (acertos >= total / 2 ? '🌟' : '💪');
     $('#result-title').textContent = perfeito ? 'Perfeito, Lara!' : (acertos >= total / 2 ? 'Muito bem, Lara!' : 'Boa, Lara!');

@@ -672,8 +672,41 @@ var App = (function () {
     el.textContent = texto; el.hidden = false;
   }
 
+  /* O céu em movimento da abertura. Carrega depois do resto e só aparece
+     quando de fato começa a tocar: se a rede falhar, ou se o aparelho
+     recusar o autoplay, a tela fica com a foto parada de sempre. */
+  /* O céu em movimento da abertura.
+     Três detalhes que o navegador impõe e que custaram tentativa:
+     1) muted precisa estar na PROPRIEDADE, não só no atributo;
+     2) vídeo sem faixa de áudio que o navegador julgue invisível é pausado
+        pra poupar bateria — por isso o elemento nasce com opacity 1 e não
+        com 0 (com 0 ele nem decodifica o primeiro quadro);
+     3) play() no mesmo instante em que se define o src é recusado; só
+        funciona depois que existe quadro, daí esperar 'loadeddata'.
+     Se ainda assim não tocar, o primeiro toque na tela resolve. E se nada
+     resolver, fica a foto parada de sempre — que é a mesma paisagem. */
+  function ligarCeu() {
+    var v = $('#ceu-video');
+    if (!v) return;
+    v.muted = true; v.defaultMuted = true;
+
+    function tocar() {
+      var p = v.play();
+      if (p && p.catch) p.catch(function () { /* tenta de novo no toque */ });
+    }
+    v.addEventListener('loadeddata', tocar);
+    v.addEventListener('error', function () { v.classList.add('falhou'); });
+    document.addEventListener('pointerdown', function aoTocar() {
+      document.removeEventListener('pointerdown', aoTocar);
+      if (v.paused) tocar();
+    }, { once: true });
+
+    v.src = 'video/ceu-inicio.mp4';
+  }
+
   function iniciar() {
     pintarFundo('start');           /* a tela de abertura já nasce ativa, sem passar por ir() */
+    ligarCeu();
     conferirVoz();
     ligarAltoFalantes();
     ligarNavegacao();
