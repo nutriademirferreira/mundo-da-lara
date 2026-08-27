@@ -32,8 +32,11 @@ var Jogo = (function () {
     var alvo = $('#star-total'); if (alvo) alvo.textContent = n;
     var falaEstrela = $('#star-som');
     if (falaEstrela) {
+      /* sem o número na frase de propósito: o número muda toda hora e não
+         dá pra gravar um arquivo pra cada, então sairia na voz do sistema.
+         Ela vê a quantidade escrita e desenhada em estrelinhas do lado. */
       falaEstrela.dataset.falar = n === 0 ? 'Você ainda não tem estrelinhas. Vamos jogar?'
-        : (n === 1 ? 'Você tem uma estrelinha!' : 'Você tem ' + n + ' estrelinhas!');
+        : (n === 1 ? 'Você tem uma estrelinha!' : 'Olha quantas estrelinhas você já tem!');
     }
     var espelhos = document.querySelectorAll('[data-star-mirror]');
     for (var i = 0; i < espelhos.length; i++) espelhos[i].textContent = n;
@@ -234,7 +237,7 @@ var Jogo = (function () {
       var som = document.createElement('button');
       som.type = 'button';
       som.className = 'som-btn';
-      som.textContent = '🔊';
+      som.textContent = '';
       som.className += letras ? ' som-btn--mini' : '';
       som.setAttribute('aria-label', 'Ouvir ' + (o.fala || o.texto));
       som.dataset.falar = o.fala || o.texto;
@@ -370,9 +373,12 @@ var Jogo = (function () {
       }
     }
 
-    var fala = perfeito
-      ? 'Parabéns Lara! Você acertou tudo!'
-      : 'Muito bem Lara! Você acertou ' + acertos + ' de ' + total + '.';
+    /* mesma razão do contador de estrelinhas: frase com número não tem como
+       ser gravada. O placar exato aparece escrito logo abaixo, em estrelinhas. */
+    var fala = perfeito ? 'Parabéns, Lara! Você acertou tudo!'
+      : (acertos >= total * 0.7 ? 'Muito bem, Lara! Você acertou quase tudo!'
+      : (acertos >= total / 2   ? 'Boa, Lara! Você acertou bastante!'
+                                : 'Boa, Lara! Bora jogar de novo pra acertar mais!'));
     var botaoSom = $('#result-som');
     if (botaoSom) botaoSom.dataset.falar = fala;
 

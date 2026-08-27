@@ -121,7 +121,6 @@ var App = (function () {
     var texto = botao.dataset.falar;
     if (!texto) return;
     $$('.som-btn.is-falando').forEach(function (b) { b.classList.remove('is-falando'); });
-    Som.tocar('toque');
     Som.falar(texto);
     if (!Som.estaLigado()) return;
     botao.classList.add('is-falando');
@@ -155,7 +154,7 @@ var App = (function () {
     void caixa.offsetWidth;               /* reinicia a animação */
     caixa.classList.add('is-on');
     clearTimeout(passagemNoAr);
-    passagemNoAr = setTimeout(function () { caixa.classList.remove('is-on'); }, 1500);
+    passagemNoAr = setTimeout(function () { caixa.classList.remove('is-on'); }, 3000);
   }
 
   /* ---------- roteamento por data-go ---------- */
@@ -164,7 +163,6 @@ var App = (function () {
       b.addEventListener('click', function (e) {
         if (e.target.closest && e.target.closest('[data-falar]')) return;
         var destino = b.dataset.go;
-        Som.tocar('toque');
         passar(destino);
         if (destino === 'corpo-jogar')       { ir('quiz'); Jogo.iniciar('corpo'); return; }
         if (destino === 'orgaos-jogar')      { ir('quiz'); Jogo.iniciar('orgaos'); return; }
@@ -212,7 +210,7 @@ var App = (function () {
             '<div class="label-card__tip">' + parte.dica + '</div>' +
           '</div>' +
           '<button class="som-btn" type="button" aria-label="Ouvir de novo" data-falar="' +
-            falaCompleta.replace(/"/g, '') + '">🔊</button>';
+            falaCompleta.replace(/"/g, '') + '"></button>';
 
         Som.tocar('zap');
         Som.falar(parte.artigo + ' ' + parte.nome, { atraso: 120 });
@@ -237,7 +235,7 @@ var App = (function () {
         '<span class="planet-card__linha">' +
           '<span class="planet-card__name">' + astro.nome + '</span>' +
           '<button class="som-btn som-btn--mini" type="button" aria-label="Ouvir ' + astro.nome + '"' +
-            ' data-falar="' + astro.nome + '">🔊</button>' +
+            ' data-falar="' + astro.nome + '"></button>' +
         '</span>' +
         '<span class="planet-card__pos">' + astro.legenda + '</span>';
       card.addEventListener('click', function (e) {
@@ -302,7 +300,7 @@ var App = (function () {
         '<span class="tam-item__linha">' +
           '<span class="tam-item__nome">' + astro.nome + '</span>' +
           '<button class="som-btn som-btn--nano" type="button" aria-label="Ouvir ' + astro.nome + '"' +
-            ' data-falar="' + fala + '">🔊</button>' +
+            ' data-falar="' + fala + '"></button>' +
         '</span>' +
         '<span class="tam-item__medida">' + medida + '</span>';
       item.addEventListener('click', function (e) {
@@ -534,7 +532,7 @@ var App = (function () {
       var frase = partes.join(' ');
       li.innerHTML = '<b>' + emoji + '</b><span>' + frase + '</span>' +
         '<button class="som-btn som-btn--mini" type="button" aria-label="Ouvir a curiosidade"' +
-        ' data-falar="' + frase.replace(/"/g, '') + '">🔊</button>';
+        ' data-falar="' + frase.replace(/"/g, '') + '"></button>';
       lista.appendChild(li);
     });
     ladoDaFicha = 'a';
@@ -599,7 +597,6 @@ var App = (function () {
 
     /* quiz */
     $('#quiz-back').addEventListener('click', function () {
-      Som.tocar('toque');
       var tipo = Jogo.tipoAtual();
       ir((tipo === 'corpo' || tipo === 'orgaos') ? 'corpo-menu'
          : tipo === 'espaco' ? 'espaco-menu' : 'home');
@@ -607,18 +604,16 @@ var App = (function () {
 
     /* jogo da velha */
     $('#velha-denovo').addEventListener('click', function () {
-      Som.tocar('toque');
       Velha.reiniciar();
     });
     $('#quiz-speak').addEventListener('click', function () { Jogo.repetirFala(); });
 
     /* resultado */
     $('#result-again').addEventListener('click', function () {
-      Som.tocar('toque');
       var t = Jogo.tipoAtual();
       ir('quiz'); Jogo.iniciar(t);
     });
-    $('#result-home').addEventListener('click', function () { Som.tocar('toque'); ir('home'); });
+    $('#result-home').addEventListener('click', function () { ir('home'); });
 
     /* galeria */
     $$('[data-fecha-visor]').forEach(function (b) { b.addEventListener('click', fecharFoto); });
@@ -685,23 +680,38 @@ var App = (function () {
         funciona depois que existe quadro, daí esperar 'loadeddata'.
      Se ainda assim não tocar, o primeiro toque na tela resolve. E se nada
      resolver, fica a foto parada de sempre — que é a mesma paisagem. */
+  /* O céu em movimento da abertura.
+     O iPhone recusa autoplay em várias situações — economia de energia
+     ligada, aba que ainda não pintou, primeiro carregamento — e não avisa
+     qual foi. Então em vez de tentar uma vez, tenta a cada sinal de que a
+     tela está viva, e desiste quieto se nada funcionar: fica a foto parada,
+     que é a mesma paisagem. */
   function ligarCeu() {
     var v = $('#ceu-video');
     if (!v) return;
-    v.muted = true; v.defaultMuted = true;
+    v.muted = true; v.defaultMuted = true;      /* na propriedade, não só no atributo */
 
-    function tocar() {
+    var desistiu = false;
+    function tentar() {
+      if (desistiu || !v.paused) return;
       var p = v.play();
-      if (p && p.catch) p.catch(function () { /* tenta de novo no toque */ });
+      if (p && p.catch) p.catch(function () {});
     }
-    v.addEventListener('loadeddata', tocar);
-    v.addEventListener('error', function () { v.classList.add('falhou'); });
-    document.addEventListener('pointerdown', function aoTocar() {
-      document.removeEventListener('pointerdown', aoTocar);
-      if (v.paused) tocar();
-    }, { once: true });
+    ['loadeddata', 'canplay', 'canplaythrough', 'stalled'].forEach(function (e) {
+      v.addEventListener(e, tentar);
+    });
+    v.addEventListener('error', function () { desistiu = true; v.classList.add('falhou'); });
+    v.addEventListener('playing', function () {
+      document.removeEventListener('pointerdown', tentar, true);
+      document.removeEventListener('visibilitychange', aoVoltar);
+    });
+    function aoVoltar() { if (document.visibilityState === 'visible') tentar(); }
+    document.addEventListener('visibilitychange', aoVoltar);
+    /* captura: o toque em qualquer lugar serve, inclusive no botão Começar */
+    document.addEventListener('pointerdown', tentar, true);
 
     v.src = 'video/ceu-inicio.mp4';
+    tentar();
   }
 
   function iniciar() {

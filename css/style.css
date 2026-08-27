@@ -175,13 +175,19 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   text-align:center;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;
 }
 .tile strong{font-size:18px;font-weight:900;line-height:1.05;letter-spacing:-.5px;min-height:2.1em;
-  display:flex;align-items:center;text-align:center}
+  display:flex;align-items:center;text-align:center;
+  text-shadow:0 1px 3px rgba(43,27,84,.45),0 2px 10px rgba(43,27,84,.30)}
+/* translúcidos de propósito: o céu de nuvens tem que aparecer por trás */
+.tile--body,.tile--space,.tile--words,.tile--tic,.tile--fotos,.tile--cinema{
+  backdrop-filter:blur(3px) saturate(1.1);-webkit-backdrop-filter:blur(3px) saturate(1.1);
+  border:1px solid rgba(255,255,255,.30);
+}
 .tile:active{transform:translateY(5px);box-shadow:0 4px 0 rgba(43,27,84,.14)}
-.tile--body{background:linear-gradient(140deg,#FF83B8,var(--pink) 55%,#F0417F)}
-.tile--space{background:linear-gradient(140deg,#5E6BFF,#7C4DFF 50%,#4B2E93)}
+.tile--body{background:linear-gradient(140deg,rgba(255,131,184,.62),rgba(240,65,127,.68))}
+.tile--space{background:linear-gradient(140deg,rgba(94,107,255,.60),rgba(75,46,147,.70))}
 .tile--space .tile__foto{filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
-.tile--words{background:linear-gradient(140deg,#5CE8BC,#12A87E 60%,#0B7A5C)}
-.tile--tic{background:linear-gradient(140deg,#FFC155,#F0761F)}
+.tile--words{background:linear-gradient(140deg,rgba(92,232,188,.58),rgba(11,122,92,.68))}
+.tile--tic{background:linear-gradient(140deg,rgba(255,193,85,.62),rgba(240,118,31,.70))}
 .tile__art{
   flex:1;min-height:0;width:100%;position:relative;padding:0;overflow:hidden;
 }
@@ -201,16 +207,24 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    ALTO-FALANTE — a Lara ainda não lê, então tudo que tem
    informação na tela pode ser ouvido com um toque
    =========================================================== */
+/* O ícone é desenhado, não emoji: emoji muda de cara em cada aparelho e o
+   do alto-falante saía duro demais pro resto do app. Como é máscara, ele
+   herda o color do botão e vira branco sozinho nas telas escuras. */
+.som-btn::before{
+  content:'';width:56%;height:56%;background-color:currentColor;
+  -webkit-mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M4.2 9.2h3.1l4.1-3.4c.8-.7 2 -.1 2 .9v10.6c0 1-1.2 1.6-2 .9l-4.1-3.4H4.2c-1.1 0-2-.9-2-2v-1.6c0-1.1.9-2 2-2Z' fill='%23000'/><path d='M16.6 9.4a3.7 3.7 0 0 1 0 5.2' stroke='%23000' stroke-width='2.1' stroke-linecap='round' fill='none'/><path d='M19.4 6.8a7.4 7.4 0 0 1 0 10.4' stroke='%23000' stroke-width='2.1' stroke-linecap='round' fill='none'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M4.2 9.2h3.1l4.1-3.4c.8-.7 2 -.1 2 .9v10.6c0 1-1.2 1.6-2 .9l-4.1-3.4H4.2c-1.1 0-2-.9-2-2v-1.6c0-1.1.9-2 2-2Z' fill='%23000'/><path d='M16.6 9.4a3.7 3.7 0 0 1 0 5.2' stroke='%23000' stroke-width='2.1' stroke-linecap='round' fill='none'/><path d='M19.4 6.8a7.4 7.4 0 0 1 0 10.4' stroke='%23000' stroke-width='2.1' stroke-linecap='round' fill='none'/></svg>") center/contain no-repeat;
+}
 .som-btn{
   flex:0 0 auto;display:grid;place-items:center;
-  width:62px;height:62px;border-radius:20px;font-size:26px;line-height:1;
+  width:62px;height:62px;border-radius:20px;font-size:0;line-height:1;
   background:#fff;color:var(--ink);
   box-shadow:0 4px 0 rgba(43,27,84,.14),0 8px 18px rgba(43,27,84,.10);
   transition:transform .12s ease;
 }
 .som-btn:active{transform:translateY(3px) scale(.95);box-shadow:0 1px 0 rgba(43,27,84,.14)}
-.som-btn--mini{width:50px;height:50px;border-radius:17px;font-size:21px}
-.som-btn--nano{width:46px;height:46px;border-radius:15px;font-size:19px}
+.som-btn--mini{width:50px;height:50px;border-radius:17px}
+.som-btn--nano{width:46px;height:46px;border-radius:15px}
 .som-btn.is-falando{
   background:linear-gradient(180deg,#FFE79A,var(--sun));
   animation:falando .55s ease-in-out infinite;
@@ -649,11 +663,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   transform:translateX(-110%);opacity:0;
   filter:drop-shadow(0 18px 34px rgba(0,0,0,.45));
 }
-.passagem.is-on img{animation:passar 1.35s cubic-bezier(.2,.85,.3,1) forwards}
+.passagem.is-on img{animation:passar 2.9s cubic-bezier(.2,.85,.3,1) forwards}
+/* a parada no meio é longa de propósito: ela precisa dar tempo de olhar */
 @keyframes passar{
   0%   {transform:translateX(-110%);opacity:0}
-  22%  {transform:translateX(-4%);opacity:1}
-  68%  {transform:translateX(-4%);opacity:1}
+  12%  {transform:translateX(-4%);opacity:1}
+  82%  {transform:translateX(-4%);opacity:1}
   100% {transform:translateX(-118%);opacity:0}
 }
 
@@ -816,7 +831,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile--fotos{
   flex-direction:row;justify-content:flex-start;gap:14px;
   min-height:88px;padding:10px 16px;
-  background:linear-gradient(120deg,#FF9A3C,#FF5FA2 55%,#B14BE0);
+  background:linear-gradient(120deg,rgba(255,154,60,.62),rgba(255,95,162,.62) 55%,rgba(177,75,224,.66));
 }
 .tile--fotos .tile__art{flex:0 0 68px;width:68px;height:68px}
 .tile--fotos strong{min-height:0;font-size:20px}
@@ -824,7 +839,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile--cinema{
   flex-direction:row;justify-content:flex-start;gap:14px;
   min-height:88px;padding:10px 16px;
-  background:linear-gradient(120deg,#3E2A8F,#7B4BE0 55%,#FF5FA2);
+  background:linear-gradient(120deg,rgba(62,42,143,.62),rgba(123,75,224,.62) 55%,rgba(255,95,162,.66));
 }
 .tile--cinema .tile__art{flex:0 0 68px;width:68px;height:68px}
 .tile--cinema strong{min-height:0;font-size:20px}

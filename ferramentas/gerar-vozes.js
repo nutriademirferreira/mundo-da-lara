@@ -28,7 +28,17 @@ function frases() {
   for (const f of ['js/data-corpo.js', 'js/data-espaco.js', 'js/data-palavras.js'])
     (0, eval)(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
 
-  const F = new Set(), add = s => { if (s && String(s).trim()) F.add(String(s).trim()); };
+  /* pedaco de codigo nao e frase: o varredor por regex morde trecho de
+     expressao, e audio gerado pra isso e credito jogado fora */
+  const F = new Set();
+  /* vindo dos dados: pode ser palavra solta ("boca", "bê") — sao as opcoes do quiz */
+  const add = s => { if (s && String(s).trim()) F.add(String(s).trim()); };
+  /* vindo de varredura por regex no codigo: exige cara de frase, senao entram
+     pedacos de expressao e argumentos de .replace() */
+  const addVarrido = s => {
+    if (!s) return; s = String(s).trim();
+    if (/[a-zà-ú]/i.test(s) && /\s/.test(s) && !/[(){}\[\]<>=;_]|\+\s*$|^\s*\+/.test(s)) F.add(s);
+  };
 
   for (const tipo of ['partes', 'orgaos']) for (const p of Corpo.lista(tipo)) {
     /* o nome pelado tambem e falado: e o texto das opcoes do quiz */
@@ -53,22 +63,53 @@ function frases() {
   /* montada em js/app.js a partir de prefixo fixo + um ramo sem numero */
   add('Palavras. Complete a palavra com a letra que está faltando. São trinta palavras pra descobrir.');
 
-  for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) add(m[1]);
+  /* Tamanho de Verdade e a ficha do planeta montam a frase na hora a partir
+     dos dados. Sao poucas e fixas: da pra calcular igual e gravar todas. */
+  for (const a of Espaco.ASTROS) {
+    const real = Espaco.REAIS && Espaco.REAIS[a.id];
+    const terraKm = Espaco.REAIS && Espaco.REAIS.terra && Espaco.REAIS.terra.km;
+    if (real && terraKm) {
+      const vezes = real.km / terraKm;
+      add(a.nome + '. ' + (vezes >= 1.6
+        ? ('É ' + vezes.toFixed(1).replace('.', ' vírgula ') + ' vezes maior que a Terra.')
+        : vezes <= 0.62 ? ('Ele cabe ' + Math.round(1 / vezes) + ' vezes dentro da Terra.')
+        : 'É quase do tamanho da Terra.'));
+    }
+    if (a.tag && a.fatos)
+      add(a.nome + '. ' + a.tag + '. ' + a.fatos.map(f => f.replace(/^\S+\s/, '')).join(' '));
+  }
+
+  /* legendas da galeria e do cineminha: moram em js/app.js, nao nos dados */
+  for (const m of fs.readFileSync(path.join(RAIZ, 'js/app.js'), 'utf8').matchAll(/fala:\s*'([^']+)'/g)) addVarrido(m[1]);
+
+  for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) addVarrido(m[1]);
   for (const f of ['js/app.js', 'js/game.js', 'js/velha.js']) {
     const src = fs.readFileSync(path.join(RAIZ, f), 'utf8');
-    for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) add(m[1]);
+    for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) addVarrido(m[1]);
     /* dataset.falar = '...' nasce em JS e nao aparece no HTML. Faltava varrer
        isso, e por causa disso cinco frases sairam com a voz do sistema.
        Literal colado num + e pedaco de frase montada com numero ("Você tem "
        + n + " estrelinhas!") — gerar audio pra pedaco e desperdicio, porque
        o app nunca vai pedir o pedaco sozinho. */
+    /* Frase montada numa variavel e so depois passada pro Som.falar():
+       era o caso do fim de quiz e de todos os avisos do jogo da velha, que
+       por isso sairam na voz do sistema justo na hora de ganhar. */
+    for (const m of src.matchAll(/\bfala\s*=\s*[^;]*/g)) {
+      const expr = m[0];
+      for (const lit of expr.matchAll(/'([^']{4,})'/g)) {
+        const antes = expr.slice(0, lit.index).trimEnd();
+        const depois = expr.slice(lit.index + lit[0].length).trimStart();
+        if (antes.endsWith('+') || depois.startsWith('+')) continue;
+        addVarrido(lit[1]);
+      }
+    }
     for (const m of src.matchAll(/dataset\.falar\s*=[^;]*/g)) {
       const expr = m[0];
       for (const lit of expr.matchAll(/'([^']{4,})'/g)) {
         const antes = expr.slice(0, lit.index).trimEnd();
         const depois = expr.slice(lit.index + lit[0].length).trimStart();
         if (antes.endsWith('+') || depois.startsWith('+')) continue;
-        add(lit[1]);
+        addVarrido(lit[1]);
       }
     }
   }

@@ -33,7 +33,7 @@
     <!-- o céu em movimento. Entra por cima de fundo-inicio.webp e some se
          não carregar: sem rede, a tela continua exatamente como antes. -->
     <video class="start-video" id="ceu-video" aria-hidden="true"
-           muted playsinline loop preload="auto" disablepictureinpicture></video>
+           autoplay muted playsinline loop preload="auto" disablepictureinpicture></video>
     <div class="start-body">
       <img class="start-lara" src="img/lara-oi.webp" alt="" draggable="false">
       <h1 class="start-title">Mundo da<br><span>Lara</span></h1>
@@ -65,7 +65,7 @@
         <span class="star-bar__label">estrelinhas</span>
       </div>
       <button class="som-btn som-btn--mini" id="star-som" type="button"
-              data-falar="Você ainda não tem estrelinhas." aria-label="Ouvir quantas estrelinhas">🔊</button>
+              data-falar="Você ainda não tem estrelinhas." aria-label="Ouvir quantas estrelinhas"></button>
     </div>
 
     <div class="menu">
@@ -75,7 +75,7 @@
           <strong>Corpo Humano</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Corpo Humano"
-                data-falar="Corpo Humano. As partes do corpo, uma a uma.">🔊</button>
+                data-falar="Corpo Humano. As partes do corpo, uma a uma."></button>
       </div>
 
       <div class="tile-wrap">
@@ -84,7 +84,7 @@
           <strong>Sistema Solar</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Sistema Solar"
-                data-falar="Sistema Solar. O Sol e os oito planetas.">🔊</button>
+                data-falar="Sistema Solar. O Sol e os oito planetas."></button>
       </div>
 
       <div class="tile-wrap">
@@ -93,7 +93,7 @@
           <strong>Palavras</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Palavras"
-                data-falar="Palavras. Complete a palavra com a letra que está faltando. São dez fases.">🔊</button>
+                data-falar="Palavras. Complete a palavra com a letra que está faltando. São dez fases."></button>
       </div>
 
       <div class="tile-wrap">
@@ -102,15 +102,15 @@
           <strong>Jogo da Velha</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
-                data-falar="Jogo da velha. Jogue com o app ou com o papai.">🔊</button>
+                data-falar="Jogo da velha. Jogue com o app ou com o papai."></button>
       </div>
       <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
         <button class="tile tile--fotos" data-go="galeria" type="button">
           <span class="tile__art"><img src="img/lara-festa.webp" alt="" class="tile__foto"></span>
-          <strong>Minhas Fotos</strong>
+          <strong>Minhas Figurinhas</strong>
         </button>
-        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Minhas Fotos"
-                data-falar="Minhas fotos. Veja todas as figurinhas da Lara.">🔊</button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Minhas Figurinhas"
+                data-falar="Minhas figurinhas. Veja todas as figurinhas da Lara."></button>
       </div>
       <!-- só aparece quando existe animação na lista FILMES (js/app.js) -->
       <div class="tile-wrap" id="wrap-cinema" hidden>
@@ -119,7 +119,7 @@
           <strong>Cineminha</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Cineminha"
-                data-falar="Cineminha. Veja a Lara se mexendo.">🔊</button>
+                data-falar="Cineminha. Veja a Lara se mexendo."></button>
       </div>
     </div>
 
@@ -138,7 +138,7 @@
       <h3 class="grupo__titulo">
         <span>Por fora 👧</span>
         <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
-                data-falar="Por fora. As partes do corpo que dá pra ver: olho, boca, mão, pé.">🔊</button>
+                data-falar="Por fora. As partes do corpo que dá pra ver: olho, boca, mão, pé."></button>
       </h3>
       <div class="duo">
         <div class="mode-wrap">
@@ -146,14 +146,14 @@
             <span class="mode__emoji">👀</span><strong>Aprender</strong>
           </button>
           <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
-                  data-falar="Aprender as partes do corpo por fora.">🔊</button>
+                  data-falar="Aprender as partes do corpo por fora."></button>
         </div>
         <div class="mode-wrap">
           <button class="mode mode--play mode--curto" data-go="corpo-jogar" type="button">
             <span class="mode__emoji">🎯</span><strong>Jogar</strong>
           </button>
           <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
-                  data-falar="Jogar o quiz das partes do corpo. Dez perguntas.">🔊</button>
+                  data-falar="Jogar o quiz das partes do corpo. Dez perguntas."></button>
         </div>
       </div>
     </div>
@@ -162,7 +162,7 @@
       <h3 class="grupo__titulo">
         <span>Por dentro 🫀</span>
         <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
-                data-falar="Por dentro. Os órgãos que ficam escondidos: coração, pulmão, estômago, rim.">🔊</button>
+                data-falar="Por dentro. Os órgãos que ficam escondidos: coração, pulmão, estômago, rim."></button>
       </h3>
       <div class="duo">
         <div class="mode-wrap">
@@ -170,14 +170,14 @@
             <span class="mode__emoji">🔎</span><strong>Aprender</strong>
           </button>
           <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
-                  data-falar="Aprender os órgãos que ficam dentro do corpo.">🔊</button>
+                  data-falar="Aprender os órgãos que ficam dentro do corpo."></button>
         </div>
         <div class="mode-wrap">
           <button class="mode mode--play mode--curto" data-go="orgaos-jogar" type="button">
             <span class="mode__emoji">🎯</span><strong>Jogar</strong>
           </button>
           <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
-                  data-falar="Jogar o quiz dos órgãos. Dez perguntas.">🔊</button>
+                  data-falar="Jogar o quiz dos órgãos. Dez perguntas."></button>
         </div>
       </div>
     </div>
@@ -211,7 +211,7 @@
           <small>Viaje do Sol até Netuno</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Explorar"
-                data-falar="Explorar. Viaje do Sol até Netuno.">🔊</button>
+                data-falar="Explorar. Viaje do Sol até Netuno."></button>
       </div>
       <div class="mode-wrap">
         <button class="mode mode--play" data-go="espaco-jogar" type="button">
@@ -220,7 +220,7 @@
           <small>9 perguntas · que planeta é esse?</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir Jogar Quiz"
-                data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?">🔊</button>
+                data-falar="Jogar quiz. Nove perguntas. Que planeta é esse?"></button>
       </div>
       <div class="mode-wrap">
         <button class="mode mode--viagem" data-go="viagem" type="button">
@@ -229,7 +229,7 @@
           <small>Sinta como o espaço é vazio e enorme</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
-                data-falar="A viagem. Sinta como o espaço é vazio e enorme.">🔊</button>
+                data-falar="A viagem. Sinta como o espaço é vazio e enorme."></button>
       </div>
       <div class="mode-wrap">
         <button class="mode mode--tamanho" data-go="tamanho" type="button">
@@ -238,7 +238,7 @@
           <small>Veja quem é gigante e quem é pequenininho</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
-                data-falar="Tamanho de verdade. Veja quem é gigante e quem é pequenininho.">🔊</button>
+                data-falar="Tamanho de verdade. Veja quem é gigante e quem é pequenininho."></button>
       </div>
     </div>
   </section>
@@ -254,7 +254,7 @@
     <div class="space-hint">
       <span>Arraste para o lado e toque num planeta 👉</span>
       <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir a dica"
-              data-falar="Arraste para o lado e toque num planeta.">🔊</button>
+              data-falar="Arraste para o lado e toque num planeta."></button>
     </div>
     <div class="orbit-scroll" id="orbit-scroll"></div>
   </section>
@@ -269,7 +269,7 @@
     <div class="space-hint">
       <span>Do menorzinho ao maior — arraste 👉</span>
       <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir"
-              data-falar="Aqui os planetas estão no tamanho certo, um do lado do outro. Arraste pro lado.">🔊</button>
+              data-falar="Aqui os planetas estão no tamanho certo, um do lado do outro. Arraste pro lado."></button>
     </div>
     <div class="tamanho-scroll" id="tamanho-scroll"></div>
   </section>
@@ -284,7 +284,7 @@
     <div class="space-hint">
       <span>Aqui vale a distância — arraste até Netuno 👉</span>
       <button class="som-btn som-btn--mini" type="button" aria-label="Ouvir"
-              data-falar="Aqui o que vale é a distância. Arraste o dedo pra viajar do Sol até Netuno.">🔊</button>
+              data-falar="Aqui o que vale é a distância. Arraste o dedo pra viajar do Sol até Netuno."></button>
     </div>
     <div class="viagem-scroll" id="viagem-scroll"></div>
     <div class="viagem-barra">
@@ -301,7 +301,7 @@
   <section class="screen screen--galeria" id="screen-galeria">
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
-      <h2 class="bar__title">Minhas Fotos</h2>
+      <h2 class="bar__title">Minhas Figurinhas</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
     <div class="galeria" id="galeria"></div>
@@ -317,7 +317,7 @@
       <button class="visor__seta visor__seta--dir" id="visor-depois" type="button" aria-label="Próxima">›</button>
       <div class="visor__rodape">
         <span class="visor__nome" id="visor-nome"></span>
-        <button class="som-btn som-btn--mini" id="visor-som" type="button" aria-label="Ouvir" data-falar="">🔊</button>
+        <button class="som-btn som-btn--mini" id="visor-som" type="button" aria-label="Ouvir" data-falar=""></button>
       </div>
     </div>
   </div>
@@ -341,7 +341,7 @@
       <p class="cinema__aviso" id="cinema-aviso" hidden>Precisa de internet pra ver o filminho 💛</p>
       <div class="visor__rodape">
         <span class="visor__nome" id="cinema-nome"></span>
-        <button class="som-btn som-btn--mini" id="cinema-som" type="button" aria-label="Ouvir" data-falar="">🔊</button>
+        <button class="som-btn som-btn--mini" id="cinema-som" type="button" aria-label="Ouvir" data-falar=""></button>
       </div>
     </div>
   </div>
@@ -361,7 +361,7 @@
           <small>A Lara é o ✗ e começa jogando</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
-                data-falar="Jogar com o app. A Lara é o xis e começa jogando.">🔊</button>
+                data-falar="Jogar com o app. A Lara é o xis e começa jogando."></button>
       </div>
       <div class="mode-wrap">
         <button class="mode mode--learn" data-go="velha-dois" type="button">
@@ -370,7 +370,7 @@
           <small>Dois jogadores no mesmo celular</small>
         </button>
         <button class="som-btn som-flutuante som-flutuante--meio" type="button" aria-label="Ouvir"
-                data-falar="Jogar com o papai. Dois jogadores no mesmo celular.">🔊</button>
+                data-falar="Jogar com o papai. Dois jogadores no mesmo celular."></button>
       </div>
     </div>
   </section>
@@ -388,13 +388,13 @@
       <span class="placar__item placar__item--e">empate <b id="placar-e">0</b></span>
       <span class="placar__item placar__item--o">◯ <b id="placar-o">0</b></span>
       <button class="som-btn som-btn--nano" id="placar-som" type="button"
-              aria-label="Ouvir o placar" data-falar="Ninguém ganhou ainda.">🔊</button>
+              aria-label="Ouvir o placar" data-falar="Ninguém ganhou ainda."></button>
     </div>
 
     <div class="velha-linha">
       <span class="velha-status" id="velha-status">Sua vez, Lara! ✗</span>
       <button class="som-btn som-btn--mini" id="velha-som" type="button"
-              aria-label="Ouvir de quem é a vez" data-falar="Sua vez, Lara!">🔊</button>
+              aria-label="Ouvir de quem é a vez" data-falar="Sua vez, Lara!"></button>
     </div>
 
     <div class="velha-tab" id="velha-tab"></div>
@@ -414,7 +414,7 @@
 
     <div class="quiz-ask">
       <h3 id="quiz-question">Que parte é essa?</h3>
-      <button class="speak-btn" id="quiz-speak" type="button" aria-label="Ouvir de novo">🔊</button>
+      <button class="speak-btn" id="quiz-speak" type="button" aria-label="Ouvir de novo"></button>
     </div>
 
     <div class="options" id="quiz-options"></div>
@@ -433,7 +433,7 @@
       <p class="result-colecao" id="result-colecao" hidden></p>
       <div class="result-stars" id="result-stars"></div>
       <button class="som-btn som-btn--mini" id="result-som" type="button"
-              data-falar="Muito bem, Lara!" aria-label="Ouvir o resultado">🔊</button>
+              data-falar="Muito bem, Lara!" aria-label="Ouvir o resultado"></button>
       <button class="btn-big btn-big--go" id="result-again" type="button">Jogar de novo</button>
       <button class="btn-big btn-big--ghost" id="result-home" type="button">Voltar pro início</button>
     </div>
@@ -454,12 +454,12 @@
       <div class="sheet__titulo">
         <h3 id="sheet-name">Planeta</h3>
         <button class="som-btn som-btn--mini" id="sheet-nome-som" type="button"
-                aria-label="Ouvir o nome" data-falar="">🔊</button>
+                aria-label="Ouvir o nome" data-falar=""></button>
       </div>
       <p class="sheet__tag" id="sheet-tag"></p>
       <ul class="sheet__facts" id="sheet-facts"></ul>
       <div class="sheet__botoes">
-        <button class="speak-btn speak-btn--wide" id="sheet-speak" type="button">🔊 Ouvir</button>
+        <button class="speak-btn speak-btn--wide" id="sheet-speak" type="button">Ouvir</button>
         <button class="speak-btn speak-btn--wide" id="sheet-girar" type="button">🔄 Outro lado</button>
       </div>
     </div>
