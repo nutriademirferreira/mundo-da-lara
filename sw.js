@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v18';
+var CACHE = 'mundo-da-lara-v20';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -81,6 +81,9 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  /* animações vão direto pra rede: pesam demais pro cache offline e o
+     player pede pedaço por pedaço (Range), que o Cache API não devolve */
+  if (/\.(mp4|webm|mov)$/i.test(new URL(req.url).pathname)) return;
 
   e.respondWith(
     caches.open(CACHE).then(function (cache) {

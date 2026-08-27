@@ -183,9 +183,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile--words{background:linear-gradient(140deg,#5CE8BC,#12A87E 60%,#0B7A5C)}
 .tile--tic{background:linear-gradient(140deg,#FFC155,#F0761F)}
 .tile__art{
-  flex:1;min-height:0;width:100%;display:grid;place-items:center;padding:0;overflow:hidden;
+  flex:1;min-height:0;width:100%;position:relative;padding:0;overflow:hidden;
 }
-.tile__foto{max-height:100%;max-width:86%;width:auto;height:auto;min-height:0;object-fit:contain;
+/* absoluta de propósito: a foto no fluxo normal segura a altura do azulejo
+   e, em tela baixa, o nome do azulejo era empurrado pra fora */
+.tile__foto{position:absolute;top:0;bottom:0;left:7%;width:86%;height:100%;object-fit:contain;
   filter:drop-shadow(0 6px 14px rgba(0,0,0,.28))}
 
 
@@ -593,7 +595,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   .placar__item{padding:7px 11px;font-size:14px}
   .placar__item b{font-size:18px}
   .velha-status{font-size:17px;padding:10px 16px}
-  .tile{min-height:146px;gap:8px}
+  /* piso zero: quem manda na altura é a linha da grade. O piso de 146px
+     existia porque a foto não encolhia — agora encolhe, e o piso só fazia
+     os azulejos se atropelarem em tela baixa */
+  .tile{min-height:0;gap:8px}
   .tile strong{font-size:17px}
   .letra{height:56px;font-size:30px}
   .opt--letra{min-height:78px;font-size:44px}
@@ -794,6 +799,35 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .tile--fotos .tile__art{flex:0 0 68px;width:68px;height:68px}
 .tile--fotos strong{min-height:0;font-size:20px}
+/* com o Cineminha do lado, as duas dividem a linha e nenhuma é mais larga */
+.tile--cinema{
+  flex-direction:row;justify-content:flex-start;gap:14px;
+  min-height:88px;padding:10px 16px;
+  background:linear-gradient(120deg,#3E2A8F,#7B4BE0 55%,#FF5FA2);
+}
+.tile--cinema .tile__art{flex:0 0 68px;width:68px;height:68px}
+.tile--cinema strong{min-height:0;font-size:20px}
+/* Com o Cineminha, a home ganha uma quarta linha em vez de espremer duas
+   faixas na mesma: meia largura não cabe figura + nome + alto-falante, e o
+   nome acabava por baixo do botão. As duas primeiras linhas cedem a altura. */
+.menu--cinema{grid-template-rows:1fr 1fr auto auto}
+.menu--cinema .tile--fotos,
+.menu--cinema .tile--cinema{min-height:74px;padding:8px 16px}
+.menu--cinema .tile--fotos .tile__art,
+.menu--cinema .tile--cinema .tile__art{flex:0 0 58px;width:58px;height:58px}
+.menu--cinema .tile--fotos strong,
+.menu--cinema .tile--cinema strong{font-size:19px}
+/* tela baixa (SE e afins): as faixas largas cedem altura pros quatro de cima */
+@media (max-height:740px){
+  .menu--cinema{gap:10px}
+  .menu--cinema .tile--fotos,
+  .menu--cinema .tile--cinema{min-height:0;padding:6px 14px;gap:10px}
+  .menu--cinema .tile--fotos .tile__art,
+  .menu--cinema .tile--cinema .tile__art{flex:0 0 40px;width:40px;height:40px}
+  .menu--cinema .tile--fotos strong,
+  .menu--cinema .tile--cinema strong{font-size:17px;min-height:0}
+}
+.tile-wrap[hidden]{display:none}
 
 .galeria{
   flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
@@ -857,5 +891,32 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:rgba(255,255,255,.14);padding:8px 18px;border-radius:999px;
   border:1px solid rgba(255,255,255,.18);
 }
+/* tocador do Cineminha: mesma moldura do visor, com vídeo no lugar da foto */
+/* minmax(0,1fr) + stretch: sem isso a linha da grade tenta se medir pelo
+   vídeo e o vídeo tenta se medir pela linha — sobrava um filminho miúdo */
+.visor--cinema .visor__caixa{grid-template-rows:minmax(0,1fr) auto;place-items:stretch}
+.visor--cinema .visor__rodape{justify-self:center}
+.cinema__tela{
+  width:100%;height:100%;min-height:0;object-fit:contain;
+  border-radius:20px;background:transparent;
+}
+.cinema__tela[hidden]{display:none}
+.cinema__aviso{
+  margin:0;padding:22px 18px;max-width:280px;text-align:center;
+  font-size:16px;font-weight:800;color:#fff;line-height:1.4;
+}
+/* as capas são os mesmos recortes da galeria: contain, senão cortam a cabeça */
+.filme-card img{object-fit:contain}
+/* triangulinho de play por cima da capa, pra ela saber que aquilo se mexe */
+.screen--galeria#screen-cineminha .foto-card{background:linear-gradient(160deg,rgba(28,16,52,.42),rgba(28,16,52,.24));border-color:rgba(255,255,255,.34)}
+.screen--galeria#screen-cineminha .foto-card__nome{color:#fff;background:linear-gradient(180deg,rgba(18,10,42,0),rgba(18,10,42,.78) 45%)}
+.filme-card::after{
+  content:'';position:absolute;left:50%;top:calc(50% - 15px);
+  width:0;height:0;margin:-13px 0 0 -8px;
+  border-left:22px solid rgba(255,255,255,.95);
+  border-top:14px solid transparent;border-bottom:14px solid transparent;
+  filter:drop-shadow(0 3px 8px rgba(43,27,84,.55));pointer-events:none;
+}
+
 .visor .som-btn{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;
   border:1px solid rgba(255,255,255,.2)}

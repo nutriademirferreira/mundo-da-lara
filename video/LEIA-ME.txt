@@ -1,0 +1,2 @@
+Coloque aqui as animacoes em .mp4 (H.264 + AAC, largura 720 ou 1080).
+Depois acrescente uma linha no array FILMES em js/app.js.

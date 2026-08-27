@@ -100,13 +100,22 @@
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
                 data-falar="Jogo da velha. Jogue com o app ou com o papai.">🔊</button>
       </div>
-      <div class="tile-wrap tile-wrap--largo">
+      <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
         <button class="tile tile--fotos" data-go="galeria" type="button">
           <span class="tile__art"><img src="img/lara-festa.webp" alt="" class="tile__foto"></span>
           <strong>Minhas Fotos</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Minhas Fotos"
                 data-falar="Minhas fotos. Veja todas as figurinhas da Lara.">🔊</button>
+      </div>
+      <!-- só aparece quando existe animação na lista FILMES (js/app.js) -->
+      <div class="tile-wrap" id="wrap-cinema" hidden>
+        <button class="tile tile--cinema" data-go="cineminha" type="button">
+          <span class="tile__art"><img src="img/lara-oi.webp" alt="" class="tile__foto"></span>
+          <strong>Cineminha</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Cineminha"
+                data-falar="Cineminha. Veja a Lara se mexendo.">🔊</button>
       </div>
     </div>
 
@@ -305,6 +314,30 @@
       <div class="visor__rodape">
         <span class="visor__nome" id="visor-nome"></span>
         <button class="som-btn som-btn--mini" id="visor-som" type="button" aria-label="Ouvir" data-falar="">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CINEMINHA (animações) ============ -->
+  <section class="screen screen--galeria screen--dark" id="screen-cineminha">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Cineminha</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="galeria" id="cineminha"></div>
+  </section>
+
+  <!-- tocador em tela cheia -->
+  <div class="visor visor--cinema" id="cinema" hidden>
+    <div class="visor__fundo" data-fecha-cinema></div>
+    <div class="visor__caixa" role="dialog" aria-modal="true">
+      <button class="visor__fechar" data-fecha-cinema type="button" aria-label="Fechar">✕</button>
+      <video class="cinema__tela" id="cinema-video" playsinline controls preload="metadata"></video>
+      <p class="cinema__aviso" id="cinema-aviso" hidden>Precisa de internet pra ver o filminho 💛</p>
+      <div class="visor__rodape">
+        <span class="visor__nome" id="cinema-nome"></span>
+        <button class="som-btn som-btn--mini" id="cinema-som" type="button" aria-label="Ouvir" data-falar="">🔊</button>
       </div>
     </div>
   </div>

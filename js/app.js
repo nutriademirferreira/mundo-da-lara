@@ -13,6 +13,7 @@ var App = (function () {
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
     'galeria':          'screen-galeria',
+    'cineminha':        'screen-cineminha',
     'tamanho':          'screen-tamanho',
     'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
@@ -39,7 +40,8 @@ var App = (function () {
     'velha-menu':       { foto:'fundo-velha',  veu:'escuro' },
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
     'result':           { foto:'fundo-home',   veu:'claro'  },
-    'galeria':          { foto:'fundo-home',   veu:'claro'  }
+    'galeria':          { foto:'fundo-home',   veu:'claro'  },
+    'cineminha':        { foto:'fundo-espaco', veu:'escuro' }
   };
 
   /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
@@ -174,6 +176,7 @@ var App = (function () {
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         if (destino === 'galeria')           { montarGaleria(); ir('galeria'); ajustarGaleria(); return; }
+        if (destino === 'cineminha')         { montarCineminha(); ir('cineminha'); ajustarGaleria(); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -439,11 +442,13 @@ var App = (function () {
      do padding-top não dimensionam a linha da grade neste caso, e os cartões
      acabavam se atropelando. Medir a largura real e mandar a altura resolve. */
   function ajustarGaleria() {
-    var caixa = $('#galeria');
-    var card = caixa && caixa.querySelector('.foto-card');
-    if (!card) return;
-    var l = card.getBoundingClientRect().width;
-    if (l > 0) caixa.style.gridAutoRows = Math.round(l * 1.32) + 'px';
+    ['#galeria', '#cineminha'].forEach(function (sel) {
+      var caixa = $(sel);
+      var card = caixa && caixa.querySelector('.foto-card');
+      if (!card) return;
+      var l = card.getBoundingClientRect().width;
+      if (l > 0) caixa.style.gridAutoRows = Math.round(l * 1.32) + 'px';
+    });
   }
 
   function abrirFoto(i) {
@@ -458,6 +463,61 @@ var App = (function () {
     Som.falar(f.fala, { atraso: 200 });
   }
   function fecharFoto() { $('#visor').hidden = true; Som.calar(); }
+
+  /* =========================================================
+     CINEMINHA — as animações
+     Ficam de fora do cache do service worker de propósito: cada
+     filminho pesa mais que o app inteiro. Carregam da internet na
+     hora de assistir; sem rede, ela vê um aviso em vez de um erro.
+     Pra publicar uma animação: jogue o arquivo em video/ e
+     acrescente uma linha aqui — o atalho na home aparece sozinho.
+     ========================================================= */
+  var FILMES = [
+    /* { arq:'lara-dancando', capa:'lara-festa', nome:'Dançando', fala:'Lara dançando.' } */
+  ];
+  var filmeAberto = 0;
+
+  function montarCineminha() {
+    var caixa = $('#cineminha');
+    if (caixa.childElementCount) return;
+    FILMES.forEach(function (f, i) {
+      var card = document.createElement('div');
+      card.className = 'foto-card filme-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+      card.innerHTML = '<img src="img/' + f.capa + '.webp" alt="' + f.nome + '" loading="lazy">' +
+                       '<span class="foto-card__nome">' + f.nome + '</span>';
+      card.addEventListener('click', function () { abrirFilme(i); });
+      caixa.appendChild(card);
+    });
+    if (window.ResizeObserver) new ResizeObserver(ajustarGaleria).observe(caixa);
+    ajustarGaleria();
+  }
+
+  function abrirFilme(i) {
+    filmeAberto = (i + FILMES.length) % FILMES.length;
+    var f = FILMES[filmeAberto];
+    var v = $('#cinema-video');
+    var aviso = $('#cinema-aviso');
+    var offline = ('onLine' in navigator) && navigator.onLine === false;
+    v.hidden = offline; aviso.hidden = !offline;
+    if (!offline) { v.src = 'video/' + f.arq + '.mp4'; v.currentTime = 0; }
+    $('#cinema-nome').textContent = f.nome;
+    $('#cinema-som').dataset.falar = f.fala;
+    $('#cinema').hidden = false;
+    Som.tocar('zap');
+    /* o filminho tem som próprio: a narração calaria por cima */
+    if (!offline) { Som.calar(); v.play().catch(function () {}); }
+    else Som.falar('Precisa de internet pra ver o filminho.', { atraso: 200 });
+  }
+  function fecharFilme() {
+    var v = $('#cinema-video');
+    v.pause(); v.removeAttribute('src'); v.load();
+    $('#cinema').hidden = true; Som.calar();
+  }
 
   function abrirFicha(astro) {
     Som.tocar('zap');
@@ -564,6 +624,13 @@ var App = (function () {
     $$('[data-fecha-visor]').forEach(function (b) { b.addEventListener('click', fecharFoto); });
     $('#visor-antes').addEventListener('click', function () { abrirFoto(fotoAberta - 1); });
     $('#visor-depois').addEventListener('click', function () { abrirFoto(fotoAberta + 1); });
+    $$('[data-fecha-cinema]').forEach(function (b) { b.addEventListener('click', fecharFilme); });
+    /* o atalho na home só existe se houver o que assistir */
+    if (FILMES.length) {
+      $('#wrap-cinema').hidden = false;
+      $('#wrap-cinema').classList.add('tile-wrap--largo');
+      $('#screen-home .menu').classList.add('menu--cinema');
+    }
 
     /* ficha do planeta */
     $$('[data-close-sheet]').forEach(function (b) { b.addEventListener('click', fecharFicha); });
@@ -572,6 +639,7 @@ var App = (function () {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !$('#planet-sheet').hidden) fecharFicha();
       if (e.key === 'Escape' && !$('#visor').hidden) fecharFoto();
+      if (e.key === 'Escape' && !$('#cinema').hidden) fecharFilme();
     });
 
     /* nada de zoom por duplo toque durante a brincadeira */
