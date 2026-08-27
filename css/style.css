@@ -778,3 +778,84 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   background:rgba(0,0,0,.42);border:1px solid rgba(255,233,168,.35);
   padding:10px 14px;border-radius:16px;margin-bottom:16px;
 }
+
+
+/* ===========================================================
+   GALERIA DE FOTOS
+   O lugar onde ela se vê. Rolagem vertical aqui é certa —
+   é o gesto que todo mundo já espera de uma galeria.
+   =========================================================== */
+.menu{grid-template-rows:1fr 1fr auto}
+.tile-wrap--largo{grid-column:1 / -1}
+.tile--fotos{
+  flex-direction:row;justify-content:flex-start;gap:14px;
+  min-height:88px;padding:10px 16px;
+  background:linear-gradient(120deg,#FF9A3C,#FF5FA2 55%,#B14BE0);
+}
+.tile--fotos .tile__art{flex:0 0 68px;width:68px;height:68px}
+.tile--fotos strong{min-height:0;font-size:20px}
+
+.galeria{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  align-items:start;                 /* sem isso a linha colapsa e o cartão vaza por cima */
+  align-content:start;
+  padding:2px 2px 8px;
+  scrollbar-width:none;
+}
+.galeria::-webkit-scrollbar{display:none}
+.foto-card{
+  position:relative;height:100%;min-height:0;border-radius:22px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.42));
+  border:1px solid rgba(255,255,255,.72);backdrop-filter:blur(6px);
+  box-shadow:0 6px 0 rgba(43,27,84,.10),0 10px 22px rgba(43,27,84,.12);
+  display:block;padding:0;
+}
+.foto-card:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(43,27,84,.10)}
+/* absoluta de propósito: assim a imagem nunca empurra o cartão pra fora
+   da proporção e a grade não se atropela */
+.foto-card img{
+  position:absolute;left:8px;right:8px;top:8px;bottom:30px;
+  width:calc(100% - 16px);height:calc(100% - 38px);object-fit:contain;
+  filter:drop-shadow(0 6px 12px rgba(43,27,84,.22));
+}
+.foto-card__nome{
+  position:absolute;left:0;right:0;bottom:0;padding:5px 8px 7px;
+  font-size:12px;font-weight:800;color:var(--ink);text-align:center;
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.86) 45%);
+}
+
+/* visor em tela cheia */
+.visor{position:fixed;inset:0;z-index:70;display:grid;place-items:center}
+.visor[hidden]{display:none}
+.visor__fundo{position:absolute;inset:0;background:rgba(18,10,42,.9);backdrop-filter:blur(6px);
+  animation:fade .2s ease}
+.visor__caixa{
+  position:relative;width:100%;max-width:520px;height:100%;
+  display:grid;grid-template-rows:1fr auto;place-items:center;
+  padding:calc(var(--safe-t) + 60px) 12px calc(var(--safe-b) + 20px);
+  animation:zoomIn .3s cubic-bezier(.2,.9,.3,1.2);
+}
+.visor__foto{max-width:88%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  filter:drop-shadow(0 18px 40px rgba(0,0,0,.6))}
+.visor__fechar{
+  position:absolute;top:calc(var(--safe-t) + 12px);right:14px;
+  width:52px;height:52px;border-radius:18px;font-size:20px;font-weight:900;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2);
+}
+.visor__seta{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:56px;height:56px;border-radius:50%;font-size:32px;font-weight:900;color:#fff;line-height:1;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2);
+}
+.visor__seta--esq{left:6px}
+.visor__seta--dir{right:6px}
+.visor__seta:active{transform:translateY(-50%) scale(.92)}
+.visor__rodape{display:flex;align-items:center;gap:10px;margin-top:10px}
+.visor__nome{
+  font-size:18px;font-weight:900;color:#fff;letter-spacing:-.2px;
+  background:rgba(255,255,255,.14);padding:8px 18px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+}
+.visor .som-btn{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;
+  border:1px solid rgba(255,255,255,.2)}

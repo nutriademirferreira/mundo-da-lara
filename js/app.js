@@ -12,6 +12,7 @@ var App = (function () {
     'corpo-aprender':   'screen-corpo-aprender',
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
+    'galeria':          'screen-galeria',
     'tamanho':          'screen-tamanho',
     'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
@@ -37,7 +38,8 @@ var App = (function () {
     'viagem':           { foto:'fundo-espaco', veu:'espaco' },
     'velha-menu':       { foto:'fundo-velha',  veu:'escuro' },
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
-    'result':           { foto:'fundo-home',   veu:'claro'  }
+    'result':           { foto:'fundo-home',   veu:'claro'  },
+    'galeria':          { foto:'fundo-home',   veu:'claro'  }
   };
 
   /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
@@ -171,6 +173,7 @@ var App = (function () {
         if (destino === 'velha-dois')        { ir('velha'); Velha.iniciar('dois', true); return; }
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
+        if (destino === 'galeria')           { montarGaleria(); ir('galeria'); ajustarGaleria(); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -382,6 +385,80 @@ var App = (function () {
     $('#viagem-texto').textContent = ultima;
   }
 
+  /* =========================================================
+     GALERIA — o lugar onde a Lara se vê
+     ========================================================= */
+  var FOTOS = [
+    { arq:'lara-oi',         nome:'Oi!',            fala:'Lara acenando oi.' },
+    { arq:'lara-festa',      nome:'Pulando',        fala:'Lara pulando de alegria.' },
+    { arq:'lara-unicornio',  nome:'Unicorninho',    fala:'Lara abraçada com o unicorninho.' },
+    { arq:'lara-corpo',      nome:'Pensando',       fala:'Lara pensando com o dedinho no rosto.' },
+    { arq:'lara-corpo2',     nome:'Curiosa',        fala:'Lara curiosa.' },
+    { arq:'lara-palavras',   nome:'Letrinhas',      fala:'Lara segurando os blocos de letras.' },
+    { arq:'lara-velha',      nome:'Coroa',          fala:'Lara com uma coroa dourada na mão.' },
+    { arq:'lara-velha2',     nome:'Rainha',         fala:'Lara com a coroa, toda cheia de pose.' },
+    { arq:'lara-espaco',     nome:'No planeta',     fala:'Lara em pé em cima de um planeta.' },
+    { arq:'lara-espaco2',    nome:'No espaço',      fala:'Lara viajando no espaço.' },
+    { arq:'lara-viajante',   nome:'Explorando',     fala:'Lara explorando o sistema solar.' },
+    { arq:'lara-astronauta', nome:'Astronauta',     fala:'Lara astronauta, quando ela crescer.' },
+    { arq:'lara-princesa',   nome:'Princesa',       fala:'Lara princesa, quando ela crescer.' },
+    { arq:'lara-cientista',  nome:'Cientista',      fala:'Lara cientista, quando ela crescer.' }
+  ];
+  var fotoAberta = 0;
+
+  function montarGaleria() {
+    var caixa = $('#galeria');
+    if (caixa.childElementCount) return;                 /* monta uma vez só */
+    FOTOS.forEach(function (f, i) {
+      /* div e não button: botão não repassa a altura da proporção pra
+         linha da grade, e os cartões se atropelam */
+      var card = document.createElement('div');
+      card.className = 'foto-card';
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+      card.innerHTML = '<img src="img/' + f.arq + '.webp" alt="' + f.nome + '" loading="lazy">' +
+                       '<span class="foto-card__nome">' + f.nome + '</span>';
+      card.addEventListener('click', function () { abrirFoto(i); });
+      caixa.appendChild(card);
+    });
+    /* a tela pode estar escondida na hora de montar: o observador acerta
+       a altura assim que a galeria ganha largura de verdade */
+    if (window.ResizeObserver) {
+      new ResizeObserver(ajustarGaleria).observe(caixa);
+    } else {
+      window.addEventListener('resize', ajustarGaleria);
+      setTimeout(ajustarGaleria, 60); setTimeout(ajustarGaleria, 300);
+    }
+    ajustarGaleria();
+  }
+
+  /* A altura da linha é calculada aqui de propósito: aspect-ratio e o truque
+     do padding-top não dimensionam a linha da grade neste caso, e os cartões
+     acabavam se atropelando. Medir a largura real e mandar a altura resolve. */
+  function ajustarGaleria() {
+    var caixa = $('#galeria');
+    var card = caixa && caixa.querySelector('.foto-card');
+    if (!card) return;
+    var l = card.getBoundingClientRect().width;
+    if (l > 0) caixa.style.gridAutoRows = Math.round(l * 1.32) + 'px';
+  }
+
+  function abrirFoto(i) {
+    fotoAberta = (i + FOTOS.length) % FOTOS.length;
+    var f = FOTOS[fotoAberta];
+    $('#visor-foto').src = 'img/' + f.arq + '.webp';
+    $('#visor-foto').alt = f.nome;
+    $('#visor-nome').textContent = f.nome;
+    $('#visor-som').dataset.falar = f.fala;
+    $('#visor').hidden = false;
+    Som.tocar('zap');
+    Som.falar(f.fala, { atraso: 200 });
+  }
+  function fecharFoto() { $('#visor').hidden = true; Som.calar(); }
+
   function abrirFicha(astro) {
     Som.tocar('zap');
     $('#sheet-art').innerHTML = Espaco.orbe(astro, 152);
@@ -483,12 +560,18 @@ var App = (function () {
     });
     $('#result-home').addEventListener('click', function () { Som.tocar('toque'); ir('home'); });
 
+    /* galeria */
+    $$('[data-fecha-visor]').forEach(function (b) { b.addEventListener('click', fecharFoto); });
+    $('#visor-antes').addEventListener('click', function () { abrirFoto(fotoAberta - 1); });
+    $('#visor-depois').addEventListener('click', function () { abrirFoto(fotoAberta + 1); });
+
     /* ficha do planeta */
     $$('[data-close-sheet]').forEach(function (b) { b.addEventListener('click', fecharFicha); });
     $('#sheet-speak').addEventListener('click', function () { if (fichaAberta) falarFicha(fichaAberta); });
     $('#sheet-girar').addEventListener('click', girarFicha);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !$('#planet-sheet').hidden) fecharFicha();
+      if (e.key === 'Escape' && !$('#visor').hidden) fecharFoto();
     });
 
     /* nada de zoom por duplo toque durante a brincadeira */

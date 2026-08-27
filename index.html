@@ -100,6 +100,14 @@
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
                 data-falar="Jogo da velha. Jogue com o app ou com o papai.">🔊</button>
       </div>
+      <div class="tile-wrap tile-wrap--largo">
+        <button class="tile tile--fotos" data-go="galeria" type="button">
+          <span class="tile__art"><img src="img/lara-festa.webp" alt="" class="tile__foto"></span>
+          <strong>Minhas Fotos</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Minhas Fotos"
+                data-falar="Minhas fotos. Veja todas as figurinhas da Lara.">🔊</button>
+      </div>
     </div>
 
     <p class="home-foot">Feito com carinho pro papai brincar com a Lara 💛</p>
@@ -275,6 +283,31 @@
       <span class="viagem-barra__texto" id="viagem-texto">Saindo do Sol</span>
     </div>
   </section>
+
+  <!-- ============ GALERIA DE FOTOS ============ -->
+  <section class="screen screen--galeria" id="screen-galeria">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Minhas Fotos</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="galeria" id="galeria"></div>
+  </section>
+
+  <!-- visor de foto em tela cheia -->
+  <div class="visor" id="visor" hidden>
+    <div class="visor__fundo" data-fecha-visor></div>
+    <div class="visor__caixa" role="dialog" aria-modal="true">
+      <button class="visor__fechar" data-fecha-visor type="button" aria-label="Fechar">✕</button>
+      <button class="visor__seta visor__seta--esq" id="visor-antes" type="button" aria-label="Anterior">‹</button>
+      <img class="visor__foto" id="visor-foto" src="" alt="">
+      <button class="visor__seta visor__seta--dir" id="visor-depois" type="button" aria-label="Próxima">›</button>
+      <div class="visor__rodape">
+        <span class="visor__nome" id="visor-nome"></span>
+        <button class="som-btn som-btn--mini" id="visor-som" type="button" aria-label="Ouvir" data-falar="">🔊</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ MENU: JOGO DA VELHA ============ -->
   <section class="screen screen--submenu" id="screen-velha-menu">
