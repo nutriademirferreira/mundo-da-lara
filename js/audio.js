@@ -101,22 +101,60 @@ var Som = (function () {
     if (tocandoVoz) { try { tocandoVoz.pause(); } catch (e) {} tocandoVoz = null; }
   }
 
+  /* Fila de verdade. Antes, 'enfileirar' so deixava de cancelar a fala
+     anterior — as duas tocavam por cima uma da outra. Na tela de aprender,
+     que fala o nome e logo a dica, saia tudo embolado. */
+  var fila = [];
+  var tocandoFila = false;
+
+  function pararFila() { fila = []; tocandoFila = false; pararVoz(); }
+
+  function proximoDaFila() {
+    if (!fila.length) { tocandoFila = false; return; }
+    tocandoFila = true;
+    var item = fila.shift();
+    if (!ligado) { pararFila(); return; }
+    var a = new Audio('audio/' + item.arq);
+    a.volume = 1;
+    tocandoVoz = a;
+    a.addEventListener('ended', function () { setTimeout(proximoDaFila, item.pausa || 90); });
+    a.addEventListener('error', function () { proximoDaFila(); });
+    var comeca = function () { a.play().catch(function () { proximoDaFila(); }); };
+    if (item.atraso) setTimeout(comeca, item.atraso); else comeca();
+  }
+
+  function enfileirarArquivos(arquivos, opcoes) {
+    if (!opcoes.enfileirar) { pararFila(); speechSynthesis.cancel(); }
+    arquivos.forEach(function (arq, i) {
+      fila.push({ arq: arq, atraso: i === 0 ? (opcoes.atraso || 0) : 0, pausa: opcoes.pausa });
+    });
+    if (!tocandoFila) proximoDaFila();
+  }
+
   /* devolve true se conseguiu tocar a gravacao */
   function falarGravado(texto, opcoes) {
     if (!indiceVoz) return false;
     var arq = indiceVoz[chaveVoz(texto)];
     if (!arq) return false;
-    try {
-      if (!opcoes.enfileirar) { pararVoz(); speechSynthesis.cancel(); }
-      var a = new Audio('audio/' + arq);
-      a.volume = 1;
-      setTimeout(function () {
-        if (!ligado) return;
-        tocandoVoz = a;
-        a.play().catch(function () { falarSintetizado(texto, opcoes); });
-      }, opcoes.atraso || 0);
-      return true;
-    } catch (e) { return false; }
+    try { enfileirarArquivos([arq], opcoes); return true; }
+    catch (e) { return false; }
+  }
+
+  /* Fala montada de pedacos gravados: 'Xis', '2', 'bolinha', '1'.
+     Numero muda toda hora e nao da pra gravar a frase inteira, mas da pra
+     gravar os pedacos. So vale se TODOS existirem — meia frase gravada e
+     meia robotica seria pior que tudo robotico. */
+  function falarPedacos(pedacos, opcoes) {
+    opcoes = opcoes || {};
+    if (!ligado || !pedacos || !pedacos.length) return;
+    if (!indiceVoz) { falarSintetizado(pedacos.join(' '), opcoes); return; }
+    var arquivos = [];
+    for (var i = 0; i < pedacos.length; i++) {
+      var arq = indiceVoz[chaveVoz(pedacos[i])];
+      if (!arq) { falarSintetizado(pedacos.join(' '), opcoes); return; }
+      arquivos.push(arq);
+    }
+    enfileirarArquivos(arquivos, opcoes);
   }
 
   function falar(texto, opcoes) {
@@ -164,7 +202,7 @@ var Som = (function () {
   }
 
   function calar() {
-    pararVoz();
+    pararFila();
     if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} }
   }
 
@@ -197,7 +235,8 @@ var Som = (function () {
   }
 
   return {
-    tocar: tocar, falar: falar, calar: calar, destravar: destravar, alternar: alternar,
+    tocar: tocar, falar: falar, falarPedacos: falarPedacos,
+    calar: calar, destravar: destravar, alternar: alternar,
     estaLigado: function () { return ligado; }
   };
 })();

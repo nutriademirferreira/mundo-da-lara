@@ -83,10 +83,12 @@ var App = (function () {
     if (!botao) return;
     var falante = botao.parentNode.querySelector('[data-falar]');
     if (!falante) return;
+    /* sem o número de propósito: ele muda a cada rodada e não dá pra gravar
+       um arquivo pra cada, então a frase inteira saía na voz do sistema.
+       A contagem exata continua escrita na tela de resultado. */
     var vistas = Jogo.palavrasVistas().length;
     falante.dataset.falar = 'Palavras. Complete a palavra com a letra que está faltando. ' +
-      (vistas ? 'Você já conheceu ' + vistas + ' de ' + Palavras.FASES.length + ' palavras.'
-              : 'São trinta palavras pra descobrir.');
+      (vistas ? 'Você já conheceu várias palavras!' : 'São trinta palavras pra descobrir.');
   }
 
   function ir(nome) {
@@ -118,16 +120,26 @@ var App = (function () {
   }
 
   function falarBotao(botao) {
+    /* data-falar-partes: frase montada de pedaços gravados, pro caso em que
+       o número É o conteúdo (o placar da velha). data-falar continua servindo
+       de texto inteiro pro sintetizador, se algum pedaço não tiver gravação. */
+    var partes = null;
+    if (botao.dataset.falarPartes) {
+      try { partes = JSON.parse(botao.dataset.falarPartes); } catch (e) { partes = null; }
+    }
     var texto = botao.dataset.falar;
-    if (!texto) return;
+    if (!partes && !texto) return;
+
     $$('.som-btn.is-falando').forEach(function (b) { b.classList.remove('is-falando'); });
-    Som.falar(texto);
+    if (partes) Som.falarPedacos(partes); else Som.falar(texto);
     if (!Som.estaLigado()) return;
+
+    var tamanho = texto ? texto.length : partes.join(' ').length;
     botao.classList.add('is-falando');
     clearTimeout(botao._temporizador);
     botao._temporizador = setTimeout(function () {
       botao.classList.remove('is-falando');
-    }, Math.min(700 + texto.length * 72, 6000));
+    }, Math.min(700 + tamanho * 72, 6000));
   }
 
   /* =========================================================

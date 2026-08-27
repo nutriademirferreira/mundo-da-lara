@@ -69,10 +69,24 @@ var Velha = (function () {
       som.dataset.falar = 'Ninguém ganhou ainda. Bora jogar!';
       return;
     }
+    /* aqui o número É o conteúdo, então não dá pra tirar. A frase inteira
+       nunca poderia ser gravada (o placar muda a cada partida), mas cada
+       pedaço pode: 'Xis', 'dois', 'bolinha', 'um'. */
     var texto = 'Xis ' + placar.X + ', bolinha ' + placar.O;
-    if (placar.velha) texto += ', e ' + placar.velha + (placar.velha === 1 ? ' empate' : ' empates');
+    var partes = ['Xis', porExtenso(placar.X), 'bolinha', porExtenso(placar.O)];
+    if (placar.velha) {
+      texto += ', e ' + placar.velha + (placar.velha === 1 ? ' empate' : ' empates');
+      partes.push('e', porExtenso(placar.velha), placar.velha === 1 ? 'empate' : 'empates');
+    }
     som.dataset.falar = texto + '.';
+    som.dataset.falarPartes = JSON.stringify(partes);
   }
+
+  /* zero a vinte basta: o placar zera ao sair da tela do tabuleiro */
+  var EXTENSO = ['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez',
+                 'onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito',
+                 'dezenove','vinte'];
+  function porExtenso(n) { return EXTENSO[n] || String(n); }
 
   function anunciar(falar) {
     var faixa = $('#velha-status');

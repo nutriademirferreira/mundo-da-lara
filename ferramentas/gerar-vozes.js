@@ -60,8 +60,11 @@ function frases() {
   }
   for (const l of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') add(Palavras.falaDaLetra(l));
 
-  /* montada em js/app.js a partir de prefixo fixo + um ramo sem numero */
-  add('Palavras. Complete a palavra com a letra que está faltando. São trinta palavras pra descobrir.');
+  /* Montada em js/app.js: prefixo fixo + um dos dois ramos. O app fala a
+     frase inteira, entao e a inteira que precisa de arquivo — o varredor por
+     regex so enxerga os pedacos, por isso as duas estao escritas aqui. */
+  for (const ramo of ['São trinta palavras pra descobrir.', 'Você já conheceu várias palavras!'])
+    add('Palavras. Complete a palavra com a letra que está faltando. ' + ramo);
 
   /* Tamanho de Verdade e a ficha do planeta montam a frase na hora a partir
      dos dados. Sao poucas e fixas: da pra calcular igual e gravar todas. */
@@ -81,6 +84,13 @@ function frases() {
 
   /* legendas da galeria e do cineminha: moram em js/app.js, nao nos dados */
   for (const m of fs.readFileSync(path.join(RAIZ, 'js/app.js'), 'utf8').matchAll(/fala:\s*'([^']+)'/g)) addVarrido(m[1]);
+
+  /* pedacos do placar da velha: a frase inteira muda a cada partida, mas
+     ela e montada de pedacos fixos, e cada pedaco tem gravacao propria */
+  for (const p of ['Xis', 'bolinha', 'e', 'empate', 'empates']) add(p);
+  for (const n of ['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez',
+                   'onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito',
+                   'dezenove','vinte']) add(n);
 
   for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) addVarrido(m[1]);
   for (const f of ['js/app.js', 'js/game.js', 'js/velha.js']) {
