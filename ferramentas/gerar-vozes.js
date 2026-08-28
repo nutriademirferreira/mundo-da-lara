@@ -26,7 +26,8 @@ const AJUSTES = { stability: 0.40, similarity_boost: 0.85, style: 0.35, use_spea
 function frases() {
   global.window = { addEventListener() {} };
   global.document = { addEventListener() {}, querySelector: () => null, querySelectorAll: () => [] };
-  for (const f of ['js/data-corpo.js', 'js/data-espaco.js', 'js/data-palavras.js'])
+  global.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+  for (const f of ['js/data-corpo.js', 'js/data-espaco.js', 'js/data-palavras.js', 'js/game.js'])
     (0, eval)(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
 
   /* pedaco de codigo nao e frase: o varredor por regex morde trecho de
@@ -54,29 +55,14 @@ function frases() {
        e pior que rede nenhuma, porque da confianca falsa. */
   };
 
-  for (const tipo of ['partes', 'orgaos']) for (const p of Corpo.lista(tipo)) {
-    /* o nome pelado tambem e falado: e o texto das opcoes do quiz */
-    add(p.nome);
-    add(p.artigo + ' ' + p.nome); add(p.dica); add('Isso! É ' + p.artigo + ' ' + p.nome + '.');
-  }
-  add('Que parte do corpo é essa?'); add('Que órgão é esse?');
+  /* Fonte unica: as falas do quiz vem do proprio motor do jogo. Enquanto
+     este arquivo remontava as frases por conta propria, as duas versoes
+     divergiam calado — 'Isso! ' + falaDaLetra(p.falta) passava o INDICE no
+     lugar da letra, entao ele gravava "Isso! 1 de LUA!" e o app dizia
+     "Isso! u de Lua!". As 30 confirmacoes ficaram sem voz e o verificador
+     jurava que estava tudo certo, porque conferia contra o proprio erro. */
+  for (const f of Jogo.todasAsFalas()) add(f);
 
-  for (const a of Espaco.ASTROS) {
-    add(a.nome); add(Espaco.comArtigo(a)); add('Isso! É ' + Espaco.comArtigo(a) + '.');
-    /* era add(a.fato), no singular — campo que nao existe. O dado se chama
-       'fatos' e e uma lista, entao isso aqui nunca acrescentou nada e a ficha
-       do planeta inteira ficou sem voz. Cada curiosidade tem alto-falante
-       proprio, e o emoji da frente nao e falado. */
-    for (const f of (a.fatos || [])) add(f.replace(/^\S+\s/, ''));
-  }
-  add('Que planeta é esse?'); add('Quem é esse?');
-
-  for (const p of Palavras.FASES) {
-    add(p.palavra);
-    add(p.palavra + '. Que letra está faltando?');
-    add('Isso! ' + Palavras.falaDaLetra(p.falta) + ' de ' + p.palavra + '!');
-    for (const e of (p.erradas || [])) add(Palavras.falaDaLetra(e));
-  }
   for (const l of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') add(Palavras.falaDaLetra(l));
 
   /* Montada em js/app.js: prefixo fixo + um dos dois ramos. O app fala a
@@ -220,8 +206,14 @@ async function gerar(texto, voz, apiKey) {
       indice[chave(t)] = arq; feitas++; gastos += t.length;
       process.stdout.write(`\r${feitas} geradas, ${puladas} ja existiam  (${gastos} creditos)   `);
     } catch (e) {
-      console.error(`\nFALHOU: ${t.slice(0, 50)} -> ${e.message}`);
-      process.exit(1);                      /* para na hora: nao queima credito errado em silencio */
+      /* grava o indice ANTES de sair. Sem isso, uma falha no meio do lote
+         jogava fora tudo que ja tinha sido gerado: os arquivos ficavam no
+         disco e o app nao achava nenhum, porque o indice so era escrito no
+         fim. Foi o que aconteceu quando a cota estourou. */
+      fs.writeFileSync(indicePath, JSON.stringify(indice, null, 1));
+      console.error(`\nPAROU em: ${t.slice(0, 50)}\n  ${e.message}`);
+      console.error(`Indice salvo com ${Object.keys(indice).length} frases. Rode de novo pra continuar de onde parou.`);
+      process.exit(1);
     }
     await new Promise(r => setTimeout(r, 250));   /* respeita o limite de requisicoes */
   }

@@ -16,6 +16,51 @@ var Jogo = (function () {
     return a;
   }
 
+  /* =========================================================
+     AS FRASES FALADAS
+     Ficam aqui, em funcoes proprias, porque o gerador de voz precisa
+     produzir exatamente as mesmas strings. Enquanto ele refazia a conta
+     por conta propria as duas versoes divergiam em silencio — foi assim
+     que as 30 confirmacoes das palavras passaram meses sem gravacao,
+     com o verificador jurando que estava tudo certo.
+     Regra: nenhuma fala do quiz nasce fora daqui.
+     ========================================================= */
+  function ditaPalavra(fase) {
+    return fase.palavra.charAt(0) + fase.palavra.slice(1).toLowerCase();
+  }
+  function falaPerguntaCorpo(orgao) { return orgao ? 'Que órgão é esse?' : 'Que parte do corpo é essa?'; }
+  function falaAcertoCorpo(p)       { return 'Isso, Lara! É ' + p.artigo + ' ' + p.nome + '.'; }
+  function falaPerguntaAstro(a)     { return a.estrela ? 'Quem é esse?' : 'Que planeta é esse?'; }
+  function falaAcertoAstro(a)       { return 'Isso, Lara! É ' + Espaco.comArtigo(a) + '.'; }
+  function falaPerguntaLetra(fase)  { return ditaPalavra(fase) + '. Que letra está faltando?'; }
+  /* "u de Lua" ensinava mentira: em 12 das 30 palavras a letra que falta nao
+     e a primeira, e "X de Y" e a formula da inicial — a Lara aprenderia que
+     xis comeca peixe. "Com o u fica Lua" e verdade em qualquer posicao, e a
+     letra continua no meio da palavra, que e o que da trabalho pra ela. */
+  function falaAcertoLetra(fase) {
+    var letra = fase.palavra.charAt(fase.falta);
+    return 'Isso, Lara! Com o ' + Palavras.falaDaLetra(letra) + ' fica ' + ditaPalavra(fase) + '!';
+  }
+
+  /* tudo que o quiz pode dizer, pro gerador de voz nao ter que adivinhar */
+  function todasAsFalas() {
+    var f = [];
+    ['partes', 'orgaos'].forEach(function (t) {
+      f.push(falaPerguntaCorpo(t === 'orgaos'));
+      Corpo.lista(t).forEach(function (p) { f.push(falaAcertoCorpo(p), p.nome, p.artigo + ' ' + p.nome, p.dica); });
+    });
+    Espaco.ASTROS.forEach(function (a) {
+      f.push(falaPerguntaAstro(a), falaAcertoAstro(a), a.nome, Espaco.comArtigo(a));
+      (a.fatos || []).forEach(function (x) { f.push(String(x).replace(/^\S+\s/, '')); });
+    });
+    Palavras.FASES.forEach(function (fase) {
+      f.push(falaPerguntaLetra(fase), falaAcertoLetra(fase), fase.palavra);
+      (fase.erradas || []).forEach(function (l) { f.push(Palavras.falaDaLetra(l)); });
+      f.push(Palavras.falaDaLetra(fase.palavra.charAt(fase.falta)));
+    });
+    return f.filter(Boolean);
+  }
+
   /* ---------- estrelinhas ---------- */
   function totalEstrelas() {
     var n = parseInt(localStorage.getItem('lara.estrelas'), 10);
@@ -69,8 +114,8 @@ var Jogo = (function () {
         alvo: alvo,
         opcoes: embaralhar([alvo].concat(outros)).map(function (p) { return { id: p.id, texto: p.nome }; }),
         pergunta: orgao ? 'Que órgão é esse?' : 'Que parte é essa?',
-        fala: orgao ? 'Que órgão é esse?' : 'Que parte do corpo é essa?',
-        acertou: 'Isso! É ' + alvo.artigo + ' ' + alvo.nome + '.'
+        fala: falaPerguntaCorpo(orgao),
+        acertou: falaAcertoCorpo(alvo)
       };
     });
   }
@@ -83,8 +128,8 @@ var Jogo = (function () {
         alvo: alvo,
         opcoes: embaralhar([alvo].concat(outros)).map(function (a) { return { id: a.id, texto: a.nome }; }),
         pergunta: alvo.estrela ? 'Quem é esse?' : 'Que planeta é esse?',
-        fala: alvo.estrela ? 'Quem é esse?' : 'Que planeta é esse?',
-        acertou: 'Isso! É ' + Espaco.comArtigo(alvo) + '.'
+        fala: falaPerguntaAstro(alvo),
+        acertou: falaAcertoAstro(alvo)
       };
     });
   }
@@ -155,8 +200,8 @@ var Jogo = (function () {
                  '<div class="palavra" style="--n:' + fase.palavra.length + '">' + pecas + '</div>' +
                '</div>',
         pergunta: 'Que letra está faltando?',
-        fala: dita + '. Que letra está faltando?',
-        acertou: 'Isso! ' + Palavras.falaDaLetra(letra) + ' de ' + dita + '!',
+        fala: falaPerguntaLetra(fase),
+        acertou: falaAcertoLetra(fase),
         aoAcertar: function () {
           var vazia = document.querySelector('#quiz-stage .letra--vazia');
           if (!vazia) return;
@@ -399,6 +444,7 @@ var Jogo = (function () {
     pintarEstrelas: pintarEstrelas, confete: confete, embaralhar: embaralhar,
     cancelarRodada: function () { clearTimeout(proximaRodada); },
     palavrasVistas: palavrasVistas,
-    ganharEstrela: guardarEstrela
+    ganharEstrela: guardarEstrela,
+    todasAsFalas: todasAsFalas
   };
 })();

@@ -101,7 +101,9 @@ var Velha = (function () {
     var som = $('#velha-som');
     var fala = estado.modo === 'app'
       ? (estado.vez === 'X' ? 'Sua vez, Lara!' : 'Agora é a minha vez.')
-      : 'Vez do ' + nome(estado.vez) + '.';
+      /* frase inteira e nao montada: "Vez do " + nome dava "Vez do bolinha",
+         errado de concordancia, e nenhuma das duas existia gravada */
+      : (estado.vez === 'X' ? 'Vez do xis.' : 'Vez da bolinha.');
     /* o botão fica ali pra ela ouvir se quiser, mas o app não fica repetindo
        de quem é a vez a cada jogada — cansa. Só o fim de jogo é falado. */
     if (som) som.dataset.falar = fala;
