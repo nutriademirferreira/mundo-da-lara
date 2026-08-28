@@ -266,7 +266,7 @@ var App = (function () {
       var card = document.createElement('div');
       card.className = 'planet-card';
       card.innerHTML =
-        '<button class="planet-card__toque" type="button">' +
+        '<button class="planet-card__toque" type="button" aria-label="' + astro.nome + '">' +
           '<span class="planet-card__orb">' + Espaco.orbe(astro, astro.tam) + '</span>' +
         '</button>' +
         '<span class="planet-card__linha">' +

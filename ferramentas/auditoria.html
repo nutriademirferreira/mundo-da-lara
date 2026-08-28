@@ -1,0 +1,171 @@
+<!doctype html><meta charset="utf-8"><title>Auditoria das telas</title>
+<style>
+ body{font:13px -apple-system,system-ui,sans-serif;background:#111;color:#eee;margin:0;padding:16px}
+ h1{font-size:15px;margin:0 0 4px} p.sub{margin:0 0 14px;opacity:.65;font-size:12px}
+ table{border-collapse:collapse;width:100%;font-size:12px;margin-bottom:18px}
+ th,td{border:1px solid #333;padding:4px 7px;text-align:left;vertical-align:top}
+ th{background:#222;position:sticky;top:0}
+ .ok{color:#6f6}.mau{color:#f77;font-weight:700}.na{opacity:.35}
+ .palco{position:absolute;left:-99999px;top:0}
+ tfoot td{background:#1a1a1a;font-weight:700}
+</style>
+<h1>Auditoria das telas — <span id="quando"></span></h1>
+<p class="sub">Cada tela, em cada aparelho, contra as regras que já foram quebradas antes.</p>
+<div id="saida"></div>
+<div class="palco" id="palco"></div>
+<script>
+/* Aparelhos: os extremos é que pegam defeito. SE é o mais apertado que
+   existe; iPad Pro deitado é o mais largo e o mais baixo. */
+const APARELHOS = [
+  ['iPhone SE',        375, 667],
+  ['iPhone 14/15/16',  393, 852],
+  ['iPhone Pro Max',   430, 932],
+  ['iPad 10.9',        820,1180],
+  ['iPad deitado',    1194, 834]
+];
+
+/* Como chegar em cada tela a partir da abertura. */
+const TELAS = [
+  ['start',            []],
+  ['home',             ['#screen-start button']],
+  ['corpo-menu',       ['[data-go="corpo-menu"]']],
+  ['corpo-aprender',   ['[data-go="corpo-menu"]','[data-go="corpo-aprender"]']],
+  ['quiz (corpo)',     ['[data-go="corpo-menu"]','[data-go="corpo-jogar"]']],
+  ['espaco-menu',      ['[data-go="espaco-menu"]']],
+  ['espaco-explorar',  ['[data-go="espaco-menu"]','[data-go="espaco-explorar"]']],
+  ['tamanho',          ['[data-go="espaco-menu"]','[data-go="tamanho"]']],
+  ['viagem',           ['[data-go="espaco-menu"]','[data-go="viagem"]']],
+  ['quiz (palavras)',  ['[data-go="palavras-jogar"]']],
+  ['memoria-menu',     ['[data-go="memoria-menu"]']],
+  ['memoria',          ['[data-go="memoria-menu"]','[data-go="memoria-palavras"]']],
+  ['velha-menu',       ['[data-go="velha-menu"]']],
+  ['velha',            ['[data-go="velha-menu"]','[data-go="velha-app"]']],
+  ['galeria',          ['[data-go="galeria"]']]
+];
+
+const cel = (v, ruim) => `<td class="${ruim ? 'mau' : 'ok'}">${v}</td>`;
+
+async function auditar(L, A) {
+  const f = document.createElement('iframe');
+  f.style.width = L + 'px'; f.style.height = A + 'px'; f.src = '../index.html';
+  document.getElementById('palco').appendChild(f);
+  await new Promise(r => f.onload = r);
+  const w = f.contentWindow, d = f.contentDocument;
+  /* simula as faixas de seguranca do iPhone: no navegador env() vale zero,
+     e foi por isso que a faixa roxa passou tres auditorias limpas */
+  const st = d.createElement('style');
+  st.textContent = ':root{--safe-t:59px !important;--safe-b:34px !important}';
+  d.head.appendChild(st);
+  await new Promise(r => setTimeout(r, 400));
+
+  const linhas = [];
+  for (const [nome, caminho] of TELAS) {
+    /* volta pra abertura antes de cada tela */
+    d.querySelectorAll('.screen').forEach(s => s.classList.remove('is-active'));
+    d.getElementById('screen-start').classList.add('is-active');
+    if (caminho.length) { d.querySelector('#screen-start button').click(); await new Promise(r => setTimeout(r, 250)); }
+    let faltou = false;
+    for (const sel of caminho) {
+      const b = d.querySelector(sel);
+      if (!b) { faltou = true; break; }
+      b.click(); await new Promise(r => setTimeout(r, 320));
+    }
+    if (faltou) { linhas.push({ nome, erro: 'botão sumiu: ' + caminho.join(' → ') }); continue; }
+    /* espera as imagens: medir antes delas carregarem dava largura de layout
+       inacabado e acusava "alvo de toque pequeno" que nao existe. Auditoria
+       que erra pra mais e tao ruim quanto a que erra pra menos. */
+    await Promise.all([...d.images].filter(i => !i.complete)
+      .map(i => new Promise(r => { i.onload = i.onerror = r; setTimeout(r, 1500); })));
+    await new Promise(r => setTimeout(r, 400));
+
+    const tela = d.querySelector('.screen.is-active');
+    const fundo = d.getElementById('fundo').getBoundingClientRect();
+    const rolaPagina = d.documentElement.scrollHeight - w.innerHeight;
+
+    /* 1. nada pode vazar do rodape nem do topo da JANELA.
+       So conta o que aparece de verdade: elemento dentro de container com
+       overflow recortado nao vaza, ele e cortado. Sem esse cuidado a
+       galeria (que rola por dentro) e o arco do Sol (recortado de proposito)
+       apareciam como defeito, e auditoria que grita lobo vira ruido. */
+    const nomeDe = el => {
+      const c = el.className;
+      return (typeof c === 'string' && c) ? c : (el.id || el.tagName);
+    };
+    const rectVisivel = el => {
+      let r = el.getBoundingClientRect();
+      let p = el.parentElement;
+      while (p && p !== d.documentElement) {
+        const cs = w.getComputedStyle(p);
+        if (cs.overflow !== 'visible' || cs.overflowY !== 'visible' || cs.overflowX !== 'visible') {
+          const pr = p.getBoundingClientRect();
+          r = { top: Math.max(r.top, pr.top), bottom: Math.min(r.bottom, pr.bottom),
+                left: Math.max(r.left, pr.left), right: Math.min(r.right, pr.right) };
+          if (r.bottom <= r.top || r.right <= r.left) return null;   /* totalmente cortado */
+        }
+        p = p.parentElement;
+      }
+      return r;
+    };
+    let vaza = 0, quemVaza = '';
+    tela.querySelectorAll('*').forEach(el => {
+      const cru = el.getBoundingClientRect();
+      if (cru.width < 2 || cru.height < 2) return;
+      const cs = w.getComputedStyle(el);
+      if (cs.visibility === 'hidden' || cs.opacity === '0' || cs.display === 'none') return;
+      const r = rectVisivel(el);
+      if (!r) return;
+      const fora = Math.max(0, Math.round(r.bottom - w.innerHeight), Math.round(-r.top));
+      if (fora > vaza) { vaza = fora; quemVaza = nomeDe(el); }
+    });
+    /* 2. a camada de fundo tem que passar da janela nos quatro lados */
+    const cobre = fundo.top <= 0 && fundo.left <= 0 &&
+                  fundo.bottom >= w.innerHeight && fundo.right >= w.innerWidth;
+    /* 3. rolagem lateral e proibida em qualquer lugar */
+    const lateral = d.documentElement.scrollWidth - w.innerWidth;
+    /* 4. alvo de toque menor que 44px cansa dedo de crianca */
+    let miudos = 0;
+    tela.querySelectorAll('button').forEach(b => {
+      const r = b.getBoundingClientRect();
+      if (r.width > 1 && (r.width < 44 || r.height < 44)) miudos++;
+    });
+    /* 5. todo botao precisa de nome pra leitura de tela */
+    let semNome = 0;
+    tela.querySelectorAll('button').forEach(b => {
+      if (!b.textContent.trim() && !b.getAttribute('aria-label')) semNome++;
+    });
+    linhas.push({ nome, rolaPagina, vaza, quemVaza, cobre, lateral, miudos, semNome });
+  }
+  f.remove();
+  return linhas;
+}
+
+(async () => {
+  const saida = document.getElementById('saida');
+  const total = { vaza: 0, rola: 0, lateral: 0, miudos: 0, semNome: 0, semFundo: 0 };
+  for (const [ap, L, A] of APARELHOS) {
+    const linhas = await auditar(L, A);
+    let html = `<h2 style="font-size:13px;margin:14px 0 6px">${ap} — ${L}×${A}</h2><table>` +
+      '<thead><tr><th>Tela</th><th>Rola?</th><th>Vaza da janela</th><th>Fundo cobre?</th>' +
+      '<th>Rola lateral?</th><th>Botão &lt;44px</th><th>Botão sem nome</th></tr></thead><tbody>';
+    for (const l of linhas) {
+      if (l.erro) { html += `<tr><td>${l.nome}</td><td colspan="6" class="mau">${l.erro}</td></tr>`; continue; }
+      total.vaza += l.vaza > 0 ? 1 : 0; total.rola += l.rolaPagina > 0 ? 1 : 0;
+      total.lateral += l.lateral > 0 ? 1 : 0; total.miudos += l.miudos;
+      total.semNome += l.semNome; total.semFundo += l.cobre ? 0 : 1;
+      html += `<tr><td>${l.nome}</td>` +
+        cel(l.rolaPagina > 0 ? l.rolaPagina + 'px' : 'não', l.rolaPagina > 0) +
+        cel(l.vaza > 0 ? l.vaza + 'px (' + String(l.quemVaza).slice(0, 22) + ')' : 'não', l.vaza > 0) +
+        cel(l.cobre ? 'sim' : 'NÃO', !l.cobre) +
+        cel(l.lateral > 0 ? l.lateral + 'px' : 'não', l.lateral > 0) +
+        cel(l.miudos || 'nenhum', l.miudos > 0) +
+        cel(l.semNome || 'nenhum', l.semNome > 0) + '</tr>';
+    }
+    saida.insertAdjacentHTML('beforeend', html + '</tbody></table>');
+  }
+  document.getElementById('quando').textContent = new Date().toLocaleString('pt-BR');
+  saida.insertAdjacentHTML('beforeend',
+    `<table><tfoot><tr><td>TOTAL de problemas</td><td>vaza: ${total.vaza}</td><td>rola: ${total.rola}</td>` +
+    `<td>sem fundo: ${total.semFundo}</td><td>lateral: ${total.lateral}</td>` +
+    `<td>botão miúdo: ${total.miudos}</td><td>sem nome: ${total.semNome}</td></tr></tfoot></table>`);
+})();
+</script>

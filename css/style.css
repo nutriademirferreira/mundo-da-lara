@@ -230,6 +230,11 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .som-btn:active{transform:translateY(3px) scale(.95);box-shadow:0 1px 0 rgba(43,27,84,.14)}
 .som-btn--mini{width:50px;height:50px;border-radius:17px}
+/* flex-shrink:0 porque o alto-falante e item de flex ao lado do nome do
+   planeta e vinha sendo espremido de 50 pra 43px — abaixo do minimo de
+   44px que dedo de crianca precisa. O tamanho ja estava declarado certo;
+   quem mentia era o encolhimento. */
+.som-btn{flex:0 0 auto}
 .som-btn--nano{width:46px;height:46px;border-radius:15px}
 .som-btn.is-falando{
   background:linear-gradient(180deg,#FFE79A,var(--sun));
@@ -389,7 +394,10 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .planet-card__linha{display:flex;align-items:center;gap:6px;
   background:rgba(13,18,52,.82);border:1px solid rgba(255,255,255,.16);
   border-radius:999px;padding:4px 5px 4px 14px;backdrop-filter:blur(6px)}
-.planet-card__linha .som-btn{width:44px;height:44px;border-radius:999px;font-size:19px;border:0}
+/* 46 e nao 44: o cartao do planeta e desenhado com escala 0.98, entao
+   44px declarado chegava em 43,1px na tela — abaixo do minimo. O que vale
+   e o tamanho medido, nao o declarado. */
+.planet-card__linha .som-btn{width:46px;height:46px;border-radius:999px;font-size:19px;border:0}
 .planet-card__orb{display:grid;place-items:center;animation:floatY 5s ease-in-out infinite}
 .planet-card__pos{opacity:.6}
 .planet-card:nth-child(even) .planet-card__orb{animation-delay:-2.2s}
