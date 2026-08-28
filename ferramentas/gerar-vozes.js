@@ -3,7 +3,8 @@
    palavra nova em data-palavras.js e rodar isso de novo basta.
 
    Uso:
-     export ELEVENLABS_API_KEY="..."
+     echo 'sua-chave' > ~/.elevenlabs-key && chmod 600 ~/.elevenlabs-key
+     (ou export ELEVENLABS_API_KEY="...")
      node ferramentas/gerar-vozes.js --faltam              # o que esta sem voz (nao gasta nada)
      node ferramentas/gerar-vozes.js <voice_id>            # gera so o que falta
      node ferramentas/gerar-vozes.js <voice_id> --amostra  # so 6 frases
@@ -175,8 +176,16 @@ async function gerar(texto, voz, apiKey) {
     if (!voz && !soContar) console.log('\nFalta o voice_id: node ferramentas/gerar-vozes.js <voice_id>');
     return;
   }
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  if (!apiKey) { console.error('Falta ELEVENLABS_API_KEY no ambiente.'); process.exit(1); }
+  /* A chave pode vir do ambiente ou de ~/.elevenlabs-key. O arquivo existe
+     pra nao precisar colar a chave no comando toda vez — ele mora fora do
+     repositorio, entao nunca vai parar num commit. */
+  const ARQUIVO_CHAVE = path.join(require('os').homedir(), '.elevenlabs-key');
+  let apiKey = process.env.ELEVENLABS_API_KEY;
+  if (!apiKey && fs.existsSync(ARQUIVO_CHAVE)) apiKey = fs.readFileSync(ARQUIVO_CHAVE, 'utf8').trim();
+  if (!apiKey) {
+    console.error('Falta a chave. Ponha ela em ~/.elevenlabs-key ou em ELEVENLABS_API_KEY.');
+    process.exit(1);
+  }
 
   const alvo = amostra
     ? ['Que parte do corpo é essa?', 'Isso! É o coração.',
