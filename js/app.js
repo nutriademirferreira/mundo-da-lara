@@ -57,15 +57,34 @@ var App = (function () {
   };
 
 
+  /* Cor de borda de cada veu. O html recebe ela junto com a troca de tela.
+     Serve de ultima defesa contra a faixa: se por qualquer motivo o iOS
+     deixar um fio de janela descoberto, ele sai na cor daquela tela em vez
+     do roxo do body, que e o que estava chamando atencao. */
+  var BORDAS = {
+    claro:  '#EDE6FB',
+    escuro: '#140C2E',
+    espaco: '#080A20',
+    meio:   '#2A1A10',
+    quiz:   '#EFE8FF',
+    cena:   '#F6F1FC'
+  };
+
   var fundoAtivo = 'a';
   function pintarFundo(nome, extra) {
     var cfg = extra || FUNDOS[nome];
     var veu = $('#fundo-veu');
-    if (!cfg) { veu.style.background = ''; $('#fundo-a').classList.remove('is-on'); $('#fundo-b').classList.remove('is-on'); return; }
+    if (!cfg) {
+      veu.style.background = '';
+      document.documentElement.style.background = '';
+      $('#fundo-a').classList.remove('is-on'); $('#fundo-b').classList.remove('is-on');
+      return;
+    }
 
     var url = 'url("img/' + cfg.foto + '.webp")';
     var visivel = fundoAtivo === 'a' ? $('#fundo-a') : $('#fundo-b');
     veu.style.background = VEUS[cfg.veu] || VEUS.claro;
+    document.documentElement.style.background = BORDAS[cfg.veu] || BORDAS.claro;
 
     /* já é essa a imagem no ar? não faz nada. (antes eu comparava com a
        camada de trás e a troca era engolida quando a foto se repetia) */

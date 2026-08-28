@@ -1,0 +1,69 @@
+<!doctype html><meta charset="utf-8"><title>Auditoria de enquadramento</title>
+<style>
+ body{font:13px -apple-system,system-ui,sans-serif;background:#111;color:#eee;margin:0;padding:16px}
+ h1{font-size:15px;margin:0 0 12px}
+ table{border-collapse:collapse;width:100%;font-size:12px}
+ th,td{border:1px solid #333;padding:4px 7px;text-align:left}
+ th{background:#222}
+ .ok{color:#6f6}.mau{color:#f77;font-weight:700}
+ iframe{border:0;width:100%;height:100%}
+ .palco{position:absolute;left:-99999px;top:0}
+</style>
+<h1>Auditoria de enquadramento — <span id="quando"></span></h1>
+<table id="t"><thead><tr>
+<th>Aparelho</th><th>Tela</th><th>Rola?</th><th>.app estoura?</th>
+<th>fundo cobre?</th><th>menu estoura?</th><th>faixa visivel</th>
+</tr></thead><tbody></tbody></table>
+<div class="palco" id="palco"></div>
+<script>
+const APARELHOS = [
+  ['iPhone SE',            375, 667],
+  ['iPhone 13 mini',       375, 812],
+  ['iPhone 14 / 15 / 16',  393, 852],
+  ['iPhone 15 Pro Max',    430, 932],
+  ['iPhone 16 Pro Max',    440, 956],
+  ['iPad mini',            744,1133],
+  ['iPad 10.9',            820,1180],
+  ['iPad Pro 11',          834,1194],
+  ['iPad Pro 12.9',       1024,1366],
+  ['iPad Pro 11 deitado', 1194, 834]
+];
+const cel = (v, ruim) => `<td class="${ruim ? 'mau' : 'ok'}">${v}</td>`;
+
+async function medir(nome, L, A) {
+  const f = document.createElement('iframe');
+  f.style.width = L + 'px'; f.style.height = A + 'px';
+  f.src = '../index.html';
+  document.getElementById('palco').appendChild(f);
+  await new Promise(r => f.onload = r);
+  const w = f.contentWindow, d = f.contentDocument;
+  const b = d.querySelector('#screen-start button'); if (b) b.click();
+  await new Promise(r => setTimeout(r, 700));
+
+  const fundo = d.getElementById('fundo').getBoundingClientRect();
+  const app   = d.querySelector('.app').getBoundingClientRect();
+  const menu  = d.querySelector('#screen-home .menu');
+  const rolaPagina = d.documentElement.scrollHeight - w.innerHeight;
+  const appEstoura = Math.round(app.height - w.innerHeight);
+  const cobre = fundo.top <= 0.5 && fundo.left <= 0.5 &&
+                fundo.bottom >= w.innerHeight - 0.5 && fundo.right >= w.innerWidth - 0.5;
+  const menuEstoura = menu ? menu.scrollHeight - menu.clientHeight : 0;
+  const faixa = Math.max(0, Math.round(w.innerHeight - fundo.bottom));
+  f.remove();
+  return { nome, tela: L + '×' + A, rolaPagina, appEstoura, cobre, menuEstoura, faixa };
+}
+
+(async () => {
+  const tb = document.querySelector('#t tbody');
+  for (const [n, L, A] of APARELHOS) {
+    const r = await medir(n, L, A);
+    tb.insertAdjacentHTML('beforeend', '<tr><td>' + r.nome + '</td><td>' + r.tela + '</td>' +
+      cel(r.rolaPagina ? r.rolaPagina + 'px' : 'nao', r.rolaPagina > 0) +
+      cel(r.appEstoura > 0 ? r.appEstoura + 'px' : 'nao', r.appEstoura > 0) +
+      cel(r.cobre ? 'sim' : 'NAO', !r.cobre) +
+      cel(r.menuEstoura > 0 ? r.menuEstoura + 'px' : 'nao', r.menuEstoura > 0) +
+      cel(r.faixa ? r.faixa + 'px' : 'nenhuma', r.faixa > 0) + '</tr>');
+  }
+  document.getElementById('quando').textContent = new Date().toLocaleString('pt-BR');
+})();
+</script>

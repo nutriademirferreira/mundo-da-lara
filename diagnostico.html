@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Diagnóstico de tela</title>
+<style>
+  /* medidas de verdade do aparelho, lidas depois pelo script */
+  :root{
+    --st:env(safe-area-inset-top,0px);   --sb:env(safe-area-inset-bottom,0px);
+    --sl:env(safe-area-inset-left,0px);  --sr:env(safe-area-inset-right,0px);
+    --dvh:100dvh; --svh:100svh; --lvh:100lvh;
+  }
+  html,body{height:100%;margin:0;background:#0B7A3B}
+  /* verde = janela de layout. Se sobrar verde na borda, e ali que a faixa nasce. */
+  .cobertura{position:fixed;inset:0;background:#101; }
+  .transbordo{position:fixed;inset:-80px;background:repeating-linear-gradient(45deg,#1a1a3a,#1a1a3a 12px,#22224a 12px,#22224a 24px)}
+  .conteudo{position:relative;z-index:2;color:#eee;font:14px/1.5 -apple-system,system-ui,sans-serif;
+    padding:calc(env(safe-area-inset-top,0px) + 16px) 18px calc(env(safe-area-inset-bottom,0px) + 16px)}
+  h1{font-size:17px;margin:0 0 4px}
+  p.sub{margin:0 0 14px;opacity:.7;font-size:12px}
+  table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+  td{border-bottom:1px solid #333;padding:6px 4px;vertical-align:top}
+  td:first-child{opacity:.65;width:52%}
+  td:last-child{text-align:right;font-weight:700}
+  .alerta{background:#7a1020;padding:10px 12px;border-radius:10px;margin:14px 0 0;font-size:13px}
+  .bom{background:#0B5A2B}
+  .marca{position:fixed;background:#FF2D6F;z-index:3;pointer-events:none}
+  .btn{display:block;margin:18px auto 0;background:#FFD34D;color:#2B1B54;border:0;
+    padding:14px 20px;border-radius:14px;font:700 16px/1 -apple-system,system-ui;width:100%}
+</style></head><body>
+<div class="transbordo"></div><div class="cobertura"></div>
+<!-- riscos rosa colados em cada borda da janela de layout -->
+<div class="marca" style="left:0;right:0;top:0;height:3px"></div>
+<div class="marca" style="left:0;right:0;bottom:0;height:3px"></div>
+<div class="marca" style="top:0;bottom:0;left:0;width:3px"></div>
+<div class="marca" style="top:0;bottom:0;right:0;width:3px"></div>
+
+<div class="conteudo">
+  <h1>Diagnóstico de tela</h1>
+  <p class="sub">Tire um print desta tela inteira e mande pro Claude.</p>
+  <table id="t"></table>
+  <div id="veredito"></div>
+  <button class="btn" onclick="copiar()">Copiar os números</button>
+</div>
+<script>
+/* Sondas: unidade de viewport e env() so viram numero quando aplicadas num
+   elemento de verdade. Ler a variavel CSS devolve o texto "100dvh". */
+function sonda(css){
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;left:0;top:0;width:1px;visibility:hidden;pointer-events:none;' + css;
+  document.body.appendChild(d);
+  var h = d.getBoundingClientRect().height;
+  d.remove();
+  return h;
+}
+function medir(){
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;inset:0;visibility:hidden;pointer-events:none';
+  document.body.appendChild(d);
+  var janela = d.getBoundingClientRect(); d.remove();
+
+  var st = sonda('height:env(safe-area-inset-top,0px)');
+  var sb = sonda('height:env(safe-area-inset-bottom,0px)');
+  var standalone = (window.navigator.standalone === true) ||
+                   (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  var r = function(n){ return Math.round(n) + ' px'; };
+
+  var linhas = [
+    ['Instalado na tela de início', standalone ? 'SIM' : 'não (Safari)'],
+    ['Tela do aparelho',            screen.width + ' × ' + screen.height],
+    ['Janela',                      innerWidth + ' × ' + innerHeight],
+    ['Janela visual',               visualViewport ? Math.round(visualViewport.width)+' × '+Math.round(visualViewport.height) : '—'],
+    ['position:fixed cobre',        r(janela.width) + ' × ' + r(janela.height)],
+    ['safe-area topo',              r(st)],
+    ['safe-area baixo',             r(sb)],
+    ['100dvh',                      r(sonda('height:100dvh'))],
+    ['100svh',                      r(sonda('height:100svh'))],
+    ['100lvh',                      r(sonda('height:100lvh'))],
+    ['fixed vs tela (a sobra)',     r(screen.height - janela.height)],
+    ['fixed vs janela',             r(innerHeight - janela.height)],
+    ['devicePixelRatio',            String(devicePixelRatio)],
+    ['Navegador',                   navigator.userAgent.slice(0, 80)]
+  ];
+  document.getElementById('t').innerHTML =
+    linhas.map(function(l){ return '<tr><td>'+l[0]+'</td><td>'+l[1]+'</td></tr>'; }).join('');
+  window.__linhas = linhas;
+
+  var sobra = screen.height - janela.height;
+  var v = document.getElementById('veredito');
+  if (!standalone) {
+    v.className = 'alerta';
+    v.textContent = 'Abra pelo ícone na tela de início, não pelo Safari — a faixa só aparece lá.';
+  } else if (sobra > 2) {
+    v.className = 'alerta';
+    v.textContent = 'ACHOU: a janela é ' + Math.round(sobra) + ' px menor que a tela. É aí que a faixa nasce.';
+  } else {
+    v.className = 'alerta bom';
+    v.textContent = 'A janela cobre a tela inteira — a faixa não vem daqui. Mande o print mesmo assim.';
+  }
+}
+function copiar(){
+  var t = (window.__linhas || []).map(function(l){ return l[0] + ': ' + l[1]; }).join('\n');
+  if (navigator.clipboard) navigator.clipboard.writeText(t);
+  alert('Copiado. Cole na conversa com o Claude.');
+}
+addEventListener('load', function(){ requestAnimationFrame(medir); });
+addEventListener('resize', medir);
+addEventListener('orientationchange', function(){ setTimeout(medir, 300); });
+</script>
+</body></html>
