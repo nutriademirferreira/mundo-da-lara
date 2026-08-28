@@ -104,8 +104,16 @@
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
                 data-falar="Jogo da velha. Jogue com o app ou com o papai."></button>
       </div>
+      <div class="tile-wrap tile-wrap--largo">
+        <button class="tile tile--faixa tile--memoria" data-go="memoria-menu" type="button">
+          <span class="tile__art"><img src="img/lara-corpo2.webp" alt="" class="tile__foto"></span>
+          <strong>Memória</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Memória"
+                data-falar="Memória. Ache as duas figuras iguais.">🔊</button>
+      </div>
       <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
-        <button class="tile tile--fotos" data-go="galeria" type="button">
+        <button class="tile tile--faixa tile--fotos" data-go="galeria" type="button">
           <span class="tile__art"><img src="img/lara-festa.webp" alt="" class="tile__foto"></span>
           <strong>Minhas Figurinhas</strong>
         </button>
@@ -114,7 +122,7 @@
       </div>
       <!-- só aparece quando existe animação na lista FILMES (js/app.js) -->
       <div class="tile-wrap" id="wrap-cinema" hidden>
-        <button class="tile tile--cinema" data-go="cineminha" type="button">
+        <button class="tile tile--faixa tile--cinema" data-go="cineminha" type="button">
           <span class="tile__art"><img src="img/lara-oi.webp" alt="" class="tile__foto"></span>
           <strong>Cineminha</strong>
         </button>
@@ -346,6 +354,47 @@
     </div>
   </div>
 
+  <!-- ============ MENU: MEMÓRIA ============ -->
+  <section class="screen screen--submenu" id="screen-memoria-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Memória</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <div class="mode-wrap">
+        <button class="mode" data-go="memoria-palavras" type="button">
+          <span class="mode__ico">🐤</span>
+          <strong>Figurinhas</strong>
+          <small>Ache os pares de bola, pato, sapo...</small>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Figurinhas. Ache os pares de bola, pato, sapo.">🔊</button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode" data-go="memoria-espaco" type="button">
+          <span class="mode__ico">🪐</span>
+          <strong>Planetas</strong>
+          <small>Ache os pares de planetas</small>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Planetas. Ache os pares de planetas.">🔊</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TABULEIRO: MEMÓRIA ============ -->
+  <section class="screen screen--memoria" id="screen-memoria">
+    <header class="bar">
+      <button class="icon-btn" data-go="memoria-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Memória</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="memoria" id="memoria"></div>
+    <p class="memoria-msg" id="memoria-msg"></p>
+    <button class="btn btn--denovo" id="memoria-denovo" type="button" hidden>Jogar de novo</button>
+  </section>
+
   <!-- ============ MENU: JOGO DA VELHA ============ -->
   <section class="screen screen--submenu" id="screen-velha-menu">
     <header class="bar">
@@ -479,6 +528,7 @@
 <script src="js/data-palavras.js"></script>
 <script src="js/game.js"></script>
 <script src="js/velha.js"></script>
+<script src="js/memoria.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

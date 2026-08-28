@@ -14,6 +14,8 @@ var App = (function () {
     'espaco-explorar':  'screen-espaco-explorar',
     'galeria':          'screen-galeria',
     'cineminha':        'screen-cineminha',
+    'memoria-menu':     'screen-memoria-menu',
+    'memoria':          'screen-memoria',
     'tamanho':          'screen-tamanho',
     'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
@@ -41,7 +43,9 @@ var App = (function () {
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
     'result':           { foto:'fundo-home',   veu:'claro'  },
     'galeria':          { foto:'fundo-home',   veu:'claro'  },
-    'cineminha':        { foto:'fundo-espaco', veu:'escuro' }
+    'cineminha':        { foto:'fundo-espaco', veu:'escuro' },
+    'memoria-menu':     { foto:'fundo-home',   veu:'claro'  },
+    'memoria':          { foto:'fundo-home',   veu:'claro'  }
   };
 
   /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
@@ -206,6 +210,8 @@ var App = (function () {
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         if (destino === 'galeria')           { montarGaleria(); ir('galeria'); ajustarGaleria(); return; }
         if (destino === 'cineminha')         { montarCineminha(); ir('cineminha'); ajustarGaleria(); return; }
+        if (destino === 'memoria-palavras')  { ir('memoria'); Memoria.iniciar('palavras'); return; }
+        if (destino === 'memoria-espaco')    { ir('memoria'); Memoria.iniciar('espaco'); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -752,6 +758,7 @@ var App = (function () {
     ligarAltoFalantes();
     ligarNavegacao();
     ligarBotoes();
+    Memoria.ligar();
     Jogo.pintarEstrelas();
     atualizarColecao();
     if ('serviceWorker' in navigator) {

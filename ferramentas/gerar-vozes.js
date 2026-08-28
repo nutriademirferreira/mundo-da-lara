@@ -36,9 +36,22 @@ function frases() {
   const add = s => { if (s && String(s).trim()) F.add(String(s).trim()); };
   /* vindo de varredura por regex no codigo: exige cara de frase, senao entram
      pedacos de expressao e argumentos de .replace() */
+  /* Pedacos que a varredura nao tem como distinguir de frase. Lista curta e
+     visivel de proposito: regex mais esperta erraria em silencio depois.
+     'vírgula' e argumento de .replace() em "2 vírgula 5 vezes maior" — frase
+     com numero variavel, que nao da pra gravar de qualquer jeito. */
+  const IGNORAR = new Set(['vírgula']);
+
   const addVarrido = s => {
     if (!s) return; s = String(s).trim();
-    if (/[a-zà-ú]/i.test(s) && /\s/.test(s) && !/[(){}\[\]<>=;_]|\+\s*$|^\s*\+/.test(s)) F.add(s);
+    if (IGNORAR.has(s)) return;
+    if (s.length < 3) return;                              /* 'g', 'px', flags de regex */
+    if (/[(){}\[\]<>=;_$`|&\\]|\+\s*$|^\s*\+/.test(s)) return;  /* cheiro de codigo */
+    if (!/[a-zà-ú]{2}/i.test(s)) return;                   /* precisa ter palavra de verdade */
+    F.add(s);
+    /* exigir espaco rejeitava interjeicao de uma palavra so — "Achou!" ficou
+       de fora e so apareceu testando o jogo. Rede de seguranca com buraco
+       e pior que rede nenhuma, porque da confianca falsa. */
   };
 
   for (const tipo of ['partes', 'orgaos']) for (const p of Corpo.lista(tipo)) {
@@ -99,7 +112,7 @@ function frases() {
                    'dezenove','vinte']) add(n);
 
   for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) addVarrido(m[1]);
-  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js']) {
+  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js', 'js/memoria.js']) {
     const src = fs.readFileSync(path.join(RAIZ, f), 'utf8');
     for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) addVarrido(m[1]);
     /* dataset.falar = '...' nasce em JS e nao aparece no HTML. Faltava varrer

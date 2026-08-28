@@ -834,40 +834,33 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    =========================================================== */
 .menu{grid-template-rows:1fr 1fr auto}
 .tile-wrap--largo{grid-column:1 / -1}
-.tile--fotos{
+/* ---- FAIXAS LARGAS ----
+   Azulejo deitado que ocupa a linha inteira: figura à esquerda, nome ao lado.
+   O estilo é da classe .tile--faixa e não de cada jogo, senão cada seção nova
+   vira mais uma cópia das mesmas seis regras. A cor é o que muda por jogo. */
+.tile--faixa{
   flex-direction:row;justify-content:flex-start;gap:14px;
-  min-height:88px;padding:10px 16px;
-  background:linear-gradient(120deg,rgba(255,154,60,.62),rgba(255,95,162,.62) 55%,rgba(177,75,224,.66));
+  min-height:74px;padding:8px 16px;
 }
-.tile--fotos .tile__art{flex:0 0 68px;width:68px;height:68px}
-.tile--fotos strong{min-height:0;font-size:20px}
-/* com o Cineminha do lado, as duas dividem a linha e nenhuma é mais larga */
-.tile--cinema{
-  flex-direction:row;justify-content:flex-start;gap:14px;
-  min-height:88px;padding:10px 16px;
-  background:linear-gradient(120deg,rgba(62,42,143,.62),rgba(123,75,224,.62) 55%,rgba(255,95,162,.66));
-}
-.tile--cinema .tile__art{flex:0 0 68px;width:68px;height:68px}
-.tile--cinema strong{min-height:0;font-size:20px}
-/* Com o Cineminha, a home ganha uma quarta linha em vez de espremer duas
-   faixas na mesma: meia largura não cabe figura + nome + alto-falante, e o
-   nome acabava por baixo do botão. As duas primeiras linhas cedem a altura. */
-.menu--cinema{grid-template-rows:1fr 1fr auto auto}
-.menu--cinema .tile--fotos,
-.menu--cinema .tile--cinema{min-height:74px;padding:8px 16px}
-.menu--cinema .tile--fotos .tile__art,
-.menu--cinema .tile--cinema .tile__art{flex:0 0 58px;width:58px;height:58px}
-.menu--cinema .tile--fotos strong,
-.menu--cinema .tile--cinema strong{font-size:19px}
-/* tela baixa (SE e afins): as faixas largas cedem altura pros quatro de cima */
-@media (max-height:740px){
-  .menu--cinema{gap:10px}
-  .menu--cinema .tile--fotos,
-  .menu--cinema .tile--cinema{min-height:0;padding:6px 14px;gap:10px}
-  .menu--cinema .tile--fotos .tile__art,
-  .menu--cinema .tile--cinema .tile__art{flex:0 0 40px;width:40px;height:40px}
-  .menu--cinema .tile--fotos strong,
-  .menu--cinema .tile--cinema strong{font-size:17px;min-height:0}
+.tile--faixa .tile__art{flex:0 0 58px;width:58px;height:58px}
+.tile--faixa strong{min-height:0;font-size:19px}
+
+.tile--fotos{background:linear-gradient(120deg,rgba(255,154,60,.62),rgba(255,95,162,.62) 55%,rgba(177,75,224,.66))}
+.tile--cinema{background:linear-gradient(120deg,rgba(62,42,143,.62),rgba(123,75,224,.62) 55%,rgba(255,95,162,.66))}
+.tile--memoria{background:linear-gradient(120deg,rgba(46,155,214,.66),rgba(22,104,168,.62) 60%,rgba(124,77,255,.60))}
+
+/* Uma linha "auto" por faixa larga. Espremer duas na mesma linha não cabe:
+   meia largura não comporta figura + nome + alto-falante, e o nome acabava
+   por baixo do botão. As duas primeiras linhas é que cedem altura. */
+.menu{grid-template-rows:1fr 1fr auto auto}
+.menu--cinema{grid-template-rows:1fr 1fr auto auto auto}
+
+/* tela baixa (SE e afins): as faixas cedem altura pros quatro azulejos de cima */
+@media (max-height:760px){
+  .menu{gap:10px}
+  .tile--faixa{min-height:0;padding:6px 14px;gap:10px}
+  .tile--faixa .tile__art{flex:0 0 40px;width:40px;height:40px}
+  .tile--faixa strong{font-size:17px}
 }
 .tile-wrap[hidden]{display:none}
 
@@ -964,3 +957,68 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 .visor .som-btn{background:rgba(255,255,255,.16);color:#fff;box-shadow:none;
   border:1px solid rgba(255,255,255,.2)}
+
+/* ===========================================================
+   JOGO DA MEMÓRIA
+   Grade 3x4 com linhas 1fr: a altura vem da grade, não do
+   conteúdo — foi o que resolveu o atropelamento na galeria.
+   =========================================================== */
+.tile--memoria{background:linear-gradient(140deg,#7BE0FF,#2E9BD6 55%,#1668A8)}
+
+.memoria{
+  flex:1;min-height:0;display:grid;
+  grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);
+  gap:10px;padding:2px;
+}
+.carta{
+  position:relative;min-height:0;min-width:0;padding:0;border-radius:18px;
+  background:none;perspective:700px;cursor:pointer;
+}
+.carta__lado{
+  position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;
+  border-radius:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.2);
+}
+.carta__verso{
+  background:linear-gradient(150deg,#7C4DFF,#F0417F);
+  border:2px solid rgba(255,255,255,.55);
+  box-shadow:0 5px 0 rgba(43,27,84,.16),0 8px 18px rgba(43,27,84,.18);
+}
+.carta__verso img{width:46%;height:auto;opacity:.92;filter:drop-shadow(0 3px 8px rgba(0,0,0,.35))}
+.carta__frente{
+  transform:rotateY(180deg);
+  background:rgba(255,255,255,.9);border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 5px 0 rgba(43,27,84,.12),0 8px 18px rgba(43,27,84,.16);
+}
+.carta.is-aberta .carta__verso,
+.carta.is-par   .carta__verso{transform:rotateY(-180deg)}
+.carta.is-aberta .carta__frente,
+.carta.is-par   .carta__frente{transform:rotateY(0)}
+
+/* o par achado para de responder ao toque e recua um pouco, pra
+   ela ver de relance o que ainda falta */
+.carta.is-par{pointer-events:none}
+.carta.is-par .carta__frente{
+  background:rgba(214,255,232,.92);border-color:#5FE0A0;
+  box-shadow:0 0 0 3px rgba(95,224,160,.45),0 8px 18px rgba(43,27,84,.14);
+}
+.carta:active .carta__lado{transform:scale(.96)}
+.carta.is-aberta:active .carta__verso{transform:rotateY(-180deg) scale(.96)}
+
+/* as figuras vêm do jogo das palavras e do espaço, em tamanhos diferentes:
+   aqui as duas obedecem a carta */
+.carta__frente .figura,
+.carta__frente .orbe{width:82%;height:82%;object-fit:contain;display:block}
+
+.memoria-msg{
+  flex:0 0 auto;text-align:center;padding:10px 8px 2px;
+  font-size:15px;font-weight:800;color:var(--ink);
+  text-shadow:0 1px 8px rgba(255,255,255,.9);
+}
+.btn--denovo{
+  flex:0 0 auto;align-self:center;margin:2px auto 4px;padding:12px 26px;border-radius:18px;
+  background:linear-gradient(180deg,#FFE07A,#FFC531);color:#5A3E00;font-weight:900;font-size:17px;
+  box-shadow:0 5px 0 #E0A700,0 10px 20px rgba(43,27,84,.22);
+}
+.btn--denovo[hidden]{display:none}
+.btn--denovo:active{transform:translateY(4px);box-shadow:0 1px 0 #E0A700}
