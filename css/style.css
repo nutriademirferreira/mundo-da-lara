@@ -1046,3 +1046,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 .btn--denovo[hidden]{display:none}
 .btn--denovo:active{transform:translateY(4px);box-shadow:0 1px 0 #E0A700}
+
+/* foto da Lara na carta: contain porque os recortes tem proporcoes
+   diferentes e cover cortaria a cabeca dela */
+.carta__frente .foto-carta{
+  width:88%;height:88%;object-fit:contain;display:block;
+  filter:drop-shadow(0 4px 10px rgba(43,27,84,.28));
+}
+/* tabuleiro grande: menos folga entre cartas pra figura sobrar maior */
+.memoria[data-pares="8"]{gap:7px}
+.memoria[data-pares="8"] .carta__lado{border-radius:14px}

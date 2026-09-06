@@ -212,6 +212,7 @@ var App = (function () {
         if (destino === 'cineminha')         { montarCineminha(); ir('cineminha'); ajustarGaleria(); return; }
         if (destino === 'memoria-palavras')  { ir('memoria'); Memoria.iniciar('palavras'); return; }
         if (destino === 'memoria-espaco')    { ir('memoria'); Memoria.iniciar('espaco'); return; }
+        if (destino === 'memoria-lara')      { ir('memoria'); Memoria.iniciar('lara'); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -779,5 +780,7 @@ var App = (function () {
 
   document.addEventListener('DOMContentLoaded', iniciar);
 
-  return { ir: ir, pintarFundo: pintarFundo };
+  /* FOTOS sai daqui pro jogo da memoria montar o baralho da Lara sem
+     manter uma segunda lista que sairia de sincronia com a galeria */
+  return { ir: ir, pintarFundo: pintarFundo, fotos: function () { return FOTOS.slice(); } };
 })();

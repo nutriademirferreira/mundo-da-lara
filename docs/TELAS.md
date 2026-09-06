@@ -105,7 +105,7 @@ declaravam 50px e eram espremidos pra 43px por serem item de flex, daí o
 | **tamanho** | Tamanhos reais, uma régua só | `Espaco.REAIS` | Júpiter é a régua. Mercúrio virar pontinho **é** a lição |
 | **viagem** | Distâncias reais, arrastando | `Espaco.DISTANCIAS` | Uma variável por tela: aqui distância é real, tamanho não |
 | **palavras** | Completa a letra que falta | `Palavras.FASES` (30) | Letra fica **no meio** de propósito. A frase de acerto é "Com o u fica Lua" — "u de Lua" ensinava que a letra é a inicial |
-| **memoria** | 6 pares, grade 3×4 | Palavras ou planetas | Carta virada fala o nome: vocabulário de graça |
+| **memoria** | 3→4→6→8 pares, grade por nível | Palavras, planetas ou as fotos dela | Dificuldade sobe a cada tabuleiro e **zera quando o app recarrega** — ela ganha a primeira partida do dia. No modo das fotos, o sorteio pula pares de foto que se confundem a 79px (lista medida em `js/memoria.js`) |
 | **velha** | Contra o app ou a dois | — | A IA é fraca **de propósito** (35% esperta). Não "conserte" |
 | **galeria** | As figurinhas dela | `FOTOS` em `js/app.js` | Única tela que rola. `gridAutoRows` calculado em JS |
 | **cineminha** | Animações | `FILMES` em `js/app.js` | Atalho só aparece se houver filme. Vídeo **fora** do cache offline |
