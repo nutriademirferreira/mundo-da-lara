@@ -98,7 +98,7 @@ function frases() {
                    'dezenove','vinte']) add(n);
 
   for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) addVarrido(m[1]);
-  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js', 'js/memoria.js']) {
+  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js', 'js/memoria.js', 'js/damas.js']) {
     const src = fs.readFileSync(path.join(RAIZ, f), 'utf8');
     for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) addVarrido(m[1]);
     /* dataset.falar = '...' nasce em JS e nao aparece no HTML. Faltava varrer

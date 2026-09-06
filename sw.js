@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v37';
+var CACHE = 'mundo-da-lara-v38';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -13,6 +13,7 @@ var ARQUIVOS = [
   'js/game.js',
   'js/velha.js',
   'js/memoria.js',
+  'js/damas.js',
   'js/app.js',
   'manifest.webmanifest',
   'icons/icon-192.png',

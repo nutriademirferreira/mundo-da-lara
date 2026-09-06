@@ -13,6 +13,10 @@ var Velha = (function () {
   ];
 
   var estado = null;
+  /* mesmo selo das damas: o timer da jogada do app sobrevivia ao fim da
+     partida e a saida da tela, e dispararia contra o estado seguinte */
+  var selo = 0;
+  var timerIA = null;
   /* placar vale só enquanto ela fica na tela: sair zera */
   var placar = { X: 0, O: 0, velha: 0 };
 
@@ -28,6 +32,7 @@ var Velha = (function () {
   function nome(sim) { return sim === 'X' ? 'xis' : 'bolinha'; }
 
   function iniciar(modo, sessaoNova) {
+    cancelar();
     if (sessaoNova) placar = { X: 0, O: 0, velha: 0 };
     estado = { modo: modo, tab: ['','','','','','','','',''], vez: 'X', fim: false, travado: false };
     $('#velha-status').classList.remove('is-fim');
@@ -131,7 +136,10 @@ var Velha = (function () {
 
     if (estado.modo === 'app' && estado.vez === 'O') {
       estado.travado = true;
-      setTimeout(function () {
+      var meu = selo;
+      clearTimeout(timerIA);
+      timerIA = setTimeout(function () {
+        if (meu !== selo || !estado || estado.fim) return;
         estado.travado = false;
         var escolha = jogadaDoApp();
         if (escolha != null) jogar(escolha);
@@ -209,8 +217,9 @@ var Velha = (function () {
   function reiniciar() { iniciar(estado ? estado.modo : 'app', false); }
 
   function zerarPlacar() { placar = { X: 0, O: 0, velha: 0 }; }
+  function cancelar() { selo++; clearTimeout(timerIA); timerIA = null; }
 
   function modoAtual() { return estado ? estado.modo : 'app'; }
 
-  return { iniciar: iniciar, reiniciar: reiniciar, modoAtual: modoAtual, zerarPlacar: zerarPlacar };
+  return { iniciar: iniciar, reiniciar: reiniciar, modoAtual: modoAtual, zerarPlacar: zerarPlacar, cancelar: cancelar };
 })();

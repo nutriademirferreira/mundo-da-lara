@@ -16,6 +16,8 @@ var App = (function () {
     'cineminha':        'screen-cineminha',
     'memoria-menu':     'screen-memoria-menu',
     'memoria':          'screen-memoria',
+    'damas-menu':       'screen-damas-menu',
+    'damas':            'screen-damas',
     'tamanho':          'screen-tamanho',
     'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
@@ -45,7 +47,9 @@ var App = (function () {
     'galeria':          { foto:'fundo-home',   veu:'claro'  },
     'cineminha':        { foto:'fundo-espaco', veu:'escuro' },
     'memoria-menu':     { foto:'fundo-home',   veu:'claro'  },
-    'memoria':          { foto:'fundo-home',   veu:'claro'  }
+    'memoria':          { foto:'fundo-home',   veu:'claro'  },
+    'damas-menu':       { foto:'fundo-espaco', veu:'escuro' },
+    'damas':            { foto:'fundo-espaco', veu:'espaco'  }
   };
 
   /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
@@ -118,7 +122,8 @@ var App = (function () {
     if (!TELAS[nome]) return;
     Som.calar();
     /* placar da velha só vale enquanto ela está na tela do tabuleiro */
-    if (telaAtual === 'velha' && nome !== 'velha') Velha.zerarPlacar();
+    if (telaAtual === 'velha' && nome !== 'velha') { Velha.zerarPlacar(); Velha.cancelar(); }
+    if (telaAtual === 'damas' && nome !== 'damas') { Damas.zerarPlacar(); Damas.cancelar(); }
     $$('.screen').forEach(function (s) { s.classList.remove('is-active'); });
     var el = document.getElementById(TELAS[nome]);
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
@@ -213,6 +218,8 @@ var App = (function () {
         if (destino === 'memoria-palavras')  { ir('memoria'); Memoria.iniciar('palavras'); return; }
         if (destino === 'memoria-espaco')    { ir('memoria'); Memoria.iniciar('espaco'); return; }
         if (destino === 'memoria-lara')      { ir('memoria'); Memoria.iniciar('lara'); return; }
+        if (destino === 'damas-app')         { ir('damas'); Damas.iniciar('app', true); return; }
+        if (destino === 'damas-dois')        { ir('damas'); Damas.iniciar('dois', true); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -760,6 +767,7 @@ var App = (function () {
     ligarNavegacao();
     ligarBotoes();
     Memoria.ligar();
+    Damas.ligar();
     Jogo.pintarEstrelas();
     atualizarColecao();
     if ('serviceWorker' in navigator) {
