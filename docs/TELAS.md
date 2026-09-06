@@ -131,6 +131,7 @@ Registro do que ela encontrou, pra ninguém remover uma regra achando que
 | Achado | Onde |
 |---|---|
 | Quatro cartões se atropelando, 40px de conteúdo cortado dentro do container | `espaco-menu`, iPhone SE |
+| Foto da Lara com 166px numa carta de 138 — cabeça cortada. Eu tinha escrito a regra 4 e violado ela na mesma sessão | `memoria`, modo Eu |
 | Cartão 23px mais largo que a própria coluna, passando por cima do vizinho | `corpo-menu`, iPhone SE |
 | 9 botões de planeta sem nome pra leitura de tela | `espaco-explorar` |
 | Alto-falante renderizando a 43,1px (declarado 44, cartão tem escala 0.98) | `espaco-explorar` |

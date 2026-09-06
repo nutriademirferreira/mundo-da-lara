@@ -1031,8 +1031,16 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 /* as figuras vêm do jogo das palavras e do espaço, em tamanhos diferentes:
    aqui as duas obedecem a carta */
+/* absoluta e nao 82%: dentro de caixa sem altura definida a porcentagem
+   vira conta circular — a linha se mede pela figura e a figura pela linha.
+   Foi assim que a foto da Lara ficou com 166px numa carta de 138 e a
+   cabeca dela era cortada. E a regra 4 do docs/TELAS.md. */
 .carta__frente .figura,
-.carta__frente .orbe{width:82%;height:82%;object-fit:contain;display:block}
+.carta__frente .orbe,
+.carta__frente .foto-carta{
+  position:absolute;top:9%;left:9%;right:9%;bottom:9%;
+  width:82%;height:82%;object-fit:contain;display:block;
+}
 
 .memoria-msg{
   flex:0 0 auto;text-align:center;padding:10px 8px 2px;
@@ -1049,10 +1057,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 
 /* foto da Lara na carta: contain porque os recortes tem proporcoes
    diferentes e cover cortaria a cabeca dela */
-.carta__frente .foto-carta{
-  width:88%;height:88%;object-fit:contain;display:block;
-  filter:drop-shadow(0 4px 10px rgba(43,27,84,.28));
-}
+.carta__frente .foto-carta{filter:drop-shadow(0 4px 10px rgba(43,27,84,.28))}
 /* tabuleiro grande: menos folga entre cartas pra figura sobrar maior */
 .memoria[data-pares="8"]{gap:7px}
 .memoria[data-pares="8"] .carta__lado{border-radius:14px}
