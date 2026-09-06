@@ -43,7 +43,18 @@ segunda linha de defesa.
 vale zero. A auditoria simula 59px em cima e 34px embaixo justamente por
 isso. Testar sem simular é testar vazamento com a torneira fechada.
 
-### 4. Altura vem da grade, nunca do conteúdo
+### 4. Altura vem da grade, e o cartão precisa poder encolher
+
+`min-width:0` / `min-height:0` no **wrapper** não basta: item de flex não
+encolhe abaixo da largura do próprio conteúdo, então quem transborda é o
+cartão de dentro. Foi assim que "Aprender" ficou 23px mais largo que a
+coluna e passou por cima do "Jogar" ao lado. Piso de conforto (`min-height:
+132px` no `.mode`) cede antes de a tela quebrar.
+
+E não conserte transbordo com `overflow-wrap:anywhere`: parte a palavra no
+meio ("Apren/der") num app onde ela está aprendendo a ler.
+
+### 4b. Altura vem da grade, nunca do conteúdo
 
 `aspect-ratio` e o truque do `padding-top` **não** dimensionam linha
 implícita de grade neste app. Quem tentou, viu os cartões se atropelarem
@@ -119,6 +130,8 @@ Registro do que ela encontrou, pra ninguém remover uma regra achando que
 
 | Achado | Onde |
 |---|---|
+| Quatro cartões se atropelando, 40px de conteúdo cortado dentro do container | `espaco-menu`, iPhone SE |
+| Cartão 23px mais largo que a própria coluna, passando por cima do vizinho | `corpo-menu`, iPhone SE |
 | 9 botões de planeta sem nome pra leitura de tela | `espaco-explorar` |
 | Alto-falante renderizando a 43,1px (declarado 44, cartão tem escala 0.98) | `espaco-explorar` |
 | Cartões da galeria se atropelando, linha da grade em 83px | `galeria` |
@@ -131,6 +144,12 @@ E o que ela **errou** antes de eu ajustar — vale tanto quanto:
   (galeria e Tamanho de Verdade davam "defeito" de 1000px)
 - Media alvo de toque antes das imagens carregarem e acusava botão pequeno
   que não existia
+- **Não olhava para dentro dos containers.** Checava rolagem da página e
+  vazamento da janela, e por isso deu `espaco-menu` como limpa enquanto os
+  quatro cartões se atropelavam no iPhone SE. Ganhou duas colunas novas —
+  *conteúdo escondido* (container que corta o que tem dentro) e *atropelo*
+  (irmãos de conteúdo sobrepostos). A regra 1 diz que o que ela não alcança
+  não existe; a auditoria não estava testando a própria regra 1.
 
 Auditoria que grita lobo é desligada, e aí não serve pra nada. Se ela
 apontar algo, **meça na mão antes de consertar**.

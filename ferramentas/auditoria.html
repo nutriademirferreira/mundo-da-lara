@@ -122,7 +122,40 @@ async function auditar(L, A) {
                   fundo.bottom >= w.innerHeight && fundo.right >= w.innerWidth;
     /* 3. rolagem lateral e proibida em qualquer lugar */
     const lateral = d.documentElement.scrollWidth - w.innerWidth;
-    /* 4. alvo de toque menor que 44px cansa dedo de crianca */
+    /* 4. CONTEUDO ESCONDIDO dentro de container que corta.
+       A regra 1 diz que o que ela nao alcanca nao existe — e esta auditoria
+       nao testava isso. O menu do espaco ficou meses com os quatro cartoes
+       se atropelando no iPhone SE, e a auditoria dava a tela como limpa:
+       a pagina nao rolava e nada passava da janela, mas 40px de conteudo
+       estavam cortados DENTRO do .modes. */
+    const ROLA_DE_PROPOSITO = ['.galeria', '#orbit-scroll', '#tamanho-scroll',
+                               '#viagem-scroll', '#cineminha', '.sheet'];
+    let escondido = 0, quemEsconde = '';
+    tela.querySelectorAll('*').forEach(el => {
+      if (ROLA_DE_PROPOSITO.some(sel => el.matches(sel) || el.closest(sel))) return;
+      const corta = el.scrollHeight - el.clientHeight;
+      /* limiar de 8px: arredondamento de linha em emoji e titulo produz 3-4px
+         em quase toda tela, e isso nao esconde nada de ninguem. Abaixo disso
+         e ruido de subpixel, nao conteudo perdido. */
+      if (el.clientHeight > 0 && corta > 8 && corta > escondido) {
+        escondido = corta; quemEsconde = nomeDe(el);
+      }
+    });
+
+    /* 5. IRMAOS DE CONTEUDO SE ATROPELANDO.
+       Cartao por cima de cartao e o sintoma visivel do mesmo defeito. So
+       compara pares da mesma classe: o alto-falante flutuante sobrepoe o
+       azulejo de proposito, e isso nao e erro. */
+    let atropelo = 0;
+    ['.mode', '.tile', '.carta', '.foto-card', '.opt'].forEach(sel => {
+      const rs = [...tela.querySelectorAll(sel)].map(e => e.getBoundingClientRect());
+      for (let i = 0; i < rs.length; i++)
+        for (let j = i + 1; j < rs.length; j++)
+          if (rs[i].bottom > rs[j].top + 1 && rs[i].top < rs[j].bottom - 1 &&
+              rs[i].right > rs[j].left + 1 && rs[i].left < rs[j].right - 1) atropelo++;
+    });
+
+    /* 6. alvo de toque menor que 44px cansa dedo de crianca */
     let miudos = 0;
     tela.querySelectorAll('button').forEach(b => {
       const r = b.getBoundingClientRect();
@@ -133,7 +166,7 @@ async function auditar(L, A) {
     tela.querySelectorAll('button').forEach(b => {
       if (!b.textContent.trim() && !b.getAttribute('aria-label')) semNome++;
     });
-    linhas.push({ nome, rolaPagina, vaza, quemVaza, cobre, lateral, miudos, semNome });
+    linhas.push({ nome, rolaPagina, vaza, quemVaza, cobre, lateral, miudos, semNome, escondido, quemEsconde, atropelo });
   }
   f.remove();
   return linhas;
@@ -141,20 +174,24 @@ async function auditar(L, A) {
 
 (async () => {
   const saida = document.getElementById('saida');
-  const total = { vaza: 0, rola: 0, lateral: 0, miudos: 0, semNome: 0, semFundo: 0 };
+  const total = { vaza: 0, rola: 0, lateral: 0, miudos: 0, semNome: 0, semFundo: 0, escondido: 0, atropelo: 0 };
   for (const [ap, L, A] of APARELHOS) {
     const linhas = await auditar(L, A);
     let html = `<h2 style="font-size:13px;margin:14px 0 6px">${ap} — ${L}×${A}</h2><table>` +
-      '<thead><tr><th>Tela</th><th>Rola?</th><th>Vaza da janela</th><th>Fundo cobre?</th>' +
-      '<th>Rola lateral?</th><th>Botão &lt;44px</th><th>Botão sem nome</th></tr></thead><tbody>';
+      '<thead><tr><th>Tela</th><th>Rola?</th><th>Vaza da janela</th><th>Conteúdo escondido</th>' +
+      '<th>Atropelo</th><th>Fundo cobre?</th><th>Rola lateral?</th><th>Botão &lt;44px</th>' +
+      '<th>Botão sem nome</th></tr></thead><tbody>';
     for (const l of linhas) {
-      if (l.erro) { html += `<tr><td>${l.nome}</td><td colspan="6" class="mau">${l.erro}</td></tr>`; continue; }
+      if (l.erro) { html += `<tr><td>${l.nome}</td><td colspan="8" class="mau">${l.erro}</td></tr>`; continue; }
+      total.escondido += l.escondido > 0 ? 1 : 0; total.atropelo += l.atropelo;
       total.vaza += l.vaza > 0 ? 1 : 0; total.rola += l.rolaPagina > 0 ? 1 : 0;
       total.lateral += l.lateral > 0 ? 1 : 0; total.miudos += l.miudos;
       total.semNome += l.semNome; total.semFundo += l.cobre ? 0 : 1;
       html += `<tr><td>${l.nome}</td>` +
         cel(l.rolaPagina > 0 ? l.rolaPagina + 'px' : 'não', l.rolaPagina > 0) +
         cel(l.vaza > 0 ? l.vaza + 'px (' + String(l.quemVaza).slice(0, 22) + ')' : 'não', l.vaza > 0) +
+        cel(l.escondido > 0 ? l.escondido + 'px (' + String(l.quemEsconde).slice(0, 20) + ')' : 'não', l.escondido > 0) +
+        cel(l.atropelo || 'nenhum', l.atropelo > 0) +
         cel(l.cobre ? 'sim' : 'NÃO', !l.cobre) +
         cel(l.lateral > 0 ? l.lateral + 'px' : 'não', l.lateral > 0) +
         cel(l.miudos || 'nenhum', l.miudos > 0) +
@@ -165,6 +202,7 @@ async function auditar(L, A) {
   document.getElementById('quando').textContent = new Date().toLocaleString('pt-BR');
   saida.insertAdjacentHTML('beforeend',
     `<table><tfoot><tr><td>TOTAL de problemas</td><td>vaza: ${total.vaza}</td><td>rola: ${total.rola}</td>` +
+    `<td>escondido: ${total.escondido}</td><td>atropelo: ${total.atropelo}</td>` +
     `<td>sem fundo: ${total.semFundo}</td><td>lateral: ${total.lateral}</td>` +
     `<td>botão miúdo: ${total.miudos}</td><td>sem nome: ${total.semNome}</td></tr></tfoot></table>`);
 })();
