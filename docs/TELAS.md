@@ -89,6 +89,27 @@ a auditoria apontar. E nenhum alvo de toque abaixo de 44px: os alto-falantes
 declaravam 50px e eram espremidos pra 43px por serem item de flex, daí o
 `.som-btn{flex:0 0 auto}`. Tamanho declarado não é tamanho medido.
 
+### 8. Timer pendente não sobrevive à tela
+
+`setTimeout` agendado dentro de um jogo **continua vivo** quando a partida
+acaba, quando ela toca "de novo", e quando ela sai da tela. Ele então
+dispara contra o estado seguinte.
+
+Isso já mordeu **três vezes** neste app:
+
+1. arrastou a Lara pra tela de resultado depois que ela saiu da rodada
+2. travou as damas em "Minha vez…" — o timer da partida anterior mexia no
+   tabuleiro da nova
+3. estava latente no jogo da velha desde sempre, só mais difícil de
+   disparar porque a partida é curta
+
+O padrão que resolve é um **selo de partida**: cada partida ganha um
+número, o timer guarda o número que viu, e desiste se o número mudou. Mais
+`clearTimeout` ao começar e um `cancelar()` chamado pelo `ir()` ao sair.
+Ver `js/damas.js` e `js/velha.js`.
+
+Módulo novo com temporizador nasce com selo. Não é opcional.
+
 ---
 
 ## Tela por tela
@@ -107,6 +128,7 @@ declaravam 50px e eram espremidos pra 43px por serem item de flex, daí o
 | **palavras** | Completa a letra que falta | `Palavras.FASES` (30) | Letra fica **no meio** de propósito. A frase de acerto é "Com o u fica Lua" — "u de Lua" ensinava que a letra é a inicial |
 | **memoria** | 3→4→6→8 pares, grade por nível | Palavras, planetas ou as fotos dela | Dificuldade sobe a cada tabuleiro e **zera quando o app recarrega** — ela ganha a primeira partida do dia. No modo das fotos, o sorteio pula pares de foto que se confundem a 79px (lista medida em `js/memoria.js`) |
 | **velha** | Contra o app ou a dois | — | A IA é fraca **de propósito** (35% esperta). Não "conserte" |
+| **damas** | 6×6, estrela dela contra planetas | — | Captura **não** é obrigatória e a dama **não** voa: as duas regras fariam o app recusar a jogada dela. 6×6 e não 8×8 porque em 8×8 a casa cai pra 42px. IA fraca de propósito (40%) |
 | **galeria** | As figurinhas dela | `FOTOS` em `js/app.js` | Única tela que rola. `gridAutoRows` calculado em JS |
 | **cineminha** | Animações | `FILMES` em `js/app.js` | Atalho só aparece se houver filme. Vídeo **fora** do cache offline |
 | **result** | Fim de rodada | — | — |
@@ -132,6 +154,7 @@ Registro do que ela encontrou, pra ninguém remover uma regra achando que
 |---|---|
 | Quatro cartões se atropelando, 40px de conteúdo cortado dentro do container | `espaco-menu`, iPhone SE |
 | Foto da Lara com 166px numa carta de 138 — cabeça cortada. Eu tinha escrito a regra 4 e violado ela na mesma sessão | `memoria`, modo Eu |
+| Botão "Jogar de novo" com 43px — um abaixo do mínimo | `damas` e `memoria` |
 | Cartão 23px mais largo que a própria coluna, passando por cima do vizinho | `corpo-menu`, iPhone SE |
 | 9 botões de planeta sem nome pra leitura de tela | `espaco-explorar` |
 | Alto-falante renderizando a 43,1px (declarado 44, cartão tem escala 0.98) | `espaco-explorar` |
