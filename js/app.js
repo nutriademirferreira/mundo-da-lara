@@ -19,6 +19,8 @@ var App = (function () {
     'damas-menu':       'screen-damas-menu',
     'damas':            'screen-damas',
     'jogos-menu':       'screen-jogos-menu',
+    'escrever-menu':    'screen-escrever-menu',
+    /* grade e desenho servem aos dois alfabetos (maiúscula e cursiva) */
     'cursiva-menu':     'screen-cursiva-menu',
     'cursiva':          'screen-cursiva',
     'tamanho':          'screen-tamanho',
@@ -54,6 +56,7 @@ var App = (function () {
     'damas-menu':       { foto:'fundo-espaco', veu:'escuro' },
     'damas':            { foto:'fundo-espaco', veu:'espaco'  },
     'jogos-menu':       { foto:'fundo-velha',  veu:'escuro' },
+    'escrever-menu':    { foto:'fundo-home',   veu:'claro'  },
     'cursiva-menu':     { foto:'fundo-home',   veu:'claro'  },
     'cursiva':          { foto:'fundo-home',   veu:'claro'  }
   };
@@ -227,7 +230,10 @@ var App = (function () {
         if (destino === 'memoria-lara')      { ir('memoria'); Memoria.iniciar('lara'); return; }
         if (destino === 'damas-app')         { ir('damas'); Damas.iniciar('app', true); return; }
         if (destino === 'damas-dois')        { ir('damas'); Damas.iniciar('dois', true); return; }
-        if (destino === 'cursiva-menu')      { Traco.montarGrade(); ir('cursiva-menu'); return; }
+        if (destino === 'maiuscula-menu')    { Traco.montarGrade('maiuscula'); ir('cursiva-menu'); return; }
+        if (destino === 'cursiva-menu')      { Traco.montarGrade('cursiva'); ir('cursiva-menu'); return; }
+        /* voltar do desenho: a grade do alfabeto em que ela estava */
+        if (destino === 'letras-voltar')     { Traco.montarGrade(); ir('cursiva-menu'); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);

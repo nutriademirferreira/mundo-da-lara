@@ -1120,15 +1120,24 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 
 /* ===========================================================
-   LETRA CURSIVA
+   ESCREVER — letra maiúscula e letra cursiva (mesmas telas)
    Larguras de traço em unidades da letra (viewBox 100x130),
    então engrossam e afinam junto com a tela.
    =========================================================== */
-.tile--cursiva{background:linear-gradient(120deg,rgba(95,224,160,.66),rgba(46,155,214,.62) 55%,rgba(124,77,255,.58))}
+.tile--escrever{background:linear-gradient(120deg,rgba(95,224,160,.66),rgba(46,155,214,.62) 55%,rgba(124,77,255,.58))}
 .tile--jogos{background:linear-gradient(120deg,rgba(255,193,85,.70),rgba(240,118,31,.62) 55%,rgba(177,75,224,.60))}
-.tile__cursiva{position:absolute;inset:4%;width:92%;height:92%}
-.tile__cursiva path{fill:none;stroke:#fff;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;
+.tile__letras{position:absolute;inset:4%;width:92%;height:92%}
+.tile__letras path{fill:none;stroke:#fff;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;
   filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+
+/* submenu Escrever: a própria letra, grande, no espaço que sobra do
+   cartão — com dois cartões só, texto no alto deixava um vazio enorme */
+.mode__letra{display:block;flex:1 1 0;min-height:0;width:100%;margin-top:4px}
+.mode__letra path{fill:none;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke:#5B3FD1}
+.mode--learn .mode__letra path{stroke:#1FA36A}
+/* o "a" ocupa uma caixa 1,8x menor que o "A": mesmo traço na tela pede
+   largura menor em unidades da letra */
+.mode__letra--cursiva path{stroke-width:5}
 
 .cursiva-contador{
   display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 10px;
@@ -1188,6 +1197,13 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   transform-box:fill-box;transform-origin:center;animation:cursivaPulsa 1.2s ease-in-out infinite}
 @keyframes cursivaPulsa{50%{transform:scale(1.35)}}
 .cursiva-svg.is-desenhando .partida{animation:none}
+/* maiúscula de vários traços: cada começo tem o número da ordem, e só o 1
+   pulsa — é por ali que começa */
+.cursiva-svg .partida.is-quieta{animation:none}
+.cursiva-svg .partida__n{
+  font-size:7.5px;font-weight:900;fill:#fff;text-anchor:middle;dominant-baseline:central;
+  pointer-events:none;-webkit-user-select:none;user-select:none;
+}
 
 /* conseguiu: a letra inteira acende */
 .cursiva-svg.is-concluida .estrada{stroke:#FFD24A;transition:stroke .3s}

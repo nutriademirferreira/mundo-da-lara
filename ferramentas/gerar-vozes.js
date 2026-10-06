@@ -63,6 +63,13 @@ function frases() {
      jurava que estava tudo certo, porque conferia contra o proprio erro. */
   for (const f of Jogo.todasAsFalas()) add(f);
 
+  /* Mesma ideia no Escrever (maiúscula e cursiva): "Vamos fazer a letra bê!"
+     nasce de um + dentro do motor, e o varredor por regex nao enxerga frase
+     montada. Quem sabe as frases e o proprio motor. */
+  for (const f of ['js/data-cursiva.js', 'js/data-maiuscula.js', 'js/cursiva.js'])
+    (0, eval)(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
+  for (const f of Traco.todasAsFalas()) add(f);
+
   for (const l of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') add(Palavras.falaDaLetra(l));
 
   /* Montada em js/app.js: prefixo fixo + um dos dois ramos. O app fala a
@@ -151,9 +158,23 @@ function prepararCurta(t) {
   return x;
 }
 
+/* Grafia só pra quem fala: muda o texto que vai pra ElevenLabs, nunca a
+   chave do índice (o app continua pedindo "a letra i"). No meio da frase a
+   letra "i" saía como o "I" do inglês — o whisper ouviu "você fez a letra
+   aí". Medido em tomadas: com acento ("letra í") ainda saiu "aí" em 4 de
+   5; entre aspas ("letra \"i\"") saiu "i" nas 2. Sozinha, "í." sai "ih". */
+const PRONUNCIA = [
+  [/letra i(?=[\s!?.,]|$)/g, 'letra "i"'],
+  [/(^|\s)i(?=[\s!?.,]|$)/g, '$1í'],
+  /* "pê." sozinho saía "bê" em 7 de 7 tomadas; com exclamação o P estala
+     e saiu "pê" nas 2. Só ele: as outras letras com ponto saíram certas */
+  [/^pê\.$/, 'pê!']
+];
+function pronunciar(t) { for (const [re, s] of PRONUNCIA) t = t.replace(re, s); return t; }
+
 async function gerar(texto, voz, apiKey) {
   const curta = ehCurta(texto);
-  const corpo = { text: curta ? prepararCurta(texto) : texto, model_id: MODELO, voice_settings: AJUSTES };
+  const corpo = { text: pronunciar(curta ? prepararCurta(texto) : texto), model_id: MODELO, voice_settings: AJUSTES };
   if (curta) corpo.previous_text = CONTEXTO;
   const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voz}?output_format=mp3_44100_64`, {
     method: 'POST',

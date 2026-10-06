@@ -5,9 +5,10 @@ enfeite: é a interface.
 
 ## Como funciona
 
-As frases do app são **finitas e conhecidas** — 228 no total. Mesmo as que
-parecem montadas na hora ("Isso! É o coração.", "Isso! B de BOLA!") vêm de
-listas fixas em `js/data-*.js`. Então cada frase tem um arquivo gravado.
+As frases do app são **finitas e conhecidas** — 416 em outubro de 2026. Mesmo
+as que parecem montadas na hora ("Isso, Lara! É o coração.", "Vamos fazer a
+letra bê!") vêm de listas fixas em `js/data-*.js`. Então cada frase tem um
+arquivo gravado.
 
 `Som.falar(texto)` faz assim:
 
@@ -40,6 +41,35 @@ metade das frases num ajuste e metade noutro fica audivelmente desencontrado.
 O script lê as frases dos próprios dados do app, então ele descobre sozinho
 o que é novo. Não existe lista paralela pra manter.
 
+Frase montada com `+` ("Vamos fazer a letra " + letra) o varredor não
+enxerga. Por isso quem monta frase assim também a exporta numa função
+`todasAsFalas()`, que o script chama: `Jogo.todasAsFalas()` (quiz) e
+`Traco.todasAsFalas()` (Escrever). Módulo novo que monta frase com `+`
+precisa do mesmo, senão a frase sai sempre na voz do sistema.
+
+Palavra solta ("sapo", "rato", "á") vai pra ElevenLabs em minúscula, com
+ponto final e com `previous_text: "Em português do Brasil:"`. Sem isso o
+modelo lia com fonética de inglês ou espanhol — "sapo" saía "cipo".
+
+## Conferir a pronúncia sem ouvir uma por uma
+
+```bash
+python3 ferramentas/ouvir.py "vamos fazer a letra bê!|sapo"   # frases escolhidas
+python3 ferramentas/ouvir.py --letras                          # as 26 letras soltas
+```
+
+O whisper transcreve e o script compara com o texto. Instruções e limites
+dele no topo do arquivo — o principal: em letra solta ele erra até com voz
+certa ("ene", "erre", "gê", "xis"), então ali o ouvido decide.
+
+**Cada geração é um sorteio.** O mesmo texto sai certo numa tomada e errado
+na outra: "ó." saiu "pô", "uá" e "ó" em três tomadas seguidas. Quando o
+whisper acusa, gere duas ou três tomadas e fique com a que ele ouve certo —
+foi assim com á, ó, agá, éle, pê e as frases da letra i, em outubro de 2026.
+Grafia que ajudou de verdade fica em `PRONUNCIA`, no gerador (muda só o
+texto enviado, nunca a chave): a letra i entre aspas no meio da frase, e
+"pê!" com exclamação.
+
 ```bash
 # 1. o que está sem voz? (não gasta crédito nenhum)
 node ferramentas/gerar-vozes.js --faltam
@@ -62,4 +92,5 @@ no código nem no app publicado. A chave é restrita a Text to Speech e tem
 teto de créditos: se vazar, o pior caso é alguém gastar a cota do mês.
 
 Conta gratuita = 10.000 créditos por mês, que **não acumulam**. O app inteiro
-custa 4.399. Cabe uma geração completa por mês com folga.
+custa por volta de 11.000 hoje — **não cabe mais** uma geração completa num mês
+só. Gerar só o que falta (o padrão do script) continua barato.

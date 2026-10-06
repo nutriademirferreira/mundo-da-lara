@@ -194,10 +194,12 @@ var Damas = (function () {
     } else {
       faixa.textContent = 'Os planetas ganharam dessa vez';
       Som.tocar('zap');
-      Som.falar('Boa, Lara! Bora jogar de novo pra acertar mais!', { atraso: 300 });
+      /* a frase do quiz ("pra acertar mais") estava emprestada aqui; damas
+         não tem acerto, tem partida — a fala repete o que a faixa mostra */
+      Som.falar('Os planetas ganharam dessa vez. Bora jogar de novo, Lara?', { atraso: 300 });
     }
     var som = $('#damas-som');
-    if (som) som.dataset.falar = ganhouLara ? 'Muito bem, Lara!' : 'Boa, Lara! Bora jogar de novo pra acertar mais!';
+    if (som) som.dataset.falar = ganhouLara ? 'Muito bem, Lara!' : 'Os planetas ganharam dessa vez. Bora jogar de novo, Lara?';
     $('#damas-denovo').classList.add('is-forte');
     return true;
   }

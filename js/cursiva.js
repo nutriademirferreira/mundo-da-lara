@@ -1,10 +1,15 @@
 /* =========================================================
-   LETRA CURSIVA — ela passa o dedo por cima da letra
+   ESCREVER — ela passa o dedo por cima da letra
+   Serve aos dois alfabetos: letra maiúscula (de forma) e letra
+   cursiva. Mesmo motor, mesmas duas telas (screen-cursiva-menu e
+   screen-cursiva); muda o desenho, a pauta, a inclinação e onde
+   fica guardado o que ela já fez — ver ALFABETOS.
+
    Como funciona:
    1. a letra aparece como uma estrada clara, larga
    2. um traço colorido desenha a letra sozinho, mostrando ONDE
-      começa e PRA QUE LADO vai — cursiva é direção, e mostrar
-      ensina sem precisar de palavra
+      começa e PRA QUE LADO vai — mostrar ensina sem precisar de
+      palavra
    3. ela passa o dedo; cada pedaço da estrada que o dedo cobre
       fica verde
    4. coberto o bastante, a letra brilha e ela ganha a estrela
@@ -20,7 +25,7 @@
    pune, e a fala de tentar de novo já existia gravada no quiz.
 
    O que NÃO é exigido, de propósito: começar no ponto verde e
-   seguir a ordem exata. A demonstração é que ensina a direção.
+   seguir a ordem exata. A demonstração e os números é que ensinam.
    ========================================================= */
 var Traco = (function () {
   function $(s) { return document.querySelector(s); }
@@ -31,15 +36,43 @@ var Traco = (function () {
   var PRECISAO_MIN = 0.50;  /* fração do desenho dela que precisa cair em cima da letra */
   var JULGAR_COM = 0.60;    /* só julga erro depois de desenhar 60% do comprimento da letra:
                                meia dúzia de pontos tortos no começo não é tentativa */
-  var ESPERA_PROXIMA = 1900;
+  /* a tela verde fica até a fala do parabéns acabar: trocar de letra no
+     meio de "você fez a letra bê" mostraria o C ainda falando do B.
+     Medido: a mais longa ("...a letra cê!") dura 3,0 s, mais 0,3 s de atraso */
+  var ESPERA_PROXIMA = 3400;
+  var ESPERA_ALFABETO = 4200;
   var PASSO = 1.6;          /* espaçamento das amostras ao longo do traço */
-  var INCLINA = 'translate(10 0) skewX(-9)';
+
+  var ALFABETOS = {
+    maiuscula: {
+      titulo: 'Letra Maiúscula',
+      fala: 'Letra maiúscula. Passe o dedo por cima da letra.',
+      letras: Maiuscula.LETRAS, ordem: Maiuscula.ORDEM,
+      inclina: '',
+      pauta: [[20, ''], [63, 'pauta--meio'], [106, 'pauta--base']],
+      chave: 'lara.maiuscula.feitas',
+      numerar: true
+    },
+    cursiva: {
+      titulo: 'Letra Cursiva',
+      fala: 'Letra cursiva. Passe o dedo por cima da letra.',
+      letras: Cursiva.LETRAS, ordem: Cursiva.ORDEM,
+      inclina: 'translate(10 0) skewX(-9)',
+      pauta: [[12, ''], [42, 'pauta--meio'], [86, 'pauta--base'], [116, '']],
+      chave: 'lara.cursiva.feitas',
+      /* o segundo traço da cursiva é o pingo do i e do j, ou o corte do t:
+         uma bolinha com número em cima esconderia justo o pingo */
+      numerar: false
+    }
+  };
+  var alfa = ALFABETOS.cursiva;
 
   var atual = 'a';
   var amostras = [];        /* {x, y, ok} ao longo de todos os traços da letra */
   var fins = [];            /* índice da última amostra de cada traço */
   var cobertos = 0;
   var concluida = false;
+  var fechouAlfabeto = false; /* acertou a última que faltava: volta pro alfabeto, não pra próxima */
   var ponteiro = null;      /* id do dedo que está desenhando; o segundo dedo é ignorado */
   var linhaTinta = null;
   var ultimoPonto = null;
@@ -50,20 +83,40 @@ var Traco = (function () {
      setTimeout, e timer pendente não pode sobreviver à saída da tela */
   var selo = 0, timerProxima = null;
 
+  /* ---------- falas ----------
+     Montadas aqui e em nenhum outro lugar: o gerador de vozes chama
+     todasAsFalas() e grava exatamente o que o app vai pedir. Frase
+     montada com + espalhada pelo código ficaria sem gravação e sairia
+     na voz do sistema. As mesmas frases valem pros dois alfabetos —
+     "a letra bê" é a mesma letra, maiúscula ou cursiva. */
+  var FALA_ALFABETO = 'Parabéns, Lara! Você fez o alfabeto inteiro!';
+  var FALA_DE_NOVO = 'Quase! Tenta de novo.';
+  function nomeDaLetra(l) { return Palavras.falaDaLetra(l.toUpperCase()); }
+  function falaAbrir(l) { return 'Vamos fazer a letra ' + nomeDaLetra(l) + '!'; }
+  function falaAcerto(l) { return 'Muito bem, Lara! Você fez a letra ' + nomeDaLetra(l) + '!'; }
+  function todasAsFalas() {
+    var f = [FALA_ALFABETO, FALA_DE_NOVO];
+    Object.keys(ALFABETOS).forEach(function (n) { f.push(ALFABETOS[n].fala); });
+    Maiuscula.ORDEM.forEach(function (l) { f.push(falaAbrir(l), falaAcerto(l)); });
+    return f;
+  }
+
+  function usar(nome) { if (ALFABETOS[nome]) alfa = ALFABETOS[nome]; }
+
   /* ---------- quais letras ela já fez ----------
      Lista validada na leitura: localStorage corrompido já mostrou
      "NaN" estrelas neste app. Dado estranho vira lista vazia. */
   function feitas() {
     try {
-      var v = JSON.parse(localStorage.getItem('lara.cursiva.feitas') || '[]');
-      return Array.isArray(v) ? v.filter(function (l) { return Cursiva.LETRAS[l]; }) : [];
+      var v = JSON.parse(localStorage.getItem(alfa.chave) || '[]');
+      return Array.isArray(v) ? v.filter(function (l) { return alfa.letras[l]; }) : [];
     } catch (e) { return []; }
   }
   function marcarFeita(l) {
     var v = feitas();
     if (v.indexOf(l) > -1) return false;           /* já tinha: sem estrela de novo */
     v.push(l);
-    try { localStorage.setItem('lara.cursiva.feitas', JSON.stringify(v)); } catch (e) {}
+    try { localStorage.setItem(alfa.chave, JSON.stringify(v)); } catch (e) {}
     return true;
   }
 
@@ -74,46 +127,65 @@ var Traco = (function () {
   }
 
   function pauta() {
-    return '<g class="pauta">' +
-      '<line x1="0" y1="12" x2="100" y2="12"/>' +
-      '<line x1="0" y1="42" x2="100" y2="42" class="pauta--meio"/>' +
-      '<line x1="0" y1="86" x2="100" y2="86" class="pauta--base"/>' +
-      '<line x1="0" y1="116" x2="100" y2="116"/></g>';
+    return '<g class="pauta">' + alfa.pauta.map(function (p) {
+      return '<line x1="0" y1="' + p[0] + '" x2="100" y2="' + p[0] + '"' + (p[1] ? ' class="' + p[1] + '"' : '') + '/>';
+    }).join('') + '</g>';
+  }
+
+  /* Onde vai a bolinha de partida de cada traço. Dois traços que nascem
+     no mesmo ponto (as duas pernas do A, a haste e o teto do E) poriam o
+     2 em cima do 1; então o segundo anda um pouco pelo próprio traço —
+     continua dizendo onde começa e ainda aponta pra onde vai. */
+  function partidas(caminhos) {
+    var postos = [];
+    caminhos.forEach(function (p) {
+      var pt = p.getPointAtLength(0);
+      var colado = postos.some(function (q) { return Math.abs(q.x - pt.x) < 8 && Math.abs(q.y - pt.y) < 8; });
+      if (colado) pt = p.getPointAtLength(Math.min(16, p.getTotalLength() / 2));
+      postos.push({ x: pt.x, y: pt.y });
+    });
+    return postos;
   }
 
   /* ---------- a grade com o alfabeto ---------- */
-  function montarGrade() {
+  function montarGrade(nome) {
+    if (nome) usar(nome);
     var caixa = $('#cursiva-grade');
     var ja = feitas();
-    caixa.innerHTML = Cursiva.ORDEM.map(function (l) {
-      var L = Cursiva.LETRAS[l];
+    caixa.innerHTML = alfa.ordem.map(function (l) {
+      var L = alfa.letras[l];
       var tracos = L.d.map(function (d) { return '<path d="' + d + '"/>'; }).join('');
       var feita = ja.indexOf(l) > -1;
       return '<button class="cletra' + (feita ? ' is-feita' : '') + '" type="button" data-letra="' + l + '"' +
-             ' aria-label="Letra ' + Palavras.falaDaLetra(l.toUpperCase()) + (feita ? ', já feita' : '') + '">' +
-               '<svg viewBox="0 0 100 130" aria-hidden="true"><g transform="' + INCLINA + '">' + tracos + '</g></svg>' +
+             ' aria-label="Letra ' + nomeDaLetra(l) + (feita ? ', já feita' : '') + '">' +
+               '<svg viewBox="0 0 100 130" aria-hidden="true"><g transform="' + alfa.inclina + '">' + tracos + '</g></svg>' +
              '</button>';
     }).join('');
     var n = $('#cursiva-contador');
-    if (n) n.textContent = ja.length + ' de ' + Cursiva.ORDEM.length;
+    if (n) n.textContent = ja.length + ' de ' + alfa.ordem.length;
+    var t = $('#cursiva-menu-titulo');
+    if (t) t.textContent = alfa.titulo;
+    var som = $('#cursiva-menu-som');
+    if (som) som.dataset.falar = alfa.fala;
   }
 
   /* ---------- a letra grande ---------- */
-  function abrir(l) {
+  function abrir(l, opcoes) {
+    opcoes = opcoes || {};
     cancelar();
     atual = l;
-    var L = Cursiva.LETRAS[l];
+    var L = alfa.letras[l];
     var svg = $('#cursiva-svg');
     var tracos = L.d.map(function (d, i) {
       return '<path class="estrada" d="' + d + '"/>' +
              '<path class="demo" d="' + d + '" style="--atraso:' + (i * 1.7) + 's"/>';
     }).join('');
     svg.innerHTML = pauta() +
-      '<g class="cursiva-letra" transform="' + INCLINA + '">' +
+      '<g class="cursiva-letra" transform="' + alfa.inclina + '">' +
         tracos +
         '<g class="cobertura"></g>' +
         '<g class="tinta"></g>' +
-        '<circle class="partida" cx="' + L.ini[0] + '" cy="' + L.ini[1] + '" r="5.5"/>' +
+        '<g class="partidas"></g>' +
       '</g>';
 
     /* o traço de demonstração precisa saber o próprio comprimento pra
@@ -125,13 +197,26 @@ var Traco = (function () {
       p.style.setProperty('--comprimento', c);
     });
 
+    /* letra de vários traços, na maiúscula: cada começo ganha o número da
+       ordem, e só o 1 pulsa — é por ali que começa */
+    var numerar = alfa.numerar && L.d.length > 1;
+    var postos = partidas(Array.prototype.slice.call(svg.querySelectorAll('.estrada')));
+    if (!numerar) postos = postos.slice(0, 1);
+    svg.querySelector('.partidas').innerHTML = postos.map(function (p, i) {
+      var x = p.x.toFixed(1), y = p.y.toFixed(1);
+      return '<circle class="partida' + (i ? ' is-quieta' : '') + '" cx="' + x + '" cy="' + y + '" r="' + (numerar ? 6 : 5.5) + '"/>' +
+             (numerar ? '<text class="partida__n" x="' + x + '" y="' + y + '">' + (i + 1) + '</text>' : '');
+    }).join('');
+
     amostrar();
     concluida = false;
+    fechouAlfabeto = false;
     $('#cursiva-svg').classList.remove('is-concluida', 'is-desenhando');
     $('#cursiva-titulo').textContent = 'Letra ' + l;
     var som = $('#cursiva-som');
-    if (som) som.dataset.falar = Palavras.falaDaLetra(l.toUpperCase());
-    Som.falar(Palavras.falaDaLetra(l.toUpperCase()), { atraso: 250 });
+    if (som) som.dataset.falar = falaAbrir(l);
+    /* vindo do parabéns, entra na fila: assim não corta o "muito bem" */
+    Som.falar(falaAbrir(l), { atraso: 250, enfileirar: !!opcoes.enfileirar });
     pintarSetas();
   }
 
@@ -248,9 +333,12 @@ var Traco = (function () {
     var svg = $('#cursiva-svg');
     svg.classList.add('is-concluida');
     Som.tocar('fanfarra');
-    Jogo.confete(30);
-    if (marcarFeita(atual)) Jogo.ganharEstrela();
-    Som.falar('Muito bem, Lara!', { atraso: 300 });
+    var nova = marcarFeita(atual);
+    if (nova) Jogo.ganharEstrela();
+    /* era a última que faltava: o alfabeto inteiro ficou verde */
+    fechouAlfabeto = nova && feitas().length === alfa.ordem.length;
+    Jogo.confete(fechouAlfabeto ? 90 : 30);
+    Som.falar(fechouAlfabeto ? FALA_ALFABETO : falaAcerto(atual), { atraso: 300 });
     var tela = $('#cursiva-parabens');
     if (tela) tela.hidden = false;
 
@@ -260,21 +348,23 @@ var Traco = (function () {
     timerProxima = setTimeout(function () {
       if (meu !== selo) return;
       seguir();
-    }, ESPERA_PROXIMA);
+    }, fechouAlfabeto ? ESPERA_ALFABETO : ESPERA_PROXIMA);
   }
 
-  /* depois do parabéns: próxima letra, ou volta pro alfabeto no z */
+  /* depois do parabéns: próxima letra; no fim do alfabeto (ou quando
+     fechou o alfabeto inteiro) volta pra grade, toda verde */
   function seguir() {
     var tela = $('#cursiva-parabens');
     if (tela) tela.hidden = true;
-    var i = Cursiva.ORDEM.indexOf(atual);
-    if (i < Cursiva.ORDEM.length - 1) { abrir(Cursiva.ORDEM[i + 1]); return; }
+    var i = alfa.ordem.indexOf(atual);
+    if (!fechouAlfabeto && i < alfa.ordem.length - 1) { abrir(alfa.ordem[i + 1], { enfileirar: true }); return; }
+    fechouAlfabeto = false;
     montarGrade();
     App.ir('cursiva-menu');
   }
 
   function tentarDeNovo() {
-    Som.falar('Quase! Tenta de novo.', { atraso: 120 });
+    Som.falar(FALA_DE_NOVO, { atraso: 120 });
     var svg = $('#cursiva-svg');
     svg.classList.add('is-de-novo');
     var meu = ++selo;
@@ -302,17 +392,17 @@ var Traco = (function () {
   }
 
   function andar(passo) {
-    var i = Cursiva.ORDEM.indexOf(atual) + passo;
-    if (i < 0 || i >= Cursiva.ORDEM.length) return;
+    var i = alfa.ordem.indexOf(atual) + passo;
+    if (i < 0 || i >= alfa.ordem.length) return;
     Som.tocar('toque');
     $('#cursiva-proxima').classList.remove('is-forte');
-    abrir(Cursiva.ORDEM[i]);
+    abrir(alfa.ordem[i]);
   }
 
   function pintarSetas() {
-    var i = Cursiva.ORDEM.indexOf(atual);
+    var i = alfa.ordem.indexOf(atual);
     $('#cursiva-anterior').disabled = i === 0;
-    $('#cursiva-proxima').disabled = i === Cursiva.ORDEM.length - 1;
+    $('#cursiva-proxima').disabled = i === alfa.ordem.length - 1;
   }
 
   function ligar() {
@@ -339,9 +429,13 @@ var Traco = (function () {
 
   function cancelar() {
     selo++; clearTimeout(timerProxima); timerProxima = null;
+    fechouAlfabeto = false;
     var tela = $('#cursiva-parabens'); if (tela) tela.hidden = true;
     var svg = $('#cursiva-svg'); if (svg) svg.classList.remove('is-de-novo');
   }
 
-  return { montarGrade: montarGrade, abrir: abrir, ligar: ligar, cancelar: cancelar };
+  return {
+    montarGrade: montarGrade, abrir: abrir, ligar: ligar, cancelar: cancelar,
+    todasAsFalas: todasAsFalas, partidas: partidas, ALFABETOS: ALFABETOS
+  };
 })();

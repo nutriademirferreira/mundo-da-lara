@@ -25,6 +25,7 @@ var Memoria = (function () {
                                               carta fica menor que o dedo */
   ];
   var nivel = 0;             /* zera sozinho quando o app recarrega */
+  var cresceu = false;       /* acabou de subir de nível: o próximo tabuleiro avisa que tem mais cartas */
   var baralho = [];           /* {id, nome, arte} duplicado e embaralhado */
   var viradas = [];           /* indices abertos agora, no maximo 2 */
   var achados = 0;
@@ -117,8 +118,11 @@ var Memoria = (function () {
     }));
     viradas = []; achados = 0; travado = false;
     desenhar(n);
-    recado('Ache as duas figuras iguais.');
-    Som.falar('Ache as duas figuras iguais.', { atraso: 300 });
+    /* sem aviso, o tabuleiro maior parecia outro jogo */
+    recado(cresceu ? 'Agora tem mais cartas!' : 'Ache as duas figuras iguais.');
+    var fala = cresceu ? 'Agora tem mais cartas, Lara!' : 'Ache as duas figuras iguais.';
+    cresceu = false;
+    Som.falar(fala, { atraso: 300 });
   }
 
   function desenhar(n) {
@@ -182,7 +186,7 @@ var Memoria = (function () {
 
   function vencer() {
     /* sobe um degrau; o proximo tabuleiro ja vem maior */
-    if (nivel < NIVEIS.length - 1) nivel++;
+    if (nivel < NIVEIS.length - 1) { nivel++; cresceu = true; }
     recado('Você achou todos os pares!');
     Som.tocar('fanfarra');
     Jogo.confete(40);

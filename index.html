@@ -96,14 +96,17 @@
                 data-falar="Palavras. Complete a palavra com a letra que está faltando. São dez fases."></button>
       </div>
 
+      <!-- Maiúscula e cursiva moram juntas aqui: um quadrado a mais na home
+           quebraria a grade 2x2 e não caberia no iPhone SE -->
       <div class="tile-wrap">
-        <button class="tile tile--cursiva" data-go="cursiva-menu" type="button">
-          <span class="tile__art"><svg viewBox="0 0 100 130" class="tile__cursiva" aria-hidden="true">
-            <g transform="translate(10 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg></span>
-          <strong>Letra Cursiva</strong>
+        <button class="tile tile--escrever" data-go="escrever-menu" type="button">
+          <span class="tile__art"><svg viewBox="-8 -54 150 150" class="tile__letras" aria-hidden="true">
+            <g transform="translate(-9 -4.1) scale(.85)"><path d="M50 20 L20 106 M50 20 L80 106 M31 74 L69 74"/></g>
+            <g transform="translate(50 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg></span>
+          <strong>Escrever</strong>
         </button>
-        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Letra Cursiva"
-                data-falar="Letra cursiva. Passe o dedo por cima da letra."></button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Escrever"
+                data-falar="Escrever. Letra maiúscula e letra cursiva."></button>
       </div>
       <!-- Velha, Memória e Damas moram juntos aqui: com os três soltos a home
            passava de 8 entradas e não cabia no iPhone SE sem perder as figuras -->
@@ -113,7 +116,7 @@
           <strong>Jogos</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogos"
-                data-falar="Jogo da velha. Jogue com o app ou com o papai."></button>
+                data-falar="Jogos. Jogo da velha, memória e damas."></button>
       </div>
       <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
         <button class="tile tile--faixa tile--fotos" data-go="galeria" type="button">
@@ -390,7 +393,7 @@
           <small>A estrela contra os planetas</small>
         </button>
         <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Sua vez, Lara!"></button>
+                data-falar="Damas. A estrela contra os planetas."></button>
       </div>
     </div>
   </section>
@@ -428,7 +431,7 @@
           <small>Ache os pares com as suas fotos</small>
         </button>
         <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Ache as duas figuras iguais.">🔊</button>
+                data-falar="Eu. Ache os pares com as suas fotos, Lara!">🔊</button>
       </div>
     </div>
   </section>
@@ -445,26 +448,58 @@
     <button class="btn btn--denovo" id="memoria-denovo" type="button" hidden>Jogar de novo</button>
   </section>
 
-  <!-- ============ LETRA CURSIVA: O ALFABETO ============ -->
-  <section class="screen screen--submenu" id="screen-cursiva-menu">
+  <!-- ============ MENU: ESCREVER ============ -->
+  <section class="screen screen--submenu" id="screen-escrever-menu">
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
-      <h2 class="bar__title">Letra Cursiva</h2>
+      <h2 class="bar__title">Escrever</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <div class="mode-wrap">
+        <button class="mode mode--learn" data-go="maiuscula-menu" type="button">
+          <strong>Letra Maiúscula</strong>
+          <small>A letra de forma, grandona</small>
+          <svg class="mode__letra" viewBox="0 10 100 106" aria-hidden="true"><path d="M50 20 L20 106 M50 20 L80 106 M31 74 L69 74"/></svg>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Letra maiúscula. A letra de forma, grandona."></button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="cursiva-menu" type="button">
+          <strong>Letra Cursiva</strong>
+          <small>A letra de mão, toda ligadinha</small>
+          <svg class="mode__letra mode__letra--cursiva" viewBox="0 36 100 60" aria-hidden="true"><g transform="translate(10 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Letra cursiva. A letra de mão, toda ligadinha."></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ESCREVER: O ALFABETO ============ -->
+  <!-- Serve à maiúscula e à cursiva: título, fala e letras vêm de
+       Traco.montarGrade(), conforme a rota (maiuscula-menu / cursiva-menu) -->
+  <section class="screen screen--submenu" id="screen-cursiva-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="escrever-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title" id="cursiva-menu-titulo">Letra Cursiva</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
     <p class="cursiva-contador"><span id="cursiva-contador">0 de 26</span>
-      <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+      <button class="som-btn som-btn--nano" id="cursiva-menu-som" type="button" aria-label="Ouvir"
               data-falar="Letra cursiva. Passe o dedo por cima da letra."></button></p>
     <div class="cursiva-grade" id="cursiva-grade"></div>
   </section>
 
-  <!-- ============ LETRA CURSIVA: DESENHAR ============ -->
+  <!-- ============ ESCREVER: DESENHAR A LETRA ============ -->
   <section class="screen screen--cursiva" id="screen-cursiva">
     <header class="bar">
-      <button class="icon-btn" data-go="cursiva-menu" type="button" aria-label="Voltar">←</button>
+      <!-- volta pra grade do alfabeto que ela estava (maiúscula ou cursiva) -->
+      <button class="icon-btn" data-go="letras-voltar" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title" id="cursiva-titulo">Letra a</h2>
       <button class="som-btn som-btn--mini" id="cursiva-som" type="button"
-              aria-label="Ouvir o nome da letra" data-falar="á"></button>
+              aria-label="Ouvir o nome da letra" data-falar="Vamos fazer a letra á!"></button>
     </header>
     <svg class="cursiva-svg" id="cursiva-svg" viewBox="0 0 100 130"
          role="img" aria-label="Passe o dedo por cima da letra"></svg>
@@ -494,7 +529,7 @@
           <small>A Lara é a estrela e começa jogando</small>
         </button>
         <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Sua vez, Lara!">🔊</button>
+                data-falar="Jogar com o app. A Lara é a estrela e começa jogando.">🔊</button>
       </div>
       <div class="mode-wrap">
         <button class="mode mode--learn" data-go="damas-dois" type="button">
@@ -503,7 +538,7 @@
           <small>Dois jogadores no mesmo celular</small>
         </button>
         <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Sua vez, Lara!">🔊</button>
+                data-falar="Jogar com o papai. Dois jogadores no mesmo celular.">🔊</button>
       </div>
     </div>
   </section>
@@ -669,6 +704,7 @@
 <script src="js/memoria.js"></script>
 <script src="js/damas.js"></script>
 <script src="js/data-cursiva.js"></script>
+<script src="js/data-maiuscula.js"></script>
 <script src="js/cursiva.js"></script>
 <script src="js/app.js"></script>
 </body>

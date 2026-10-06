@@ -15,6 +15,9 @@ python3 ferramentas/servidor.py 8952 .     # servidor local sem cache
   o que está recortado por container com rolagem — sem esses dois cuidados
   ela acusava defeito que não existe, e auditoria que grita lobo é ignorada
 - `node ferramentas/gerar-vozes.js --faltam` — o que está sem voz gravada
+- `ferramentas/letras.html` — só quando mexer numa letra do Escrever: as 52
+  letras em tamanho grande, com a pauta e as bolinhas de partida, usando os
+  mesmos dados e a mesma função do app
 
 ---
 
@@ -127,7 +130,7 @@ Módulo novo com temporizador nasce com selo. Não é opcional.
 | Tela | O que faz | Dados | Cuidado |
 |---|---|---|---|
 | **start** | Abertura, céu em vídeo | `video/ceu-inicio.mp4` | Vídeo pode falhar no autoplay; a foto parada é a mesma paisagem, então não degrada |
-| **home** | Sete azulejos | — | 4 quadrados + faixas largas (`.tile--faixa`). Cada faixa nova = mais uma linha `auto` |
+| **home** | Sete azulejos | — | 4 quadrados (Corpo, Sistema Solar, Palavras, Escrever) + faixas largas (`.tile--faixa`). Cada faixa nova = mais uma linha `auto`. Módulo novo entra **dentro** de um submenu (Jogos, Escrever), não como azulejo solto |
 | **corpo-menu** | Escolhe por fora / por dentro | — | — |
 | **corpo-aprender** | Toca na figura e ouve o nome | `Corpo.PARTES` / `ORGAOS` | Zonas de toque são elipses em quadro 300×470. Trocar a arte exige recalibrar as 20 |
 | **quiz** | Pergunta + 3 opções escritas | `Corpo`, `Espaco`, `Palavras` | Opções são **texto puro**, sem emoji: ela precisa reconhecer a palavra escrita |
@@ -136,10 +139,11 @@ Módulo novo com temporizador nasce com selo. Não é opcional.
 | **tamanho** | Tamanhos reais, uma régua só | `Espaco.REAIS` | Júpiter é a régua. Mercúrio virar pontinho **é** a lição |
 | **viagem** | Distâncias reais, arrastando | `Espaco.DISTANCIAS` | Uma variável por tela: aqui distância é real, tamanho não |
 | **palavras** | Completa a letra que falta | `Palavras.FASES` (30) | Letra fica **no meio** de propósito. A frase de acerto é "Com o u fica Lua" — "u de Lua" ensinava que a letra é a inicial |
-| **memoria** | 3→4→6→8 pares, grade por nível | Palavras, planetas ou as fotos dela | Dificuldade sobe a cada tabuleiro e **zera quando o app recarrega** — ela ganha a primeira partida do dia. No modo das fotos, o sorteio pula pares de foto que se confundem a 79px (lista medida em `js/memoria.js`) |
+| **memoria** | 3→4→6→8 pares, grade por nível | Palavras, planetas ou as fotos dela | Dificuldade sobe a cada tabuleiro e **zera quando o app recarrega** — ela ganha a primeira partida do dia. O tabuleiro que cresceu avisa: "Agora tem mais cartas, Lara!". No modo das fotos, o sorteio pula pares de foto que se confundem a 79px (lista medida em `js/memoria.js`) |
 | **jogos-menu** | Velha, Memória e Damas | — | Os três ficavam soltos na home e ela passou de 8 entradas — no iPhone SE os azulejos perdiam a figura e o nome ia pra baixo do alto-falante |
-| **cursiva-menu** | As 26 minúsculas, grade 5×6 | `Cursiva.LETRAS` em `js/data-cursiva.js` | Letra feita fica verde com estrela; `lara.cursiva.feitas` guarda quais |
-| **cursiva** | Passar o dedo por cima da letra | idem | **Gabarito do Ademir:** cobriu 70% da letra, chegou ao fim de cada traço e pelo menos metade do desenho caiu em cima da letra → tela verde e passa sozinha pra próxima. Mais da metade fora → "Quase! Tenta de novo." (sem X nem vermelho: erro não pune). No meio → silêncio, ela continua. Sem "chegar ao fim" o `t` completava com 31% do traço; sem a precisão, rabiscar a tela toda passava. Tremor de até ±11 unidades passa 100% — dedo de 5 anos treme ~±7. A passagem automática tem selo (regra 8) |
+| **escrever-menu** | Letra maiúscula ou letra cursiva | — | Mesma razão do jogos-menu: um quinto quadrado quebrava a grade 2×2 da home |
+| **cursiva-menu** | Grade 5×6 do alfabeto — **serve aos dois** | `Maiuscula.LETRAS` (`js/data-maiuscula.js`) e `Cursiva.LETRAS` (`js/data-cursiva.js`); o resto em `ALFABETOS`, `js/cursiva.js` | A **rota** escolhe o alfabeto: `maiuscula-menu` ou `cursiva-menu`. O voltar do desenho é `letras-voltar`, que volta pro alfabeto em que ela estava — `data-go="cursiva-menu"` ali jogaria quem fazia maiúscula na cursiva. Letra feita fica verde com estrela; cada alfabeto guarda a sua lista (`lara.maiuscula.feitas`, `lara.cursiva.feitas`) |
+| **cursiva** | Passar o dedo por cima da letra (maiúscula ou cursiva) | idem | **Maiúscula** é letra de forma, em pé, um caminho por traço na ordem da escola; o começo de cada traço tem número e só o 1 pulsa. Dois traços que nascem no mesmo ponto (pernas do A, haste e teto do E): o 2 anda 16 unidades pelo próprio traço, senão fica em cima do 1. **Cursiva** tem uma bolinha só: número em cima esconderia o pingo do i. **Falas:** abrir a letra → "Vamos fazer a letra bê!"; acertou → "Muito bem, Lara! Você fez a letra bê!" e a próxima entra na **fila** da voz (trocar a letra antes faria o C aparecer ainda falando do B — por isso a espera é 3,4 s: a fala mais longa dura 3,0 s); a última que faltava → "Parabéns, Lara! Você fez o alfabeto inteiro!" e volta pra grade. Testado por traço simulado: as 52 letras completam com o traço inteiro e nenhuma com 60% de cada traço. **Gabarito do Ademir:** cobriu 70% da letra, chegou ao fim de cada traço e pelo menos metade do desenho caiu em cima da letra → tela verde e passa sozinha pra próxima. Mais da metade fora → "Quase! Tenta de novo." (sem X nem vermelho: erro não pune). No meio → silêncio, ela continua. Sem "chegar ao fim" o `t` completava com 31% do traço; sem a precisão, rabiscar a tela toda passava. Tremor de até ±11 unidades passa 100% — dedo de 5 anos treme ~±7. A passagem automática tem selo (regra 8) |
 | **velha** | Contra o app ou a dois | — | A IA é fraca **de propósito** (35% esperta). Não "conserte" |
 | **damas** | 6×6, estrela dela contra planetas | — | Captura **não** é obrigatória e a dama **não** voa: as duas regras fariam o app recusar a jogada dela. 6×6 e não 8×8 porque em 8×8 a casa cai pra 42px. IA fraca de propósito (40%) |
 | **galeria** | As figurinhas dela | `FOTOS` em `js/app.js` | Única tela que rola. `gridAutoRows` calculado em JS |
