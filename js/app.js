@@ -18,6 +18,9 @@ var App = (function () {
     'memoria':          'screen-memoria',
     'damas-menu':       'screen-damas-menu',
     'damas':            'screen-damas',
+    'jogos-menu':       'screen-jogos-menu',
+    'cursiva-menu':     'screen-cursiva-menu',
+    'cursiva':          'screen-cursiva',
     'tamanho':          'screen-tamanho',
     'viagem':           'screen-viagem',
     'velha-menu':       'screen-velha-menu',
@@ -49,7 +52,10 @@ var App = (function () {
     'memoria-menu':     { foto:'fundo-home',   veu:'claro'  },
     'memoria':          { foto:'fundo-home',   veu:'claro'  },
     'damas-menu':       { foto:'fundo-espaco', veu:'escuro' },
-    'damas':            { foto:'fundo-espaco', veu:'espaco'  }
+    'damas':            { foto:'fundo-espaco', veu:'espaco'  },
+    'jogos-menu':       { foto:'fundo-velha',  veu:'escuro' },
+    'cursiva-menu':     { foto:'fundo-home',   veu:'claro'  },
+    'cursiva':          { foto:'fundo-home',   veu:'claro'  }
   };
 
   /* Véu mínimo. A imagem é o espetáculo — quem precisa de contraste
@@ -124,6 +130,7 @@ var App = (function () {
     /* placar da velha só vale enquanto ela está na tela do tabuleiro */
     if (telaAtual === 'velha' && nome !== 'velha') { Velha.zerarPlacar(); Velha.cancelar(); }
     if (telaAtual === 'damas' && nome !== 'damas') { Damas.zerarPlacar(); Damas.cancelar(); }
+    if (telaAtual === 'cursiva' && nome !== 'cursiva') Traco.cancelar();
     $$('.screen').forEach(function (s) { s.classList.remove('is-active'); });
     var el = document.getElementById(TELAS[nome]);
     if (el) { el.classList.add('is-active'); el.scrollTop = 0; }
@@ -220,6 +227,7 @@ var App = (function () {
         if (destino === 'memoria-lara')      { ir('memoria'); Memoria.iniciar('lara'); return; }
         if (destino === 'damas-app')         { ir('damas'); Damas.iniciar('app', true); return; }
         if (destino === 'damas-dois')        { ir('damas'); Damas.iniciar('dois', true); return; }
+        if (destino === 'cursiva-menu')      { Traco.montarGrade(); ir('cursiva-menu'); return; }
         if (destino === 'tamanho')           { montarTamanho(); ir('tamanho'); return; }
         if (destino === 'viagem')            { montarViagem(); ir('viagem'); return; }
         ir(destino);
@@ -768,6 +776,7 @@ var App = (function () {
     ligarBotoes();
     Memoria.ligar();
     Damas.ligar();
+    Traco.ligar();
     Jogo.pintarEstrelas();
     atualizarColecao();
     if ('serviceWorker' in navigator) {

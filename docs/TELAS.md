@@ -89,6 +89,16 @@ a auditoria apontar. E nenhum alvo de toque abaixo de 44px: os alto-falantes
 declaravam 50px e eram espremidos pra 43px por serem item de flex, daí o
 `.som-btn{flex:0 0 auto}`. Tamanho declarado não é tamanho medido.
 
+### 7b. CSS se edita por trecho exato, nunca por contagem de chaves
+
+Cortar um bloco de CSS contando `{` e `}` deixou duas linhas órfãs e uma
+chave solta. O navegador não dá erro: ele **descarta em silêncio** a regra
+seguinte. A que caiu foi `.tile-wrap[hidden]{display:none}`, e o Cineminha
+escondido passou a ocupar uma linha inteira da home em todo aparelho.
+
+Depois de mexer no `style.css`, confira o saldo de chaves (tem que dar 0) e
+se a regra que você espera aparece em `getComputedStyle` — não só no arquivo.
+
 ### 8. Timer pendente não sobrevive à tela
 
 `setTimeout` agendado dentro de um jogo **continua vivo** quando a partida
@@ -127,6 +137,9 @@ Módulo novo com temporizador nasce com selo. Não é opcional.
 | **viagem** | Distâncias reais, arrastando | `Espaco.DISTANCIAS` | Uma variável por tela: aqui distância é real, tamanho não |
 | **palavras** | Completa a letra que falta | `Palavras.FASES` (30) | Letra fica **no meio** de propósito. A frase de acerto é "Com o u fica Lua" — "u de Lua" ensinava que a letra é a inicial |
 | **memoria** | 3→4→6→8 pares, grade por nível | Palavras, planetas ou as fotos dela | Dificuldade sobe a cada tabuleiro e **zera quando o app recarrega** — ela ganha a primeira partida do dia. No modo das fotos, o sorteio pula pares de foto que se confundem a 79px (lista medida em `js/memoria.js`) |
+| **jogos-menu** | Velha, Memória e Damas | — | Os três ficavam soltos na home e ela passou de 8 entradas — no iPhone SE os azulejos perdiam a figura e o nome ia pra baixo do alto-falante |
+| **cursiva-menu** | As 26 minúsculas, grade 5×6 | `Cursiva.LETRAS` em `js/data-cursiva.js` | Letra feita fica verde com estrela; `lara.cursiva.feitas` guarda quais |
+| **cursiva** | Passar o dedo por cima da letra | idem | **Gabarito do Ademir:** cobriu 70% da letra, chegou ao fim de cada traço e pelo menos metade do desenho caiu em cima da letra → tela verde e passa sozinha pra próxima. Mais da metade fora → "Quase! Tenta de novo." (sem X nem vermelho: erro não pune). No meio → silêncio, ela continua. Sem "chegar ao fim" o `t` completava com 31% do traço; sem a precisão, rabiscar a tela toda passava. Tremor de até ±11 unidades passa 100% — dedo de 5 anos treme ~±7. A passagem automática tem selo (regra 8) |
 | **velha** | Contra o app ou a dois | — | A IA é fraca **de propósito** (35% esperta). Não "conserte" |
 | **damas** | 6×6, estrela dela contra planetas | — | Captura **não** é obrigatória e a dama **não** voa: as duas regras fariam o app recusar a jogada dela. 6×6 e não 8×8 porque em 8×8 a casa cai pra 42px. IA fraca de propósito (40%) |
 | **galeria** | As figurinhas dela | `FOTOS` em `js/app.js` | Única tela que rola. `gridAutoRows` calculado em JS |
@@ -155,6 +168,9 @@ Registro do que ela encontrou, pra ninguém remover uma regra achando que
 | Quatro cartões se atropelando, 40px de conteúdo cortado dentro do container | `espaco-menu`, iPhone SE |
 | Foto da Lara com 166px numa carta de 138 — cabeça cortada. Eu tinha escrito a regra 4 e violado ela na mesma sessão | `memoria`, modo Eu |
 | Botão "Jogar de novo" com 43px — um abaixo do mínimo | `damas` e `memoria` |
+| Home com 8 entradas: no SE os azulejos perdiam a figura e os nomes ficavam embaixo do alto-falante | `home` |
+| Cineminha escondido ocupando uma linha inteira da grade — chave `}` solta no CSS fez o navegador descartar `.tile-wrap[hidden]` | `home`, todos os aparelhos |
+| Botão de ouvir a **pergunta** do quiz era um quadrado branco vazio desde 27/08 — o commit `fdaef7c` tirou o 🔊 de todos os botões pro ícone novo, que só existe em `.som-btn`, e esse é `.speak-btn` | `quiz`, os quatro temas |
 | Cartão 23px mais largo que a própria coluna, passando por cima do vizinho | `corpo-menu`, iPhone SE |
 | 9 botões de planeta sem nome pra leitura de tela | `espaco-explorar` |
 | Alto-falante renderizando a 43,1px (declarado 44, cartão tem escala 0.98) | `espaco-explorar` |
@@ -174,6 +190,18 @@ E o que ela **errou** antes de eu ajustar — vale tanto quanto:
   *conteúdo escondido* (container que corta o que tem dentro) e *atropelo*
   (irmãos de conteúdo sobrepostos). A regra 1 diz que o que ela não alcança
   não existe; a auditoria não estava testando a própria regra 1.
+- **Comparava sobreposição só entre elementos da mesma classe.** Por isso a
+  home passou com "Corpo Huma…" escondido embaixo do alto-falante. Ganhou a
+  coluna *nome coberto*: todo texto de azulejo contra todo botão flutuante.
+  Validada recriando o defeito — acusou os seis nomes — e restaurando.
+- **Achava que botão com `aria-label` estava bem.** Nome pra leitor de tela
+  não é desenho na tela: o botão da pergunta do quiz passava em "botão sem
+  nome" e era um quadrado vazio. Ganhou a coluna *botão vazio* — sem texto
+  visível, sem imagem e sem ícone em `::before`/`::after`. Validada tirando
+  o ícone de novo: acusou `quiz-speak`.
+- **Tratava `<text>` de SVG como caixa com rolagem.** A curva do "?" do quiz
+  do corpo dava 11px "escondidos" no iPad. SVG não corta o próprio texto;
+  elemento SVG agora fica fora da checagem de conteúdo escondido.
 
 Auditoria que grita lobo é desligada, e aí não serve pra nada. Se ela
 apontar algo, **meça na mão antes de consertar**.

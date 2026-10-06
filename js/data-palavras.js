@@ -11,7 +11,8 @@ var Palavras = (function () {
   var FALA = {
     A:'á', B:'bê', C:'cê', D:'dê', E:'é', F:'éfe', G:'gê', H:'agá', I:'i',
     J:'jota', L:'éle', M:'eme', N:'ene', O:'ó', P:'pê', Q:'quê', R:'erre',
-    S:'esse', T:'tê', U:'u', V:'vê', X:'xis', Z:'zê'
+    S:'esse', T:'tê', U:'u', V:'vê', X:'xis', Z:'zê',
+    K:'cá', W:'dáblio', Y:'ípsilon'
   };
 
   function desenhoBola() { return ''+

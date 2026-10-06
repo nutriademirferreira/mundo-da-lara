@@ -97,28 +97,23 @@
       </div>
 
       <div class="tile-wrap">
-        <button class="tile tile--tic" data-go="velha-menu" type="button">
+        <button class="tile tile--cursiva" data-go="cursiva-menu" type="button">
+          <span class="tile__art"><svg viewBox="0 0 100 130" class="tile__cursiva" aria-hidden="true">
+            <g transform="translate(10 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg></span>
+          <strong>Letra Cursiva</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Letra Cursiva"
+                data-falar="Letra cursiva. Passe o dedo por cima da letra."></button>
+      </div>
+      <!-- Velha, Memória e Damas moram juntos aqui: com os três soltos a home
+           passava de 8 entradas e não cabia no iPhone SE sem perder as figuras -->
+      <div class="tile-wrap tile-wrap--largo">
+        <button class="tile tile--faixa tile--jogos" data-go="jogos-menu" type="button">
           <span class="tile__art"><img src="img/lara-velha.webp" alt="" class="tile__foto"></span>
-          <strong>Jogo da Velha</strong>
+          <strong>Jogos</strong>
         </button>
-        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogo da Velha"
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogos"
                 data-falar="Jogo da velha. Jogue com o app ou com o papai."></button>
-      </div>
-      <div class="tile-wrap tile-wrap--largo">
-        <button class="tile tile--faixa tile--memoria" data-go="memoria-menu" type="button">
-          <span class="tile__art"><img src="img/lara-corpo2.webp" alt="" class="tile__foto"></span>
-          <strong>Memória</strong>
-        </button>
-        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Memória"
-                data-falar="Memória. Ache as duas figuras iguais.">🔊</button>
-      </div>
-      <div class="tile-wrap tile-wrap--largo">
-        <button class="tile tile--faixa tile--damas" data-go="damas-menu" type="button">
-          <span class="tile__art"><img src="img/estrela.webp" alt="" class="tile__foto"></span>
-          <strong>Damas</strong>
-        </button>
-        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Damas"
-                data-falar="Sua vez, Lara!">🔊</button>
       </div>
       <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
         <button class="tile tile--faixa tile--fotos" data-go="galeria" type="button">
@@ -362,10 +357,48 @@
     </div>
   </div>
 
+  <!-- ============ MENU: JOGOS ============ -->
+  <section class="screen screen--submenu" id="screen-jogos-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Jogos</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="modes">
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="velha-menu" type="button">
+          <span class="mode__ico">⭕</span>
+          <strong>Jogo da Velha</strong>
+          <small>Com o app ou com o papai</small>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Jogo da velha. Jogue com o app ou com o papai."></button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--learn" data-go="memoria-menu" type="button">
+          <span class="mode__ico">🃏</span>
+          <strong>Memória</strong>
+          <small>Ache as duas figuras iguais</small>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Memória. Ache as duas figuras iguais."></button>
+      </div>
+      <div class="mode-wrap">
+        <button class="mode mode--play" data-go="damas-menu" type="button">
+          <span class="mode__ico">⭐</span>
+          <strong>Damas</strong>
+          <small>A estrela contra os planetas</small>
+        </button>
+        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
+                data-falar="Sua vez, Lara!"></button>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ MENU: MEMÓRIA ============ -->
   <section class="screen screen--submenu" id="screen-memoria-menu">
     <header class="bar">
-      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <button class="icon-btn" data-go="jogos-menu" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Memória</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
@@ -412,10 +445,44 @@
     <button class="btn btn--denovo" id="memoria-denovo" type="button" hidden>Jogar de novo</button>
   </section>
 
+  <!-- ============ LETRA CURSIVA: O ALFABETO ============ -->
+  <section class="screen screen--submenu" id="screen-cursiva-menu">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Letra Cursiva</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <p class="cursiva-contador"><span id="cursiva-contador">0 de 26</span>
+      <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+              data-falar="Letra cursiva. Passe o dedo por cima da letra."></button></p>
+    <div class="cursiva-grade" id="cursiva-grade"></div>
+  </section>
+
+  <!-- ============ LETRA CURSIVA: DESENHAR ============ -->
+  <section class="screen screen--cursiva" id="screen-cursiva">
+    <header class="bar">
+      <button class="icon-btn" data-go="cursiva-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title" id="cursiva-titulo">Letra a</h2>
+      <button class="som-btn som-btn--mini" id="cursiva-som" type="button"
+              aria-label="Ouvir o nome da letra" data-falar="á"></button>
+    </header>
+    <svg class="cursiva-svg" id="cursiva-svg" viewBox="0 0 100 130"
+         role="img" aria-label="Passe o dedo por cima da letra"></svg>
+    <button class="cursiva-parabens" id="cursiva-parabens" type="button" hidden aria-label="Próxima letra">
+      <span class="cursiva-parabens__check">✓</span>
+      <strong>Parabéns!</strong>
+    </button>
+    <div class="cursiva-controles">
+      <button class="icon-btn" id="cursiva-anterior" type="button" aria-label="Letra anterior">‹</button>
+      <button class="btn btn--denovo" id="cursiva-limpar" type="button">Apagar</button>
+      <button class="icon-btn" id="cursiva-proxima" type="button" aria-label="Próxima letra">›</button>
+    </div>
+  </section>
+
   <!-- ============ MENU: DAMAS ============ -->
   <section class="screen screen--submenu" id="screen-damas-menu">
     <header class="bar">
-      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <button class="icon-btn" data-go="jogos-menu" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Damas</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
@@ -469,7 +536,7 @@
   <!-- ============ MENU: JOGO DA VELHA ============ -->
   <section class="screen screen--submenu" id="screen-velha-menu">
     <header class="bar">
-      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <button class="icon-btn" data-go="jogos-menu" type="button" aria-label="Voltar">←</button>
       <h2 class="bar__title">Jogo da Velha</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
@@ -601,6 +668,8 @@
 <script src="js/velha.js"></script>
 <script src="js/memoria.js"></script>
 <script src="js/damas.js"></script>
+<script src="js/data-cursiva.js"></script>
+<script src="js/cursiva.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

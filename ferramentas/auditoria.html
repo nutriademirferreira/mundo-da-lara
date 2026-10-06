@@ -36,13 +36,16 @@ const TELAS = [
   ['tamanho',          ['[data-go="espaco-menu"]','[data-go="tamanho"]']],
   ['viagem',           ['[data-go="espaco-menu"]','[data-go="viagem"]']],
   ['quiz (palavras)',  ['[data-go="palavras-jogar"]']],
-  ['memoria-menu',     ['[data-go="memoria-menu"]']],
-  ['memoria',          ['[data-go="memoria-menu"]','[data-go="memoria-palavras"]']],
-  ['memoria (Lara)',   ['[data-go="memoria-menu"]','[data-go="memoria-lara"]']],
-  ['damas-menu',       ['[data-go="damas-menu"]']],
-  ['damas',            ['[data-go="damas-menu"]','[data-go="damas-app"]']],
-  ['velha-menu',       ['[data-go="velha-menu"]']],
-  ['velha',            ['[data-go="velha-menu"]','[data-go="velha-app"]']],
+  ['memoria-menu',     ['[data-go="jogos-menu"]','[data-go="memoria-menu"]']],
+  ['memoria',          ['[data-go="jogos-menu"]','[data-go="memoria-menu"]','[data-go="memoria-palavras"]']],
+  ['memoria (Lara)',   ['[data-go="jogos-menu"]','[data-go="memoria-menu"]','[data-go="memoria-lara"]']],
+  ['jogos-menu',       ['[data-go="jogos-menu"]']],
+  ['cursiva-menu',     ['[data-go="cursiva-menu"]']],
+  ['cursiva',          ['[data-go="cursiva-menu"]','.cletra[data-letra="g"]']],
+  ['damas-menu',       ['[data-go="jogos-menu"]','[data-go="damas-menu"]']],
+  ['damas',            ['[data-go="jogos-menu"]','[data-go="damas-menu"]','[data-go="damas-app"]']],
+  ['velha-menu',       ['[data-go="jogos-menu"]','[data-go="velha-menu"]']],
+  ['velha',            ['[data-go="jogos-menu"]','[data-go="velha-menu"]','[data-go="velha-app"]']],
   ['galeria',          ['[data-go="galeria"]']]
 ];
 
@@ -136,6 +139,10 @@ async function auditar(L, A) {
     let escondido = 0, quemEsconde = '';
     tela.querySelectorAll('*').forEach(el => {
       if (ROLA_DE_PROPOSITO.some(sel => el.matches(sel) || el.closest(sel))) return;
+      /* SVG não tem caixa de rolagem: num <text>, scrollHeight maior que
+         clientHeight é só o desenho da letra mais alto que a linha (a curva
+         do "?" do quiz do corpo dava 11px no iPad). Nada é cortado. */
+      if (el instanceof SVGElement) return;
       const corta = el.scrollHeight - el.clientHeight;
       /* limiar de 8px: arredondamento de linha em emoji e titulo produz 3-4px
          em quase toda tela, e isso nao esconde nada de ninguem. Abaixo disso
@@ -158,7 +165,50 @@ async function auditar(L, A) {
               rs[i].right > rs[j].left + 1 && rs[i].left < rs[j].right - 1) atropelo++;
     });
 
-    /* 6. alvo de toque menor que 44px cansa dedo de crianca */
+    /* 6. NOME COBERTO POR BOTÃO.
+       O atropelo só compara elementos da mesma classe, e por isso a home
+       passou com "Corpo Huma…" e "Jogo da Ve…" escondidos embaixo do
+       alto-falante. Aqui: todo texto de azulejo, modo ou cartão contra todo
+       botão flutuante da mesma tela. */
+    let coberto = 0, quemCoberto = '';
+    const botoes = [...tela.querySelectorAll('.som-flutuante, .som-btn')]
+      .map(b => b.getBoundingClientRect()).filter(r => r.width > 1);
+    tela.querySelectorAll('.tile strong, .mode strong, .foto-card__nome').forEach(t => {
+      const a = t.getBoundingClientRect();
+      if (a.width < 2) return;
+      if (botoes.some(b => a.right > b.left + 2 && a.left < b.right - 2 &&
+                           a.bottom > b.top + 2 && a.top < b.bottom - 2)) {
+        coberto++; quemCoberto = quemCoberto || t.textContent.trim();
+      }
+    });
+
+    /* 7. BOTÃO VAZIO NA TELA.
+       Ter aria-label não basta: o botão de ouvir a pergunta do quiz tinha
+       nome e era um quadrado branco vazio desde 27/08 — um ajuste de CSS
+       tirou o 🔊 e ele não ganhou o ícone novo. Pra quem não lê, o desenho
+       É o botão. Conta como visível: texto com fonte > 0, imagem/svg dentro,
+       ou ::before/::after com máscara, fundo ou conteúdo. */
+    let vazios = 0, quemVazio = '';
+    tela.querySelectorAll('button').forEach(b => {
+      /* casa de tabuleiro (velha, damas) é vazia de propósito: é onde ela joga */
+      if (b.closest('.velha-tab, .damas-tab')) return;
+      const r = b.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2) return;
+      const cs = w.getComputedStyle(b);
+      if (cs.visibility === 'hidden' || cs.opacity === '0') return;
+      const temTexto = b.textContent.trim() && parseFloat(cs.fontSize) > 0;
+      const temImagem = b.querySelector('img, svg, picture, canvas');
+      const pseudo = ['::before', '::after'].some(ps => {
+        const p = w.getComputedStyle(b, ps);
+        if (!p || p.content === 'none' || p.display === 'none') return false;
+        const masc = p.webkitMaskImage || p.maskImage || 'none';
+        return (masc && masc !== 'none') || p.backgroundImage !== 'none' ||
+               (p.content && p.content !== '""' && p.content !== "''");
+      });
+      if (!temTexto && !temImagem && !pseudo) { vazios++; quemVazio = quemVazio || (b.id || b.className || 'botão'); }
+    });
+
+    /* 8. alvo de toque menor que 44px cansa dedo de crianca */
     let miudos = 0;
     tela.querySelectorAll('button').forEach(b => {
       const r = b.getBoundingClientRect();
@@ -169,7 +219,7 @@ async function auditar(L, A) {
     tela.querySelectorAll('button').forEach(b => {
       if (!b.textContent.trim() && !b.getAttribute('aria-label')) semNome++;
     });
-    linhas.push({ nome, rolaPagina, vaza, quemVaza, cobre, lateral, miudos, semNome, escondido, quemEsconde, atropelo });
+    linhas.push({ nome, rolaPagina, vaza, quemVaza, cobre, lateral, miudos, semNome, escondido, quemEsconde, atropelo, coberto, quemCoberto, vazios, quemVazio });
   }
   f.remove();
   return linhas;
@@ -177,16 +227,16 @@ async function auditar(L, A) {
 
 (async () => {
   const saida = document.getElementById('saida');
-  const total = { vaza: 0, rola: 0, lateral: 0, miudos: 0, semNome: 0, semFundo: 0, escondido: 0, atropelo: 0 };
+  const total = { vaza: 0, rola: 0, lateral: 0, miudos: 0, semNome: 0, semFundo: 0, escondido: 0, atropelo: 0, coberto: 0, vazios: 0 };
   for (const [ap, L, A] of APARELHOS) {
     const linhas = await auditar(L, A);
     let html = `<h2 style="font-size:13px;margin:14px 0 6px">${ap} — ${L}×${A}</h2><table>` +
       '<thead><tr><th>Tela</th><th>Rola?</th><th>Vaza da janela</th><th>Conteúdo escondido</th>' +
-      '<th>Atropelo</th><th>Fundo cobre?</th><th>Rola lateral?</th><th>Botão &lt;44px</th>' +
+      '<th>Atropelo</th><th>Nome coberto</th><th>Botão vazio</th><th>Fundo cobre?</th><th>Rola lateral?</th><th>Botão &lt;44px</th>' +
       '<th>Botão sem nome</th></tr></thead><tbody>';
     for (const l of linhas) {
-      if (l.erro) { html += `<tr><td>${l.nome}</td><td colspan="8" class="mau">${l.erro}</td></tr>`; continue; }
-      total.escondido += l.escondido > 0 ? 1 : 0; total.atropelo += l.atropelo;
+      if (l.erro) { html += `<tr><td>${l.nome}</td><td colspan="10" class="mau">${l.erro}</td></tr>`; continue; }
+      total.escondido += l.escondido > 0 ? 1 : 0; total.atropelo += l.atropelo; total.coberto += l.coberto; total.vazios += l.vazios;
       total.vaza += l.vaza > 0 ? 1 : 0; total.rola += l.rolaPagina > 0 ? 1 : 0;
       total.lateral += l.lateral > 0 ? 1 : 0; total.miudos += l.miudos;
       total.semNome += l.semNome; total.semFundo += l.cobre ? 0 : 1;
@@ -195,6 +245,8 @@ async function auditar(L, A) {
         cel(l.vaza > 0 ? l.vaza + 'px (' + String(l.quemVaza).slice(0, 22) + ')' : 'não', l.vaza > 0) +
         cel(l.escondido > 0 ? l.escondido + 'px (' + String(l.quemEsconde).slice(0, 20) + ')' : 'não', l.escondido > 0) +
         cel(l.atropelo || 'nenhum', l.atropelo > 0) +
+        cel(l.coberto ? l.coberto + ' (' + String(l.quemCoberto).slice(0, 16) + ')' : 'nenhum', l.coberto > 0) +
+        cel(l.vazios ? l.vazios + ' (' + String(l.quemVazio).slice(0, 16) + ')' : 'nenhum', l.vazios > 0) +
         cel(l.cobre ? 'sim' : 'NÃO', !l.cobre) +
         cel(l.lateral > 0 ? l.lateral + 'px' : 'não', l.lateral > 0) +
         cel(l.miudos || 'nenhum', l.miudos > 0) +
@@ -205,7 +257,7 @@ async function auditar(L, A) {
   document.getElementById('quando').textContent = new Date().toLocaleString('pt-BR');
   saida.insertAdjacentHTML('beforeend',
     `<table><tfoot><tr><td>TOTAL de problemas</td><td>vaza: ${total.vaza}</td><td>rola: ${total.rola}</td>` +
-    `<td>escondido: ${total.escondido}</td><td>atropelo: ${total.atropelo}</td>` +
+    `<td>escondido: ${total.escondido}</td><td>atropelo: ${total.atropelo}</td><td>coberto: ${total.coberto}</td><td>vazio: ${total.vazios}</td>` +
     `<td>sem fundo: ${total.semFundo}</td><td>lateral: ${total.lateral}</td>` +
     `<td>botão miúdo: ${total.miudos}</td><td>sem nome: ${total.semNome}</td></tr></tfoot></table>`);
 })();
