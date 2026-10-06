@@ -136,11 +136,29 @@ function frases() {
 const chave = t => String(t).replace(/\s+/g, ' ').trim().toLowerCase();
 const nomeArquivo = t => crypto.createHash('sha1').update(chave(t)).digest('hex').slice(0, 12) + '.mp3';
 
+/* PALAVRA SOLTA SAI ERRADA. Sem frase em volta, o modelo não sabe que é
+   português e chuta: "sapo" saía "cipo", "uva" saía "O.V.A." (leu como
+   sigla), "pipoca" saía "bye pocca", "o rim" saía "oh, him". Medido com
+   whisper: 52 de 137 frases curtas erradas. O modelo que usamos não aceita
+   language_code, mas aceita previous_text — contexto que ele LÊ e NÃO FALA.
+   Então frase curta vai em minúscula (maiúscula ele lê como sigla), com
+   ponto, e com o idioma dito no contexto. */
+const CONTEXTO = 'Em português do Brasil:';
+const ehCurta = t => t.trim().split(/\s+/).length <= 2 && t.trim().length <= 18;
+function prepararCurta(t) {
+  let x = t.trim().toLowerCase();
+  if (!/[.!?]$/.test(x)) x += '.';
+  return x;
+}
+
 async function gerar(texto, voz, apiKey) {
+  const curta = ehCurta(texto);
+  const corpo = { text: curta ? prepararCurta(texto) : texto, model_id: MODELO, voice_settings: AJUSTES };
+  if (curta) corpo.previous_text = CONTEXTO;
   const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voz}?output_format=mp3_44100_64`, {
     method: 'POST',
     headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: texto, model_id: MODELO, voice_settings: AJUSTES })
+    body: JSON.stringify(corpo)
   });
   if (!r.ok) throw new Error(`${r.status} ${(await r.text()).slice(0, 200)}`);
   return Buffer.from(await r.arrayBuffer());
@@ -186,7 +204,12 @@ async function gerar(texto, voz, apiKey) {
     process.exit(1);
   }
 
-  const alvo = amostra
+  const refazer = (process.argv.find(a => a.startsWith('--refazer=')) || '').slice(10);
+  const refazerCurtas = process.argv.includes('--refazer-curtas');
+  const forcar = new Set(refazer ? refazer.split('|').map(chave) : []);
+  if (refazerCurtas) todas.filter(ehCurta).forEach(t => forcar.add(chave(t)));
+
+  const alvo = refazer ? todas.filter(t => forcar.has(chave(t))) : amostra
     ? ['Que parte do corpo é essa?', 'Isso! É o coração.',
        'O coração bate e empurra o sangue pro corpo todo.', 'A boca fala, come e dá beijo!',
        'Por dentro. Os órgãos que ficam escondidos: coração, pulmão, estômago, rim.',
@@ -200,7 +223,7 @@ async function gerar(texto, voz, apiKey) {
   let feitas = 0, puladas = 0, gastos = 0;
   for (const t of alvo) {
     const arq = nomeArquivo(t);
-    if (fs.existsSync(path.join(DESTINO, arq))) { indice[chave(t)] = arq; puladas++; continue; }
+    if (fs.existsSync(path.join(DESTINO, arq)) && !forcar.has(chave(t))) { indice[chave(t)] = arq; puladas++; continue; }
     try {
       fs.writeFileSync(path.join(DESTINO, arq), await gerar(t, voz, apiKey));
       indice[chave(t)] = arq; feitas++; gastos += t.length;
