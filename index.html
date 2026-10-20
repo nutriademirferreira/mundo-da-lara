@@ -96,8 +96,8 @@
                 data-falar="Palavras. Complete a palavra com a letra que está faltando. São dez fases."></button>
       </div>
 
-      <!-- Maiúscula e cursiva moram juntas aqui: um quadrado a mais na home
-           quebraria a grade 2x2 e não caberia no iPhone SE -->
+      <!-- Maiúscula, cursiva e as sílabas moram juntas aqui: um quadrado a
+           mais na home quebraria a grade 2x2 e não caberia no iPhone SE -->
       <div class="tile-wrap">
         <button class="tile tile--escrever" data-go="escrever-menu" type="button">
           <span class="tile__art"><svg viewBox="-8 -54 150 150" class="tile__letras" aria-hidden="true">
@@ -106,7 +106,7 @@
           <strong>Escrever</strong>
         </button>
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Escrever"
-                data-falar="Escrever. Letra maiúscula e letra cursiva."></button>
+                data-falar="Escrever. Letra maiúscula, letra cursiva e as sílabas."></button>
       </div>
       <!-- Velha, Memória e Damas moram juntos aqui: com os três soltos a home
            passava de 8 entradas e não cabia no iPhone SE sem perder as figuras -->
@@ -485,24 +485,57 @@
       <h2 class="bar__title">Escrever</h2>
       <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
     </header>
-    <div class="modes">
-      <div class="mode-wrap">
-        <button class="mode mode--learn" data-go="maiuscula-menu" type="button">
-          <strong>Letra Maiúscula</strong>
-          <small>A letra de forma, grandona</small>
-          <svg class="mode__letra" viewBox="0 10 100 106" aria-hidden="true"><path d="M50 20 L20 106 M50 20 L80 106 M31 74 L69 74"/></svg>
-        </button>
-        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Letra maiúscula. A letra de forma, grandona."></button>
+    <!-- Dois grupos de dois, o mesmo formato do corpo-menu: quatro
+         cartoes altos nao cabem no iPhone SE e se atropelam (regra 4) -->
+    <div class="grupo">
+      <h3 class="grupo__titulo">
+        <span>Letras ✏️</span>
+        <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+                data-falar="Letras. Passe o dedo por cima da letra pra aprender a escrever."></button>
+      </h3>
+      <div class="duo">
+        <div class="mode-wrap">
+          <button class="mode mode--learn mode--curto" data-go="maiuscula-menu" type="button">
+            <svg class="mode__letra" viewBox="0 10 100 106" aria-hidden="true"><path d="M50 20 L20 106 M50 20 L80 106 M31 74 L69 74"/></svg>
+            <strong>Maiúscula</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Letra maiúscula. A letra de forma, grandona."></button>
+        </div>
+        <div class="mode-wrap">
+          <button class="mode mode--play mode--curto" data-go="cursiva-menu" type="button">
+            <svg class="mode__letra mode__letra--cursiva" viewBox="0 36 100 60" aria-hidden="true"><g transform="translate(10 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg>
+            <strong>Cursiva</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Letra cursiva. A letra de mão, toda ligadinha."></button>
+        </div>
       </div>
-      <div class="mode-wrap">
-        <button class="mode mode--play" data-go="cursiva-menu" type="button">
-          <strong>Letra Cursiva</strong>
-          <small>A letra de mão, toda ligadinha</small>
-          <svg class="mode__letra mode__letra--cursiva" viewBox="0 36 100 60" aria-hidden="true"><g transform="translate(10 0) skewX(-9)"><path d="M64 50 C52 40 30 44 28 62 C26 80 46 92 60 80 L64 50 L64 82 C68 88 76 88 82 82"/></g></svg>
-        </button>
-        <button class="som-btn som-btn--mini som-flutuante" type="button" aria-label="Ouvir"
-                data-falar="Letra cursiva. A letra de mão, toda ligadinha."></button>
+    </div>
+
+    <div class="grupo">
+      <h3 class="grupo__titulo">
+        <span>Sílabas 🧩</span>
+        <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+                data-falar="Sílabas. Juntando a letra com a vogal e uma sílaba na outra, a palavra aparece."></button>
+      </h3>
+      <div class="duo">
+        <div class="mode-wrap">
+          <button class="mode mode--learn mode--curto" data-go="familias" type="button">
+            <span class="mode__emoji">🔠</span>
+            <strong>As Famílias</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="As famílias. Toque numa letra pra ouvir a família dela."></button>
+        </div>
+        <div class="mode-wrap">
+          <button class="mode mode--play mode--curto" data-go="juntar" type="button">
+            <span class="mode__emoji">🧩</span>
+            <strong>Juntar</strong>
+          </button>
+          <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir"
+                  data-falar="Juntar as sílabas. Toque na sílaba certa pra montar a palavra."></button>
+        </div>
       </div>
     </div>
   </section>
@@ -541,6 +574,57 @@
       <button class="icon-btn" id="cursiva-anterior" type="button" aria-label="Letra anterior">‹</button>
       <button class="btn btn--denovo" id="cursiva-limpar" type="button">Apagar</button>
       <button class="icon-btn" id="cursiva-proxima" type="button" aria-label="Próxima letra">›</button>
+    </div>
+  </section>
+
+  <!-- ============ SÍLABAS: A GRADE DAS FAMÍLIAS ============ -->
+  <section class="screen screen--submenu" id="screen-familias">
+    <header class="bar">
+      <button class="icon-btn" data-go="escrever-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">As Famílias</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <p class="cursiva-contador"><span>Toque numa letra</span>
+      <button class="som-btn som-btn--nano" type="button" aria-label="Ouvir"
+              data-falar="As famílias. Toque numa letra pra ouvir a família dela."></button></p>
+    <div class="familias-grade" id="familias-grade"></div>
+  </section>
+
+  <!-- ============ SÍLABAS: A FAMÍLIA ABERTA ============ -->
+  <!-- O voltar e fixo em "familias" de proposito: esta tela so se abre
+       pela grade das familias, diferente do letras-voltar da letra, que
+       serve a dois alfabetos e por isso precisa guardar a rota -->
+  <section class="screen screen--submenu" id="screen-familia">
+    <header class="bar">
+      <button class="icon-btn" data-go="familias" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title" id="familia-titulo">Família do B</h2>
+      <button class="som-btn som-btn--mini" id="familia-som" type="button"
+              aria-label="Ouvir a família toda" data-falar="A família do bê: ba, be, bi, bo, bu."></button>
+    </header>
+    <div class="familia-silabas" id="familia-silabas"></div>
+    <div class="cursiva-controles">
+      <button class="icon-btn" id="familia-anterior" type="button" aria-label="Família anterior">‹</button>
+      <button class="icon-btn" id="familia-proxima" type="button" aria-label="Próxima família">›</button>
+    </div>
+  </section>
+
+  <!-- ============ SÍLABAS: JUNTAR ============ -->
+  <section class="screen screen--juntar" id="screen-juntar">
+    <header class="bar">
+      <button class="icon-btn" data-go="escrever-menu" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Juntar Sílabas</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="juntar-palco" id="juntar-palco"></div>
+    <div class="juntar-linha">
+      <button class="som-btn som-btn--mini" id="juntar-som" type="button"
+              aria-label="Ouvir a palavra de novo" data-falar="Bola. Junte as sílabas."></button>
+      <div class="juntar-vagas" id="juntar-vagas"></div>
+    </div>
+    <div class="juntar-pecas" id="juntar-pecas"></div>
+    <div class="cursiva-controles">
+      <button class="icon-btn" id="juntar-anterior" type="button" aria-label="Palavra anterior">‹</button>
+      <button class="icon-btn" id="juntar-proxima" type="button" aria-label="Próxima palavra">›</button>
     </div>
   </section>
 
@@ -736,6 +820,8 @@
 <script src="js/data-cursiva.js"></script>
 <script src="js/data-maiuscula.js"></script>
 <script src="js/cursiva.js"></script>
+<script src="js/data-silabas.js"></script>
+<script src="js/silabas.js"></script>
 <script src="js/data-historias.js"></script>
 <script src="js/historias.js"></script>
 <script src="js/app.js"></script>

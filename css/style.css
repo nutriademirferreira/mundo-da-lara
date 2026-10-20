@@ -637,6 +637,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   :root{--tap:66px}
   /* cartao compacto: quatro deles precisam caber em ~460px de palco */
   .mode{padding:12px 76px 12px 16px;gap:2px}
+  /* Os 76px da direita sao do cartao ALTO, onde o alto-falante fica na
+     faixa do texto. No cartao CURTO, que centraliza e tem o alto-falante
+     acima do nome, esse padding sobrava do lado errado: o conteudo cabia
+     em 68px, "As Familias" quebrava em duas linhas e o cartao crescia
+     24px a mais que o vizinho. Vale para o corpo-menu tambem. */
+  .mode--curto{padding:12px 10px}
   .mode__emoji{font-size:34px}
   .mode strong{font-size:20px}
   .mode small{font-size:13px}
@@ -1353,4 +1359,115 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   .leitura__p{font-size:18px;line-height:1.66}
   .leitura__arte{max-width:260px}
   .leitura__titulo{font-size:20px}
+}
+
+/* ===========================================================
+   SÍLABAS — a grade das famílias, a família aberta e o Juntar
+   =========================================================== */
+
+/* Cartao curto: o desenho da letra tem altura fixa, igual ao emoji dos
+   outros cartoes curtos. Com flex:1 1 0 num cartao de altura automatica
+   ele valia ZERO e o cartao encolhia pra 75px — ai o alto-falante, que
+   mora no canto de cima, caia em cima do nome. E o mesmo defeito de
+   "nome coberto" que a auditoria ja pegou na home. */
+.mode--curto .mode__letra{flex:0 0 auto;height:42px;margin-top:0}
+
+/* 18 azulejos em 3 colunas x 6 linhas. Em 5 colunas o azulejo cairia
+   pra 62px de largura e a última linha ficaria com dois soltos; em 3
+   ele fica largo, que é o que dedo de 5 anos acerta. Altura vem da
+   grade, nunca do conteúdo (regra 4b). */
+.familias-grade{
+  flex:1;min-height:0;display:grid;
+  grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(6,1fr);gap:9px;
+}
+.cfamilia{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  min-width:0;min-height:0;border-radius:18px;
+  background:rgba(255,255,255,.74);border:2px solid rgba(255,255,255,.9);
+  box-shadow:0 4px 0 rgba(43,27,84,.10),0 6px 14px rgba(43,27,84,.12);
+}
+.cfamilia:active{transform:translateY(3px)}
+.cfamilia__c{font-size:30px;font-weight:900;line-height:1;color:#3B2A7A}
+/* as cinco vogais embaixo da consoante: o azulejo já conta a regra da
+   família antes de ela entrar — a consoante fica, a vogal muda */
+.cfamilia__v{font-size:10px;font-weight:800;letter-spacing:.5px;color:var(--pink-dark)}
+.cfamilia--vogais{background:linear-gradient(180deg,#FFF1F8,#FFDFEE);border-color:#FFC2DC}
+.cfamilia__vogais{font-size:15px;font-weight:900;letter-spacing:1px;color:var(--pink-dark)}
+
+/* a família aberta: uma coluna, e o número de linhas é escrito em
+   js/silabas.js a partir do tamanho do array — o Q tem três sílabas, e
+   grade de cinco linhas fixas deixaria uma vaga fantasma (QUU) */
+.familia-silabas{
+  flex:1;min-height:0;display:grid;grid-template-columns:1fr;gap:10px;
+}
+.fsilaba{
+  display:flex;align-items:center;justify-content:center;gap:1px;
+  min-width:0;min-height:0;border-radius:20px;
+  background:rgba(255,255,255,.82);border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 5px 0 rgba(43,27,84,.10),0 8px 18px rgba(43,27,84,.12);
+  font-size:clamp(30px,7.2vh,54px);font-weight:900;line-height:1;letter-spacing:-1px;
+  /* teto de altura: a familia do Q tem tres silabas, e sem teto as tres
+     esticavam pra 211px cada uma — a mesma tela com cara de outra tela */
+  height:100%;max-height:140px;align-self:center;
+}
+.fsilaba__c{color:#3B2A7A}
+/* a vogal em rosa: ela vê de olho que a primeira parte não muda */
+.fsilaba__v{color:var(--pink-dark)}
+.fsilaba:active{transform:translateY(4px)}
+.fsilaba.is-tocada{animation:rightPop .4s cubic-bezier(.2,.9,.3,1.6)}
+
+/* ---------- juntar ---------- */
+.juntar-palco{
+  flex:1;min-height:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:8px;
+}
+.fase-tag--feita{background:linear-gradient(180deg,#DEFFEE,#BFF6DC);color:#0B6A46}
+.juntar-linha{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 12px}
+.juntar-vagas{display:flex;gap:8px;justify-content:center;flex-wrap:nowrap;min-width:0}
+.jvaga{
+  flex:0 0 auto;display:grid;place-items:center;border-radius:16px;
+  min-width:66px;height:62px;padding:0 9px;
+  font-size:27px;font-weight:900;color:var(--ink);
+  background:rgba(255,255,255,.42);border:3px dashed rgba(43,27,84,.18);
+}
+/* só a lacuna da vez fica amarela: com as duas iguais não dava pra ver
+   qual estava esperando, e a ordem é a lição desta tela */
+.jvaga.is-agora{background:#FFF6D8;border-color:#F0B400;animation:ringPulse 1.1s ease-in-out infinite}
+.jvaga.is-cheia{background:#fff;border:3px solid transparent;box-shadow:0 4px 0 rgba(43,27,84,.12)}
+.juntar-vagas.is-pronta .jvaga{
+  background:linear-gradient(180deg,#5BE7BC,var(--mint));border-color:transparent;color:#064A38;
+  box-shadow:0 4px 0 var(--mint-dark);animation:rightPop .45s cubic-bezier(.2,.9,.3,1.6);
+}
+
+/* A bandeja tem SEMPRE duas fileiras e altura fixa. Com flex-wrap as 4
+   pastilhas de uma palavra de duas sílabas cabiam numa fileira só e as 5
+   de uma palavra de três quebravam em 4+1, torto — e o desenho subia e
+   descia a cada palavra. As colunas são escritas em js/silabas.js a
+   partir da contagem: 4 pastilhas viram 2x2, 5 viram 3+2. */
+.juntar-pecas{
+  flex:0 0 auto;height:132px;display:grid;grid-template-rows:repeat(2,1fr);
+  justify-content:center;align-content:center;gap:10px;margin-bottom:8px;
+}
+.jpeca{
+  min-width:0;padding:0 12px;border-radius:18px;
+  font-size:27px;font-weight:900;color:var(--ink);letter-spacing:-.5px;
+  background:#fff;box-shadow:0 5px 0 rgba(43,27,84,.14),0 8px 16px rgba(43,27,84,.12);
+}
+.jpeca:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(43,27,84,.14)}
+/* pastilha usada fica apagada e no lugar: tirar da tela mexeria com a
+   posição das outras, e aos 5 anos achar de novo custa mais que decidir */
+.jpeca.is-usada{opacity:.2;box-shadow:none}
+.jpeca.is-dica{animation:ringPulse 1.1s ease-in-out infinite}
+.jpeca.is-tremendo{animation:tremer .42s ease-in-out}
+@keyframes tremer{
+  10%,90%{transform:translateX(-4px)}
+  30%,70%{transform:translateX(5px)}
+  50%{transform:translateX(-5px)}
+}
+
+@media (max-height:680px){
+  .juntar-pecas{height:120px}
+  .jpeca{font-size:25px}
+  .jvaga{height:56px;min-width:62px;font-size:25px}
+  .cfamilia__c{font-size:26px}
 }

@@ -70,6 +70,15 @@ function frases() {
     (0, eval)(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
   for (const f of Traco.todasAsFalas()) add(f);
 
+  /* Mesma coisa nas Silabas: a familia, a silaba solta, o pedido e a
+     confirmacao de cada palavra nascem de + dentro do modulo. Modulo novo
+     que nao entra nesta lista nasce MUDO, e o verificador jura que esta
+     tudo certo — foi assim que as 30 confirmacoes do quiz passaram meses
+     sem gravacao. */
+  for (const f of ['js/data-silabas.js', 'js/silabas.js'])
+    (0, eval)(fs.readFileSync(path.join(RAIZ, f), 'utf8'));
+  for (const f of Silabario.todasAsFalas()) add(f);
+
   for (const l of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') add(Palavras.falaDaLetra(l));
 
   /* Montada em js/app.js: prefixo fixo + um dos dois ramos. O app fala a
@@ -105,7 +114,8 @@ function frases() {
                    'dezenove','vinte']) add(n);
 
   for (const m of fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8').matchAll(/data-falar="([^"]+)"/g)) addVarrido(m[1]);
-  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js', 'js/memoria.js', 'js/damas.js', 'js/cursiva.js']) {
+  for (const f of ['js/app.js', 'js/game.js', 'js/velha.js', 'js/memoria.js', 'js/damas.js',
+                   'js/cursiva.js', 'js/silabas.js']) {
     const src = fs.readFileSync(path.join(RAIZ, f), 'utf8');
     for (const m of src.matchAll(/Som\.falar\('([^']+)'/g)) addVarrido(m[1]);
     /* dataset.falar = '...' nasce em JS e nao aparece no HTML. Faltava varrer
@@ -168,7 +178,53 @@ const PRONUNCIA = [
   [/(^|\s)i(?=[\s!?.,]|$)/g, '$1í'],
   /* "pê." sozinho saía "bê" em 7 de 7 tomadas; com exclamação o P estala
      e saiu "pê" nas 2. Só ele: as outras letras com ponto saíram certas */
-  [/^pê\.$/, 'pê!']
+  [/^pê\.$/, 'pê!'],
+
+  /* =========================================================
+     SÍLABA SOLTA DE DUAS LETRAS
+     Minúscula + ponto + previous_text resolveu o problema de IDIOMA
+     ("uva" saindo "O.V.A.", "sapo" saindo "cipo"), que é de palavra de
+     4 a 6 letras. Não resolve o de DUAS letras, que é outro: um token
+     de dois caracteres tem três leituras concorrentes que o contexto
+     não desempata — sílaba portuguesa, palavra inglesa e sigla. E a
+     prova está no próprio histórico deste arquivo: tudo que precisou de
+     grafia especial ou de várias tomadas (á, ó, agá, éle, pê, i) tem de
+     uma a três letras.
+
+     O erro que importa aqui não é soar robótico: é "be" sair com o /bi/
+     do inglês, que é exatamente a sílaba BI do cartão vizinho. Ela
+     aprenderia o par letra-som trocado, e nada na tela denunciaria.
+
+     Onde dá, a grafia mandada é uma que JÁ FOI APROVADA de ouvido neste
+     app (bê, cê, dê, gê, pê, tê, vê, zê, quê, cá) ou uma palavra de
+     verdade (já, nó, só, dó, tô, fé, né, ré, mé, lê, chá). A chave do
+     índice não muda: o app continua pedindo "be".
+
+     Coluna do E: o nome da letra É a sílaba. "bê" é /be/, igual a BE.
+     Só vale nas letras cujo nome é consoante + ê. */
+  [/^be\.$/, 'bê.'], [/^ce\.$/, 'cê.'], [/^de\.$/, 'dê.'], [/^ge\.$/, 'gê.'],
+  [/^pe\.$/, 'pê!'], [/^te\.$/, 'tê.'], [/^ve\.$/, 'vê.'], [/^ze\.$/, 'zê.'],
+  /* JE e GE são o mesmo som /ʒe/ em português, e SE e CE o mesmo /se/:
+     mandar a grafia irmã entrega o som certo com texto já conferido */
+  [/^je\.$/, 'gê.'], [/^se\.$/, 'cê.'],
+  /* "me", "re", "ne", "fe", "le" como palavra solta saem com som de
+     inglês ou de clítico ("me" vira /mi/ na fala brasileira) */
+  [/^me\.$/, 'mé.'], [/^re\.$/, 'ré.'], [/^ne\.$/, 'né.'],
+  [/^fe\.$/, 'fé.'], [/^le\.$/, 'lê.'],
+  /* coluna do O: "no", "so", "go", "do", "to" são palavras inglesas de
+     mesma grafia, e a leitura inglesa cai em cima de outra sílaba */
+  [/^no\.$/, 'nó.'], [/^so\.$/, 'só.'], [/^do\.$/, 'dó.'],
+  [/^to\.$/, 'tô.'], [/^go\.$/, 'gô.'],
+  /* "ja" sai /ia/, do alemão, em vez de /ʒa/ */
+  [/^ja\.$/, 'já.'],
+  /* "que" como palavra é /ki/ na fala brasileira, e sairia idêntico a
+     QUI, os dois cartões vizinhos com o mesmo som */
+  [/^que\.$/, 'quê.'], [/^ca\.$/, 'cá.'],
+  /* o X inicial é /ʃ/ em português (xícara, xarope), o mesmo som do CH.
+     Mandar com CH não é truque: é a mesma consoante escrita do jeito que
+     o modelo não erra. Sozinho, o X sai /ks/, /z/ ou /s/. */
+  [/^xa\.$/, 'chá.'], [/^xe\.$/, 'chê.'], [/^xi\.$/, 'chi.'],
+  [/^xo\.$/, 'chô.'], [/^xu\.$/, 'chu.']
 ];
 function pronunciar(t) { for (const [re, s] of PRONUNCIA) t = t.replace(re, s); return t; }
 
