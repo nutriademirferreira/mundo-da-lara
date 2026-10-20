@@ -654,8 +654,20 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   /* piso zero: quem manda na altura é a linha da grade. O piso de 146px
      existia porque a foto não encolhia — agora encolhe, e o piso só fazia
      os azulejos se atropelarem em tela baixa */
-  .tile{min-height:0;gap:8px}
-  .tile strong{font-size:17px}
+  .tile{min-height:0;gap:8px;padding:10px}
+  /* O nome reserva DUAS linhas (2.1em) pra alinhar azulejo de nome curto
+     com azulejo de nome longo. No SE nenhum dos quatro nomes quebra, e
+     essa reserva de 18px empurrava o nome pra dentro da faixa do
+     alto-falante — que ocupa os 55px de cima do azulejo (top 9 + 46 de
+     botao). Aqui a reserva cai pra uma linha: nome que quebrar continua
+     crescendo sozinho, sem partir palavra. */
+  .tile strong{font-size:17px;min-height:1.2em}
+  /* Os 26px cortados aqui nao sao estetica: eles voltam pra altura dos
+     azulejos. Com as tres faixas largas (Jogos, Historias, Figurinhas) o
+     palco do SE deixava 82px por azulejo — figura da Lara em 4px e
+     "Corpo Human" embaixo do alto-falante. */
+  .star-linha{margin:8px 0 10px}
+  .home-foot{padding-top:6px;font-size:11px}
   .letra{height:56px;font-size:30px}
   .opt--letra{min-height:78px;font-size:44px}
   .start-badge{font-size:48px}
@@ -868,7 +880,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
    O lugar onde ela se vê. Rolagem vertical aqui é certa —
    é o gesto que todo mundo já espera de uma galeria.
    =========================================================== */
-.menu{grid-template-rows:1fr 1fr auto}
 .tile-wrap--largo{grid-column:1 / -1}
 /* ---- FAIXAS LARGAS ----
    Azulejo deitado que ocupa a linha inteira: figura à esquerda, nome ao lado.
@@ -885,11 +896,22 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .tile--cinema{background:linear-gradient(120deg,rgba(62,42,143,.62),rgba(123,75,224,.62) 55%,rgba(255,95,162,.66))}
 .tile--memoria{background:linear-gradient(120deg,rgba(46,155,214,.66),rgba(22,104,168,.62) 60%,rgba(124,77,255,.60))}
 
-/* Uma linha "auto" por faixa larga. Espremer duas na mesma linha não cabe:
-   meia largura não comporta figura + nome + alto-falante, e o nome acabava
-   por baixo do botão. As duas primeiras linhas é que cedem altura. */
-.menu{grid-template-rows:1fr 1fr auto auto}
-.menu--cinema{grid-template-rows:1fr 1fr auto auto auto}
+/* Uma linha "auto" por faixa larga — hoje três: Jogos, Histórias e
+   Figurinhas. Espremer duas na mesma linha não cabe: meia largura não
+   comporta figura + nome + alto-falante, e o nome acabava por baixo do
+   botão. As duas primeiras linhas é que cedem altura.
+   O que elas cedem tem limite MEDIDO: no iPhone SE cada faixa larga come
+   ~60px das duas linhas de cima, e o azulejo quadrado precisa de 99px pra
+   figura aparecer e o nome escapar do alto-falante. Com três faixas fecha
+   em 99px. Faixa nova aqui sem conferir o SE é defeito calado: a linha
+   implícita já nasce "auto", nada estoura na tela, e quem encolhe em
+   silêncio é a figura da Lara.
+   Com a quarta faixa (Cineminha, que só aparece se FILMES tiver item) o
+   azulejo cai pra 68px, a figura pra 17px e os quatro nomes voltam pra
+   baixo do botão — medido. Quando houver filme, o Cineminha entra dentro
+   de um submenu junto das Figurinhas, não como faixa solta. */
+.menu{grid-template-rows:1fr 1fr auto auto auto}
+.menu--cinema{grid-template-rows:1fr 1fr auto auto auto auto}
 
 /* tela baixa (SE e afins): as faixas cedem altura pros quatro azulejos de cima */
 @media (max-height:760px){
@@ -897,6 +919,12 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
   .tile--faixa{min-height:0;padding:6px 14px;gap:10px}
   .tile--faixa .tile__art{flex:0 0 40px;width:40px;height:40px}
   .tile--faixa strong{font-size:17px}
+}
+/* Depois do bloco de 760 de proposito: aqui o gap do menu e o de 760 tem a
+   mesma especificidade, e quem vem depois no arquivo e que vale. Os 8px de
+   gap que sobram viram altura de azulejo no SE. */
+@media (max-height:680px){
+  .menu{gap:8px}
 }
 .tile-wrap[hidden]{display:none}
 
