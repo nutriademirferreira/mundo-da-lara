@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Traços — gabarito do Escrever</title>
+<!--
+  Dedo simulado nas 52 letras, contra o gabarito que o Ademir aprovou.
+  Abrir pelo servidor local:
+    python3 ferramentas/servidor.py 8961 .
+    http://localhost:8961/ferramentas/tracos.html
+
+  Mede duas coisas, e as duas precisam passar:
+
+  1. TRACO INTEIRO COMPLETA — passar o dedo por cima de 100% de cada
+     traco tem que dar a letra por feita. Se falhar, a letra ficou
+     impossivel e a crianca rabisca sem nunca fechar.
+  2. 60% DE CADA TRACO NAO COMPLETA — meio caminho nao pode valer. Sem
+     essa checagem o "t" completava com 31% do traco, porque a margem do
+     dedo alcanca amostra adiante e a haste passa duas vezes pelo mesmo
+     lugar.
+
+  O dossiê (docs/TELAS.md, linha da tela cursiva) registra esse teste
+  desde o comeco; esta folha e a forma executavel dele. Rode SEMPRE que
+  mexer em js/cursiva.js, em data-maiuscula.js ou em data-cursiva.js —
+  a geometria do gabarito e o que mais custa caro quebrar em silencio.
+-->
+<style>
+ body{font:13px/1.4 -apple-system,system-ui,sans-serif;background:#111;color:#eee;margin:0;padding:16px}
+ h1{font-size:15px;margin:0 0 4px} p.sub{margin:0 0 14px;opacity:.65;font-size:12px}
+ table{border-collapse:collapse;width:100%;font-size:12px;margin-bottom:16px;max-width:640px}
+ th,td{border:1px solid #333;padding:5px 8px;text-align:left}
+ th{background:#222}
+ .ok{color:#6f6}.mau{color:#f77;font-weight:700}
+ .palco{position:absolute;left:-99999px;top:0}
+</style>
+</head>
+<body>
+<h1>Traços — dedo simulado nas 52 letras</h1>
+<p class="sub">Traço inteiro tem que completar. 60% de cada traço <b>não</b> pode completar.</p>
+<div id="saida">medindo…</div>
+<div class="palco" id="palco"></div>
+<script>
+const FRACAO_PARCIAL = 0.60;
+
+function tracar(doc, fracao) {
+  const svg = doc.querySelector('#cursiva-svg');
+  const g = svg.querySelector('.cursiva-letra');
+  const m = g.getScreenCTM();
+  let id = 1;
+  for (const p of [...svg.querySelectorAll('.estrada')]) {
+    const total = p.getTotalLength() * fracao;
+    const pts = [];
+    for (let s = 0; s <= total; s += 1.2) {
+      const q = p.getPointAtLength(s);
+      pts.push(new doc.defaultView.DOMPoint(q.x, q.y).matrixTransform(m));
+    }
+    const f = p.getPointAtLength(total);
+    pts.push(new doc.defaultView.DOMPoint(f.x, f.y).matrixTransform(m));
+    const pid = id++;
+    const ev = (t, pt) => svg.dispatchEvent(new doc.defaultView.PointerEvent(t, {
+      pointerId: pid, clientX: pt.x, clientY: pt.y, bubbles: true, cancelable: true
+    }));
+    ev('pointerdown', pts[0]);
+    for (const pt of pts) ev('pointermove', pt);
+    ev('pointerup', pts[pts.length - 1]);
+  }
+  return svg.classList.contains('is-concluida');
+}
+
+(async () => {
+  const f = document.createElement('iframe');
+  f.style.cssText = 'width:420px;height:900px';
+  f.src = '../index.html';
+  document.getElementById('palco').appendChild(f);
+  await new Promise(r => f.onload = r);
+  const w = f.contentWindow, d = f.contentDocument;
+  await new Promise(r => setTimeout(r, 600));
+
+  /* cala voz, efeito e estrela: o teste mede geometria, e 104 passagens
+     falando e guardando estrela sujariam o placar dela */
+  w.Som.falar = () => {}; w.Som.falarPedacos = () => {}; w.Som.tocar = () => {};
+  w.Jogo.confete = () => {}; w.Jogo.ganharEstrela = () => {};
+  try { w.localStorage.clear(); } catch (e) {}
+
+  let html = '';
+  let ruins = 0;
+  for (const nome of Object.keys(w.Traco.ALFABETOS)) {
+    const A = w.Traco.ALFABETOS[nome];
+    w.Traco.montarGrade(nome);
+    const linhas = [];
+    for (const l of A.ordem) {
+      w.Traco.abrir(l); await new Promise(r => setTimeout(r, 20));
+      const inteiro = tracar(d, 1.0);
+      w.Traco.abrir(l); await new Promise(r => setTimeout(r, 20));
+      const parcial = tracar(d, FRACAO_PARCIAL);
+      const mau = !inteiro || parcial;
+      if (mau) ruins++;
+      linhas.push(`<tr><td>${l}</td>` +
+        `<td class="${inteiro ? 'ok' : 'mau'}">${inteiro ? 'completa' : 'NÃO COMPLETA'}</td>` +
+        `<td class="${parcial ? 'mau' : 'ok'}">${parcial ? 'COMPLETOU COM 60%' : 'não completa'}</td></tr>`);
+    }
+    html += `<h2>${A.titulo}</h2><table><thead><tr><th>letra</th>` +
+            `<th>traço inteiro</th><th>60% de cada traço</th></tr></thead>` +
+            `<tbody>${linhas.join('')}</tbody></table>`;
+  }
+  document.getElementById('saida').innerHTML =
+    `<p class="${ruins ? 'mau' : 'ok'}">${ruins ? ruins + ' letra(s) fora do gabarito' : 'as 52 letras passaram'}</p>` + html;
+  f.remove();
+})();
+</script>
+</body>
+</html>

@@ -147,7 +147,16 @@ var Som = (function () {
   function falarPedacos(pedacos, opcoes) {
     opcoes = opcoes || {};
     if (!ligado || !pedacos || !pedacos.length) return;
-    if (!indiceVoz) { falarSintetizado(pedacos.join(' '), opcoes); return; }
+    /* Mesma espera do falar(): sem ela, qualquer fala por pedacos nos
+       primeiros instantes do app ia direto pro sintetizador, porque o
+       indice ainda estava baixando. No placar da velha isso nunca
+       aparecia (o placar so fala no fim da partida), mas a silaba
+       escrita fala logo na primeira tela que ela toca. */
+    if (!indiceVoz) {
+      esperarIndice(function () { falarPedacos(pedacos, opcoes); },
+                    function () { falarSintetizado(pedacos.join(' '), opcoes); });
+      return;
+    }
     var arquivos = [];
     for (var i = 0; i < pedacos.length; i++) {
       var arq = indiceVoz[chaveVoz(pedacos[i])];
@@ -157,26 +166,31 @@ var Som = (function () {
     enfileirarArquivos(arquivos, opcoes);
   }
 
-  function falar(texto, opcoes) {
-    if (!ligado || !texto) return;
-    opcoes = opcoes || {};
-    if (indiceVoz) { escolherEFalar(texto, opcoes); return; }
-
-    /* o indice ainda esta baixando. Se desistir agora, as primeiras falas
-       do app — justo as de boas-vindas — saem sempre com a voz feia. Entao
-       espera ele chegar, com prazo curto pra nunca deixar a crianca no vacuo. */
+  /* O indice ainda esta baixando. Se desistir agora, as primeiras falas
+     do app — justo as de boas-vindas — saem sempre com a voz feia. Entao
+     espera ele chegar, com prazo curto pra nunca deixar a crianca no vacuo.
+     Serve ao falar() e ao falarPedacos(). */
+  function esperarIndice(aoChegar, aoDesistir) {
     var decidiu = false;
     var prazo = setTimeout(function () {
       if (decidiu) return;
       decidiu = true;
-      falarSintetizado(texto, opcoes);
+      aoDesistir();
     }, 1200);
     carregandoVoz.then(function () {
       if (decidiu) return;
       decidiu = true;
       clearTimeout(prazo);
-      escolherEFalar(texto, opcoes);
+      aoChegar();
     });
+  }
+
+  function falar(texto, opcoes) {
+    if (!ligado || !texto) return;
+    opcoes = opcoes || {};
+    if (indiceVoz) { escolherEFalar(texto, opcoes); return; }
+    esperarIndice(function () { escolherEFalar(texto, opcoes); },
+                  function () { falarSintetizado(texto, opcoes); });
   }
 
   function escolherEFalar(texto, opcoes) {

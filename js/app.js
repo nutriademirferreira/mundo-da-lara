@@ -145,7 +145,9 @@ var App = (function () {
     /* placar da velha só vale enquanto ela está na tela do tabuleiro */
     if (telaAtual === 'velha' && nome !== 'velha') { Velha.zerarPlacar(); Velha.cancelar(); }
     if (telaAtual === 'damas' && nome !== 'damas') { Damas.zerarPlacar(); Damas.cancelar(); }
-    if (telaAtual === 'cursiva' && nome !== 'cursiva') Traco.cancelar();
+    /* sair() e nao cancelar(): o cancelar e chamado pelo proprio abrir() a
+       cada letra nova e por isso nao pode largar o roteiro da silaba */
+    if (telaAtual === 'cursiva' && nome !== 'cursiva') Traco.sair();
     if (telaAtual === 'juntar' && nome !== 'juntar') Silabario.cancelar();
     $$('.screen').forEach(function (s) { s.classList.remove('is-active'); });
     var el = document.getElementById(TELAS[nome]);
@@ -246,8 +248,14 @@ var App = (function () {
         if (destino === 'damas-dois')        { ir('damas'); Damas.iniciar('dois', true); return; }
         if (destino === 'maiuscula-menu')    { Traco.montarGrade('maiuscula'); ir('cursiva-menu'); return; }
         if (destino === 'cursiva-menu')      { Traco.montarGrade('cursiva'); ir('cursiva-menu'); return; }
-        /* voltar do desenho: a grade do alfabeto em que ela estava */
-        if (destino === 'letras-voltar')     { Traco.montarGrade(); ir('cursiva-menu'); return; }
+        /* Voltar do desenho. Tem tres donos agora: a grade da maiuscula, a
+           da cursiva, e a tela da familia quando ela esta escrevendo uma
+           silaba. data-go fixo aqui jogaria ela no alfabeto errado — foi
+           exatamente isso que criou este destino. */
+        if (destino === 'letras-voltar') {
+          if (Traco.noRoteiro()) { Traco.sair(); Silabario.voltarDaEscrita(); return; }
+          Traco.montarGrade(); ir('cursiva-menu'); return;
+        }
         if (destino === 'familias')          { Silabario.montarGrade(); ir('familias'); return; }
         /* ir() primeiro: ele chama Som.calar(), e montar antes faria a
            troca de tela engolir a propria fala da palavra */

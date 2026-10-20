@@ -1444,6 +1444,38 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 .fsilaba:active{transform:translateY(4px)}
 .fsilaba.is-tocada{animation:rightPop .4s cubic-bezier(.2,.9,.3,1.6)}
 
+/* ---------- escrever a sílaba: a tira B + A = BA ---------- */
+.traco-silaba{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:7px;
+  margin:0 0 10px;
+}
+.traco-silaba b{
+  display:grid;place-items:center;min-width:46px;height:46px;padding:0 9px;
+  border-radius:14px;font-size:24px;font-weight:900;line-height:1;
+  background:rgba(255,255,255,.62);color:#3B2A7A;
+  box-shadow:0 3px 0 rgba(43,27,84,.10);
+}
+.traco-silaba i{font-size:19px;font-weight:900;font-style:normal;color:var(--ink-soft)}
+/* a letra da vez é a amarela, a mesma cor da lacuna que espera no Juntar */
+.traco-silaba .is-agora{background:#FFF6D8;border:2px solid #F0B400;color:#8A6400}
+.traco-silaba .is-feita{
+  background:linear-gradient(180deg,#5BE7BC,var(--mint));color:#064A38;
+  box-shadow:0 3px 0 var(--mint-dark);
+}
+/* o resultado, depois do igual: nasce apagado e acende quando fecha */
+.traco-silaba__s{opacity:.42}
+.traco-silaba__s.is-feita{opacity:1;animation:rightPop .45s cubic-bezier(.2,.9,.3,1.6)}
+
+/* sílaba que ela já escreveu fica verde na família, igual à letra feita
+   na grade do alfabeto — mesmo sinal, que ela já entende */
+.fsilaba.is-escrita{background:rgba(214,255,232,.92);border-color:#5FE0A0}
+.fsilaba.is-escrita .fsilaba__c{color:#1E8C55}
+.fsilaba.is-escrita::after{
+  content:'⭐';position:absolute;top:-6px;right:-4px;font-size:18px;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.25));
+}
+.fsilaba{position:relative}
+
 /* ---------- juntar ---------- */
 .juntar-palco{
   flex:1;min-height:0;display:flex;flex-direction:column;
@@ -1494,6 +1526,8 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 }
 
 @media (max-height:680px){
+  .traco-silaba b{min-width:40px;height:40px;font-size:21px}
+  .traco-silaba{margin-bottom:7px}
   .juntar-pecas{height:120px}
   .jpeca{font-size:25px}
   .jvaga{height:56px;min-width:62px;font-size:25px}

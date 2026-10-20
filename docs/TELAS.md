@@ -222,6 +222,17 @@ E o que ela **errou** antes de eu ajustar — vale tanto quanto:
 - **Tratava `<text>` de SVG como caixa com rolagem.** A curva do "?" do quiz
   do corpo dava 11px "escondidos" no iPad. SVG não corta o próprio texto;
   elemento SVG agora fica fora da checagem de conteúdo escondido.
+- **E a exclusão de SVG não funcionava.** Ela era `el instanceof SVGElement`,
+  e `instanceof` não atravessa realm: o `SVGElement` da folha de auditoria não
+  é o do iframe, então o teste dava sempre falso. Ninguém percebeu por dois
+  meses porque nenhuma tela auditada tinha `<text>` de SVG transbordando — ela
+  abria o M na maiúscula (um traço só) e o g na cursiva (que não numera). No
+  dia em que ela passou a abrir uma letra de VÁRIOS traços, os números das
+  partidas acusaram de 13 a 30px de "conteúdo escondido" nas cinco telas e nos
+  cinco aparelhos, e a letra B normal mostrava exatamente o mesmo. A
+  conferência agora é pelo **namespace**, que não depende de realm. Exclusão
+  que não exclui é pior que exclusão nenhuma: ela dá a impressão de que o caso
+  está coberto.
 
 Auditoria que grita lobo é desligada, e aí não serve pra nada. Se ela
 apontar algo, **meça na mão antes de consertar**.

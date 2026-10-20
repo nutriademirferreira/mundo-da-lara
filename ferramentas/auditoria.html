@@ -48,6 +48,8 @@ const TELAS = [
   ['familias',         ['[data-go="escrever-menu"]','[data-go="familias"]']],
   ['familia (vogais)', ['[data-go="escrever-menu"]','[data-go="familias"]','.cfamilia[data-familia="vogais"]']],
   ['familia (Q, 3)',   ['[data-go="escrever-menu"]','[data-go="familias"]','.cfamilia[data-familia="q"]']],
+  ['escrever silaba',  ['[data-go="escrever-menu"]','[data-go="familias"]','.cfamilia[data-familia="b"]','#familia-escrever']],
+  ['escrever QUA (3)',  ['[data-go="escrever-menu"]','[data-go="familias"]','.cfamilia[data-familia="q"]','#familia-escrever']],
   ['juntar',           ['[data-go="escrever-menu"]','[data-go="juntar"]']],
   ['damas-menu',       ['[data-go="jogos-menu"]','[data-go="damas-menu"]']],
   ['damas',            ['[data-go="jogos-menu"]','[data-go="damas-menu"]','[data-go="damas-app"]']],
@@ -152,8 +154,17 @@ async function auditar(L, A) {
       if (ROLA_DE_PROPOSITO.some(sel => el.matches(sel) || el.closest(sel))) return;
       /* SVG não tem caixa de rolagem: num <text>, scrollHeight maior que
          clientHeight é só o desenho da letra mais alto que a linha (a curva
-         do "?" do quiz do corpo dava 11px no iPad). Nada é cortado. */
-      if (el instanceof SVGElement) return;
+         do "?" do quiz do corpo dava 11px no iPad). Nada é cortado.
+
+         A conferência é pelo NAMESPACE, não por `instanceof SVGElement`.
+         O `instanceof` não atravessa realm: o `SVGElement` desta página não
+         é o do iframe, então o teste dava sempre falso e a exclusão nunca
+         valeu de nada. O defeito só apareceu quando a auditoria passou a
+         abrir uma letra de VÁRIOS traços (antes ela abria o M, que é um
+         traço só, e o g da cursiva, que não numera): aí os números das
+         partidas (.partida__n) acusaram 13 a 30px de "conteúdo escondido"
+         nas cinco telas, em todos os aparelhos. */
+      if (el.namespaceURI === 'http://www.w3.org/2000/svg') return;
       const corta = el.scrollHeight - el.clientHeight;
       /* limiar de 8px: arredondamento de linha em emoji e titulo produz 3-4px
          em quase toda tela, e isso nao esconde nada de ninguem. Abaixo disso

@@ -26,6 +26,23 @@
 
    O que NÃO é exigido, de propósito: começar no ponto verde e
    seguir a ordem exata. A demonstração e os números é que ensinam.
+
+   MODO ROTEIRO — escrever uma sílaba
+   Além do alfabeto, esta tela sabe traçar uma SEQUÊNCIA de letras:
+   escreve o B, escreve o A, e sai BA. Quem pede é o Silabário, pela
+   tela da família. A tira em cima mostra "B + A = BA" e vai ficando
+   verde.
+
+   Por que o roteiro mora AQUI e não num módulo próprio: todo o
+   gabarito — amostragem do traço, cobertura, precisão, chegar ao fim —
+   é este código, e ele foi medido letra por letra. Uma segunda cópia
+   divergiria em silêncio, que é exatamente o defeito que a regra 6 do
+   dossiê descreve pras falas.
+
+   No roteiro a letra NÃO entra em lara.maiuscula.feitas e não dá
+   estrela: escrever o B dentro de BA não é a tarefa do alfabeto, e
+   senão a grade ficaria verde sozinha. A estrela é da sílaba, e quem
+   guarda é o Silabário.
    ========================================================= */
 var Traco = (function () {
   function $(s) { return document.querySelector(s); }
@@ -41,6 +58,11 @@ var Traco = (function () {
      Medido: a mais longa ("...a letra cê!") dura 3,0 s, mais 0,3 s de atraso */
   var ESPERA_PROXIMA = 3400;
   var ESPERA_ALFABETO = 4200;
+  /* dentro da sílaba a fala é curta ("Muito bem, Lara!", 1,2 s), então a
+     letra seguinte entra mais rápido — dez segundos de conversa por
+     sílaba cansa uma criança de 5 anos */
+  var ESPERA_ROTEIRO = 1900;
+  var ESPERA_ROTEIRO_FIM = 3200;
   var PASSO = 1.6;          /* espaçamento das amostras ao longo do traço */
 
   var ALFABETOS = {
@@ -83,6 +105,9 @@ var Traco = (function () {
      setTimeout, e timer pendente não pode sobreviver à saída da tela */
   var selo = 0, timerProxima = null;
 
+  /* modo roteiro: {silaba, letras:[], i, feitas:[], aoFechar, aoFim} */
+  var roteiro = null;
+
   /* ---------- falas ----------
      Montadas aqui e em nenhum outro lugar: o gerador de vozes chama
      todasAsFalas() e grava exatamente o que o app vai pedir. Frase
@@ -91,11 +116,14 @@ var Traco = (function () {
      "a letra bê" é a mesma letra, maiúscula ou cursiva. */
   var FALA_ALFABETO = 'Parabéns, Lara! Você fez o alfabeto inteiro!';
   var FALA_DE_NOVO = 'Quase! Tenta de novo.';
+  /* no meio da sílaba: a letra acabou mas a sílaba não. Frase curta e já
+     gravada, pra não parar a brincadeira pra ouvir elogio comprido */
+  var FALA_MEIO = 'Muito bem, Lara!';
   function nomeDaLetra(l) { return Palavras.falaDaLetra(l.toUpperCase()); }
   function falaAbrir(l) { return 'Vamos fazer a letra ' + nomeDaLetra(l) + '!'; }
   function falaAcerto(l) { return 'Muito bem, Lara! Você fez a letra ' + nomeDaLetra(l) + '!'; }
   function todasAsFalas() {
-    var f = [FALA_ALFABETO, FALA_DE_NOVO];
+    var f = [FALA_ALFABETO, FALA_DE_NOVO, FALA_MEIO];
     Object.keys(ALFABETOS).forEach(function (n) { f.push(ALFABETOS[n].fala); });
     Maiuscula.ORDEM.forEach(function (l) { f.push(falaAbrir(l), falaAcerto(l)); });
     return f;
@@ -212,7 +240,7 @@ var Traco = (function () {
     concluida = false;
     fechouAlfabeto = false;
     $('#cursiva-svg').classList.remove('is-concluida', 'is-desenhando');
-    $('#cursiva-titulo').textContent = 'Letra ' + l;
+    $('#cursiva-titulo').textContent = roteiro ? ('Escrever ' + roteiro.silaba) : ('Letra ' + l);
     var som = $('#cursiva-som');
     if (som) som.dataset.falar = falaAbrir(l);
     /* vindo do parabéns, entra na fila: assim não corta o "muito bem" */
@@ -333,6 +361,7 @@ var Traco = (function () {
     var svg = $('#cursiva-svg');
     svg.classList.add('is-concluida');
     Som.tocar('fanfarra');
+    if (roteiro) { acertouNoRoteiro(); return; }
     var nova = marcarFeita(atual);
     if (nova) Jogo.ganharEstrela();
     /* era a última que faltava: o alfabeto inteiro ficou verde */
@@ -361,6 +390,82 @@ var Traco = (function () {
     fechouAlfabeto = false;
     montarGrade();
     App.ir('cursiva-menu');
+  }
+
+  /* =========================================================
+     ROTEIRO — escrever uma sílaba, letra por letra
+     ========================================================= */
+
+  /* a tira de cima: B + A = BA, com o que já saiu em verde */
+  function pintarRoteiro() {
+    var tira = $('#traco-silaba');
+    if (!tira) return;
+    if (!roteiro) { tira.hidden = true; tira.innerHTML = ''; return; }
+    var pecas = roteiro.letras.map(function (l, i) {
+      var cls = 'traco-silaba__l' +
+        (roteiro.feitas[i] ? ' is-feita' : (i === roteiro.i ? ' is-agora' : ''));
+      return '<b class="' + cls + '">' + l + '</b>';
+    }).join('<i>+</i>');
+    var pronta = roteiro.feitas.length === roteiro.letras.length &&
+                 roteiro.feitas.every(Boolean);
+    tira.innerHTML = pecas + '<i>=</i><b class="traco-silaba__s' +
+      (pronta ? ' is-feita' : '') + '">' + roteiro.silaba + '</b>';
+    tira.hidden = false;
+  }
+
+  /* Pedido pelo Silabário. 'letras' é o que ela vai traçar (B e A), e
+     'silaba' é o que aparece depois do igual — nem sempre são a mesma
+     coisa: QUA se escreve com três letras e a sílaba é QUA. */
+  function escreverSilaba(cfg) {
+    usar(cfg.alfabeto || 'maiuscula');
+    cancelar();
+    roteiro = {
+      silaba: cfg.silaba,
+      letras: cfg.letras.slice(),
+      i: 0,
+      feitas: cfg.letras.map(function () { return false; }),
+      aoFechar: cfg.aoFechar,
+      aoFim: cfg.aoFim
+    };
+    pintarRoteiro();
+    abrir(roteiro.letras[0], { enfileirar: !!cfg.enfileirar });
+  }
+
+  function acertouNoRoteiro() {
+    roteiro.feitas[roteiro.i] = true;
+    pintarRoteiro();
+    var ultima = roteiro.i >= roteiro.letras.length - 1;
+    Jogo.confete(ultima ? 60 : 16);
+    /* quem fala a sílaba pronta e dá a estrela é quem pediu o roteiro:
+       aqui o Traço só sabe de letra */
+    if (ultima) { if (roteiro.aoFechar) roteiro.aoFechar(roteiro.silaba); }
+    else Som.falar(FALA_MEIO, { atraso: 300 });
+
+    var tela = $('#cursiva-parabens');
+    if (tela) tela.hidden = false;
+
+    var meu = ++selo;
+    clearTimeout(timerProxima);
+    timerProxima = setTimeout(function () {
+      if (meu !== selo) return;                /* regra 8: ela já saiu */
+      seguirRoteiro();
+    }, ultima ? ESPERA_ROTEIRO_FIM : ESPERA_ROTEIRO);
+  }
+
+  function seguirRoteiro() {
+    var tela = $('#cursiva-parabens');
+    if (tela) tela.hidden = true;
+    if (!roteiro) return;
+    if (roteiro.i < roteiro.letras.length - 1) {
+      roteiro.i++;
+      pintarRoteiro();
+      abrir(roteiro.letras[roteiro.i], { enfileirar: true });
+      return;
+    }
+    var fim = roteiro.aoFim;
+    roteiro = null;
+    pintarRoteiro();
+    if (fim) fim();
   }
 
   function tentarDeNovo() {
@@ -392,6 +497,7 @@ var Traco = (function () {
   }
 
   function andar(passo) {
+    if (roteiro) return;
     var i = alfa.ordem.indexOf(atual) + passo;
     if (i < 0 || i >= alfa.ordem.length) return;
     Som.tocar('toque');
@@ -400,6 +506,13 @@ var Traco = (function () {
   }
 
   function pintarSetas() {
+    /* no roteiro não se pula letra: a sílaba tem duas e as duas são a
+       tarefa. As setas ficam desligadas, o Apagar continua valendo */
+    if (roteiro) {
+      $('#cursiva-anterior').disabled = true;
+      $('#cursiva-proxima').disabled = true;
+      return;
+    }
     var i = alfa.ordem.indexOf(atual);
     $('#cursiva-anterior').disabled = i === 0;
     $('#cursiva-proxima').disabled = i === alfa.ordem.length - 1;
@@ -427,6 +540,8 @@ var Traco = (function () {
     if ((b = $('#cursiva-proxima'))) b.addEventListener('click', function () { andar(1); });
   }
 
+  /* Usado TAMBÉM pelo abrir(), a cada letra nova: por isso ele não pode
+     largar o roteiro — quem faz isso é o sair(), chamado pelo App.ir() */
   function cancelar() {
     selo++; clearTimeout(timerProxima); timerProxima = null;
     fechouAlfabeto = false;
@@ -434,8 +549,17 @@ var Traco = (function () {
     var svg = $('#cursiva-svg'); if (svg) svg.classList.remove('is-de-novo');
   }
 
+  function sair() {
+    cancelar();
+    roteiro = null;
+    pintarRoteiro();
+  }
+
+  function noRoteiro() { return !!roteiro; }
+
   return {
     montarGrade: montarGrade, abrir: abrir, ligar: ligar, cancelar: cancelar,
+    sair: sair, escreverSilaba: escreverSilaba, noRoteiro: noRoteiro,
     todasAsFalas: todasAsFalas, partidas: partidas, ALFABETOS: ALFABETOS
   };
 })();

@@ -55,6 +55,13 @@ var Silabario = (function () {
   var FALA_GRADE  = 'As famílias. Toque numa letra pra ouvir a família dela.';
   var FALA_JUNTAR = 'Juntar as sílabas. Toque na sílaba certa pra montar a palavra.';
   var FALA_FIM    = 'Parabéns, Lara! Você juntou todas as palavras!';
+  var FALA_ESCREVER = 'Escrever. Passe o dedo nas duas letras e a sílaba aparece.';
+  /* Pedaço, não frase: a sílaba pronta sai por Som.falarPedacos, juntando
+     este começo com o mp3 da própria sílaba, que já é pedido pela tela da
+     família. Gravar "Você escreveu ba!" inteiro seriam 95 arquivos e 1.615
+     créditos; assim é UM arquivo de 13. */
+  var FALA_ESCREVEU = 'Você escreveu';
+  var FALA_FAMILIA_ESCRITA = 'Parabéns, Lara! Você escreveu a família inteira!';
 
   function falaDaFamilia(f) {
     /* o cantinho vai numa frase só, com palavra de verdade em volta: é
@@ -68,7 +75,8 @@ var Silabario = (function () {
   function falaAcerto(p) { return 'Isso, Lara! Você leu ' + Silabas.ditaPalavra(p.palavra) + '!'; }
 
   function todasAsFalas() {
-    var f = [FALA_GRADE, FALA_JUNTAR, FALA_FIM];
+    var f = [FALA_GRADE, FALA_JUNTAR, FALA_FIM,
+             FALA_ESCREVER, FALA_ESCREVEU, FALA_FAMILIA_ESCRITA];
     Silabas.FAMILIAS.forEach(function (fam) { f.push(falaDaFamilia(fam)); });
     Silabas.todasAsSilabas().forEach(function (s) { f.push(Silabas.falaDaSilaba(s)); });
     Silabas.PALAVRAS.forEach(function (p) {
@@ -129,13 +137,16 @@ var Silabario = (function () {
   function pastilhaDaFamilia(s) {
     var S = String(s).toUpperCase();
     var consoante = S.slice(0, -1), vogal = S.slice(-1);
-    return '<button class="fsilaba" type="button" data-silaba="' + S + '" aria-label="Sílaba ' + S + '">' +
+    var escrita = escritas().indexOf(S) > -1;
+    return '<button class="fsilaba' + (escrita ? ' is-escrita' : '') + '" type="button"' +
+           ' data-silaba="' + S + '" aria-label="Sílaba ' + S + (escrita ? ', já escrita' : '') + '">' +
              (consoante ? '<b class="fsilaba__c">' + consoante + '</b>' : '') +
              '<b class="fsilaba__v">' + vogal + '</b>' +
            '</button>';
   }
 
-  function abrirFamilia(id) {
+  function abrirFamilia(id, opcoes) {
+    opcoes = opcoes || {};
     var f = Silabas.porId(id);
     if (!f) return;
     familiaAtual = f;
@@ -151,12 +162,18 @@ var Silabario = (function () {
     if (t) t.textContent = f.vogais ? 'As Vogais' : 'Família do ' + f.rotulo;
     var som = $('#familia-som');
     if (som) som.dataset.falar = falaDaFamilia(f);
+    /* a família das vogais não tem o que juntar: A é uma letra, não uma
+       letra MAIS uma vogal. Escrever ali seria o alfabeto de novo */
+    var escrever = $('#familia-escrever');
+    if (escrever) escrever.hidden = !!f.vogais;
     pintarSetasFamilia();
 
     /* a troca de tela vem ANTES da fala: App.ir() chama Som.calar(),
        e falar primeiro faria a tela engolir a própria abertura */
     App.ir('familia');
-    Som.falar(falaDaFamilia(f), { atraso: 250 });
+    /* calado: voltando da escrita, quem fala é o parabéns — o cantinho da
+       família por cima dele sairia embolado */
+    if (!opcoes.calado) Som.falar(falaDaFamilia(f), { atraso: 250 });
   }
 
   function indiceDaFamilia() {
@@ -177,6 +194,84 @@ var Silabario = (function () {
     var a = $('#familia-anterior'), p = $('#familia-proxima');
     if (a) a.disabled = i <= 0;
     if (p) p.disabled = i === Silabas.FAMILIAS.length - 1;
+  }
+
+  /* =========================================================
+     2b. ESCREVER A SÍLABA — B + A = BA
+
+     Quem desenha é o Traço, o mesmo motor das 52 letras, no modo
+     roteiro: ela traça o B, traça o A, e a tira de cima fecha em BA.
+     Aqui mora só o que o Traço não tem como saber — qual sílaba vem a
+     seguir, a estrela e a fala da sílaba pronta.
+
+     A letra traçada aqui NÃO conta no alfabeto: escrever o B dentro de
+     BA não é a tarefa do alfabeto, e a grade ficaria verde sozinha.
+     ========================================================= */
+  var CHAVE_ESCRITAS = 'lara.silabas.escritas';
+  var escrevendo = null;    /* {familia, i} */
+
+  function escritas() {
+    try {
+      var v = JSON.parse(localStorage.getItem(CHAVE_ESCRITAS) || '[]');
+      return Array.isArray(v) ? v.filter(function (x) { return typeof x === 'string'; }) : [];
+    } catch (e) { return []; }
+  }
+  function marcarEscrita(s) {
+    var v = escritas();
+    if (v.indexOf(s) > -1) return false;       /* já tinha: sem estrela de novo */
+    v.push(s);
+    try { localStorage.setItem(CHAVE_ESCRITAS, JSON.stringify(v)); } catch (e) {}
+    return true;
+  }
+
+  /* QUA se escreve com três letras e a sílaba é QUA: a tira mostra
+     Q + U + A = QUA, que é a verdade da escrita */
+  function letrasDaSilaba(s) { return String(s).toUpperCase().split(''); }
+
+  function escreverFamilia(id) {
+    var f = Silabas.porId(id) || familiaAtual;
+    if (!f || f.vogais) return;
+    escrevendo = { familia: f, i: 0 };
+    App.ir('cursiva');            /* antes da fala: App.ir chama Som.calar */
+    escreverSilabaDaVez();
+  }
+
+  function escreverSilabaDaVez() {
+    var f = escrevendo.familia;
+    Traco.escreverSilaba({
+      alfabeto: 'maiuscula',
+      silaba: f.silabas[escrevendo.i],
+      letras: letrasDaSilaba(f.silabas[escrevendo.i]),
+      enfileirar: escrevendo.i > 0,
+      aoFechar: fechouSilaba,
+      aoFim: proximaEscrita
+    });
+  }
+
+  function fechouSilaba(silaba) {
+    if (marcarEscrita(silaba)) Jogo.ganharEstrela();
+    /* "Você escreveu" + o mp3 da própria sílaba. Se algum pedaço ainda
+       não tiver gravação, o Som cai no sintetizador pra frase inteira —
+       nunca meia frase boa e meia feia. */
+    Som.falarPedacos([FALA_ESCREVEU, Silabas.falaDaSilaba(silaba)], { atraso: 320 });
+  }
+
+  function proximaEscrita() {
+    if (!escrevendo) return;
+    escrevendo.i++;
+    if (escrevendo.i < escrevendo.familia.silabas.length) { escreverSilabaDaVez(); return; }
+    var f = escrevendo.familia;
+    escrevendo = null;
+    abrirFamilia(f.id, { calado: true });
+    Jogo.confete(90);
+    Som.falar(FALA_FAMILIA_ESCRITA, { atraso: 260 });
+  }
+
+  /* o voltar da tela de escrita cai na família, não na grade do alfabeto:
+     é o mesmo cuidado do letras-voltar, agora com um terceiro consumidor */
+  function voltarDaEscrita() {
+    escrevendo = null;
+    abrirFamilia(familiaAtual ? familiaAtual.id : 'b', { calado: true });
   }
 
   /* =========================================================
@@ -425,6 +520,10 @@ var Silabario = (function () {
     });
 
     var b;
+    if ((b = $('#familia-escrever'))) b.addEventListener('click', function () {
+      Som.tocar('toque');
+      escreverFamilia(familiaAtual ? familiaAtual.id : 'b');
+    });
     if ((b = $('#familia-anterior'))) b.addEventListener('click', function () { andarFamilia(-1); });
     if ((b = $('#familia-proxima')))  b.addEventListener('click', function () { andarFamilia(1); });
     if ((b = $('#juntar-anterior')))  b.addEventListener('click', function () { andarJuntar(-1); });
@@ -440,6 +539,7 @@ var Silabario = (function () {
 
   return {
     montarGrade: montarGrade, abrirFamilia: abrirFamilia,
+    escreverFamilia: escreverFamilia, voltarDaEscrita: voltarDaEscrita,
     montarJuntar: montarJuntar, ligar: ligar, cancelar: cancelar,
     todasAsFalas: todasAsFalas, somDaSilaba: somDaSilaba
   };

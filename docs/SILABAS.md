@@ -17,8 +17,53 @@ com sílaba até ler a palavra.
 | Tela | O que faz |
 |---|---|
 | **familias** | 18 azulejos, 3 colunas × 6 linhas. As vogais primeiro e depois uma consoante por azulejo |
-| **familia** | A família aberta: BA BE BI BO BU, grandes, cada uma tocável. Sem erro e sem estrela — aqui é pra ouvir |
+| **familia** | A família aberta: BA BE BI BO BU, grandes, cada uma tocável. Sem erro e sem estrela — aqui é pra ouvir. E o botão **✏️ Escrever** |
+| **escrever** | Ela traça o B, traça o A, e sai BA. Reusa a tela da letra (`screen-cursiva`) no **modo roteiro** |
 | **juntar** | O jogo: o desenho da palavra, as lacunas e as pastilhas de sílaba embaralhadas |
+
+Cada tela faz uma coisa só, na ordem da alfabetização: **ouvir** a família,
+**escrever** a sílaba, **juntar** as sílabas numa palavra.
+
+## Escrever a sílaba — B + A = BA
+
+Pedido do Ademir em 20/10/2026, com as palavras dele: *"eu quero que ela junte
+as letras, eu quero que ela escreva o B mais A igual a BA, C mais A igual a
+CA"*. Por isso a tira de cima é literalmente `B + A = BA`, com a letra da vez
+em amarelo, a feita em verde e o resultado apagado até fechar.
+
+Quem desenha é o **Traço**, o mesmo motor das 52 letras, no modo roteiro, com
+o mesmo gabarito que o Ademir aprovou: cobriu 70% da letra, chegou ao fim de
+cada traço, e pelo menos metade do desenho caiu em cima.
+
+Três decisões:
+
+- **Em maiúscula, não em cursiva.** Juntar letras em cursiva é ligar uma na
+  outra com a laçada, e os dados da cursiva são 26 letras soltas, sem
+  ligadura. Duas cursivas lado a lado ensinariam um jeito de escrever que não
+  existe. A ligadura é outro trabalho, com desenho novo.
+- **A letra traçada aqui não conta no alfabeto.** Escrever o B dentro de BA
+  não é a tarefa do alfabeto; senão a grade das 26 ficaria verde sozinha. A
+  estrela é da sílaba, guardada em `lara.silabas.escritas`, e a sílaba fica
+  verde com ⭐ na família.
+- **A família das vogais não tem Escrever.** A é uma letra, não uma letra mais
+  uma vogal. Ali não há o que juntar, e o botão fica escondido.
+
+QUA se escreve com **três** letras, então a tira mostra `Q + U + A = QUA`. É
+por isso que no código a lista de letras é separada da sílaba.
+
+### A fala, quase sem gravação nova
+
+| Momento | O que fala | Gravado? |
+|---|---|---|
+| abre a letra | "Vamos fazer a letra bê!" | sim, nas 26 |
+| fecha a letra do meio | "Muito bem, Lara!" | sim |
+| fecha a sílaba | "Você escreveu" + o mp3 da própria sílaba | o começo é 1 arquivo de 13 créditos; a sílaba já era pedida pela tela da família |
+| fecha a família | "Parabéns, Lara! Você escreveu a família inteira!" | 1 arquivo |
+
+Gravar "Você escreveu ba!" inteiro seriam 95 arquivos e 1.615 créditos. Por
+pedaços são 13. Quem junta é o `Som.falarPedacos`, que só usa gravação se
+**todos** os pedaços existirem — meia frase boa e meia robótica seria pior que
+tudo robótico.
 
 ## As quatro decisões que parecem detalhe
 
@@ -128,6 +173,10 @@ de novo.
 Palavra nova = uma linha em `PALAVRAS` (com a divisão escrita à mão), um
 desenho em `js/data-palavras.js`, e rodar o gerador de vozes. Família nova =
 uma linha em `FAMILIAS`.
+
+Mexeu no motor de traço (`js/cursiva.js`) ou nos traços das letras? Rode
+`ferramentas/tracos.html` **antes de publicar**: dedo simulado nas 52 letras,
+traço inteiro tem que completar e 60% de cada traço não pode completar.
 
 ```bash
 node ferramentas/gerar-vozes.js --faltam     # não custa crédito

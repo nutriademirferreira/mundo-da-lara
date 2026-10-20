@@ -564,6 +564,9 @@
       <button class="som-btn som-btn--mini" id="cursiva-som" type="button"
               aria-label="Ouvir o nome da letra" data-falar="Vamos fazer a letra á!"></button>
     </header>
+    <!-- só no modo roteiro (escrever uma sílaba): B + A = BA, com o que
+         ela já fez em verde. Fica escondida quando é letra do alfabeto -->
+    <p class="traco-silaba" id="traco-silaba" hidden></p>
     <svg class="cursiva-svg" id="cursiva-svg" viewBox="0 0 100 130"
          role="img" aria-label="Passe o dedo por cima da letra"></svg>
     <button class="cursiva-parabens" id="cursiva-parabens" type="button" hidden aria-label="Próxima letra">
@@ -604,6 +607,7 @@
     <div class="familia-silabas" id="familia-silabas"></div>
     <div class="cursiva-controles">
       <button class="icon-btn" id="familia-anterior" type="button" aria-label="Família anterior">‹</button>
+      <button class="btn btn--denovo" id="familia-escrever" type="button">✏️ Escrever</button>
       <button class="icon-btn" id="familia-proxima" type="button" aria-label="Próxima família">›</button>
     </div>
   </section>
