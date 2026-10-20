@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 380 420" role="img"><title>Bolhinha acendendo as oito cores no fundo do mar</title><desc>Fundo do mar a noite, dentro de uma nuvem de areia escura. O polvinho Bolhinha brilha no centro com cada bracinho de uma cor, piscando como estrelinha. Atras dele vem o peixinho Dedal, depois o cavalo-marinho Fiapo e, no fim da fila, a tartaruga Vovo Casquinha, seguindo as cores ate a casinha de pedra.</desc>
+<rect x="0" y="0" width="380" height="420" rx="16" fill="#12345a"/>
+<path d="M0 16 Q0 0 16 0 L364 0 Q380 0 380 16 L380 74 Q190 102 0 78 Z" fill="#1b4a7a"/>
+<path d="M0 44 Q190 72 380 48 L380 66 Q190 92 0 70 Z" fill="#2a6396" opacity="0.6"/>
+<circle cx="70" cy="44" r="26" fill="#f6e7b0"/>
+<circle cx="81" cy="36" r="24" fill="#1b4a7a"/>
+<path d="M118 60 q10 -5 20 0 M150 76 q10 -5 20 0 M250 58 q10 -5 20 0" fill="none" stroke="#a9cdf2" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
+<circle cx="208" cy="36" r="2" fill="#fff6c8"/>
+<circle cx="300" cy="94" r="1.6" fill="#fff6c8"/>
+<circle cx="340" cy="52" r="2.2" fill="#fff6c8"/>
+<circle cx="36" cy="112" r="1.6" fill="#fff6c8"/>
+<circle cx="120" cy="130" r="1.4" fill="#fff6c8"/>
+<circle cx="256" cy="124" r="1.8" fill="#fff6c8"/>
+<circle cx="356" cy="140" r="1.3" fill="#fff6c8"/>
+<ellipse cx="190" cy="252" rx="198" ry="96" fill="#5a4a2e" opacity="0.42"/>
+<ellipse cx="112" cy="222" rx="112" ry="56" fill="#6b5733" opacity="0.32"/>
+<ellipse cx="286" cy="272" rx="118" ry="58" fill="#6b5733" opacity="0.28"/>
+<ellipse cx="200" cy="304" rx="172" ry="58" fill="#4a3c25" opacity="0.38"/>
+<path d="M44 282 q34 -16 66 2 q30 16 62 -2 M232 292 q32 -16 62 2" fill="none" stroke="#8a7448" stroke-width="2.4" stroke-linecap="round" opacity="0.45"/>
+<path d="M0 330 Q100 308 200 328 T380 320 L380 404 Q380 420 364 420 L16 420 Q0 420 0 404 Z" fill="#c9b27a"/>
+<path d="M30 352 q26 -8 52 0 M224 346 q26 -8 52 0 M120 384 q30 -8 60 0" fill="none" stroke="#a88f58" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="66" cy="318" r="3" fill="#c9b27a" opacity="0.5"/>
+<circle cx="246" cy="312" r="2.6" fill="#c9b27a" opacity="0.5"/>
+<circle cx="330" cy="334" r="3" fill="#c9b27a" opacity="0.5"/>
+<path d="M30 340 q-12 -38 4 -68 q10 -20 2 -38" fill="none" stroke="#2f7a5a" stroke-width="8" stroke-linecap="round"/>
+<path d="M54 346 q12 -34 2 -62" fill="none" stroke="#3f9a70" stroke-width="6" stroke-linecap="round"/>
+<path d="M354 336 q12 -40 0 -74" fill="none" stroke="#2f7a5a" stroke-width="8" stroke-linecap="round"/>
+<path d="M332 342 q10 -30 0 -54" fill="none" stroke="#3f9a70" stroke-width="5" stroke-linecap="round"/>
+<path d="M206 340 q-4 -34 10 -52 M212 312 q10 -6 16 -18" fill="none" stroke="#b05c7a" stroke-width="7" stroke-linecap="round"/>
+<circle cx="218" cy="286" r="7" fill="#c76e8a"/>
+<circle cx="230" cy="292" r="5.5" fill="#c76e8a"/>
+<ellipse cx="46" cy="374" rx="40" ry="28" fill="#56708a"/>
+<ellipse cx="50" cy="386" rx="13" ry="16" fill="#0e2742"/>
+<circle cx="24" cy="360" r="4" fill="#f2d6b8"/>
+<circle cx="62" cy="352" r="3.4" fill="#f2d6b8"/>
+<circle cx="80" cy="370" r="3.6" fill="#f2d6b8"/>
+<circle cx="158" cy="226" r="76" fill="#fff3a0" opacity="0.08"/>
+<circle cx="158" cy="226" r="54" fill="#fff3a0" opacity="0.13"/>
+<circle cx="158" cy="222" r="33" fill="#fff3a0" opacity="0.28"/>
+<g fill="none" stroke-width="7" stroke-linecap="round">
+<path d="M130 232 q-30 -2 -44 8" stroke="#b48ce0"/>
+<path d="M134 240 q-26 8 -34 24" stroke="#ffd86b"/>
+<path d="M144 246 q-14 16 -14 34" stroke="#f2a6b8"/>
+<path d="M156 248 q0 20 6 34" stroke="#a9cdf2"/>
+<path d="M170 246 q14 14 20 32" stroke="#b6e36a"/>
+<path d="M180 240 q24 8 32 24" stroke="#f0a33a"/>
+<path d="M186 232 q30 0 44 10" stroke="#6fd8c0"/>
+<path d="M184 222 q30 -10 42 -24" stroke="#ffe066"/>
+</g>
+<circle cx="86" cy="240" r="4.5" fill="#b48ce0"/>
+<circle cx="100" cy="264" r="4.5" fill="#ffd86b"/>
+<circle cx="130" cy="280" r="4.5" fill="#f2a6b8"/>
+<circle cx="162" cy="282" r="4.5" fill="#a9cdf2"/>
+<circle cx="190" cy="278" r="4.5" fill="#b6e36a"/>
+<circle cx="212" cy="264" r="4.5" fill="#f0a33a"/>
+<circle cx="230" cy="242" r="4.5" fill="#6fd8c0"/>
+<circle cx="226" cy="198" r="4.5" fill="#ffe066"/>
+<ellipse cx="158" cy="212" rx="32" ry="34" fill="#ffd86b"/>
+<ellipse cx="158" cy="224" rx="24" ry="22" fill="#ffe9a8"/>
+<circle cx="144" cy="192" r="3.6" fill="#f7b94a"/>
+<circle cx="158" cy="185" r="3.6" fill="#f7b94a"/>
+<circle cx="172" cy="192" r="3.6" fill="#f7b94a"/>
+<circle cx="147" cy="218" r="8" fill="#ffffff"/>
+<circle cx="169" cy="218" r="8" fill="#ffffff"/>
+<circle cx="148" cy="219" r="4" fill="#1b1b1b"/>
+<circle cx="170" cy="219" r="4" fill="#1b1b1b"/>
+<circle cx="146" cy="216" r="1.5" fill="#ffffff"/>
+<circle cx="168" cy="216" r="1.5" fill="#ffffff"/>
+<path d="M150 233 q8 7 16 0" fill="none" stroke="#a8702a" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="135" cy="229" rx="5" ry="3.5" fill="#f2a6b8" opacity="0.7"/>
+<ellipse cx="181" cy="229" rx="5" ry="3.5" fill="#f2a6b8" opacity="0.7"/>
+<circle cx="198" cy="204" r="5.6" fill="#ffd86b"/>
+<circle cx="212" cy="196" r="4.6" fill="#b6e36a"/>
+<circle cx="225" cy="190" r="3.8" fill="#a9cdf2"/>
+<polygon points="264,188 279,178 279,198" fill="#d9763a"/>
+<ellipse cx="256" cy="188" rx="13" ry="10" fill="#f2914a"/>
+<ellipse cx="255" cy="192" rx="8" ry="5" fill="#f8c08a"/>
+<path d="M258 178 q-4 -8 -10 -6" fill="none" stroke="#f2914a" stroke-width="4" stroke-linecap="round"/>
+<circle cx="250" cy="185" r="3.6" fill="#ffffff"/>
+<circle cx="249" cy="185" r="1.8" fill="#1b1b1b"/>
+<path d="M300 216 q-14 10 -9 25 q4 13 -4 21 q-7 7 -16 4" fill="none" stroke="#f0c266" stroke-width="9" stroke-linecap="round"/>
+<path d="M290 234 q-10 6 -4 14" fill="none" stroke="#ffe0a0" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M297 246 q-9 5 -4 13" fill="none" stroke="#ffe0a0" stroke-width="3" stroke-linecap="round"/>
+<circle cx="301" cy="214" r="9.5" fill="#f0c266"/>
+<path d="M307 210 q11 0 14 6" fill="none" stroke="#f0c266" stroke-width="5" stroke-linecap="round"/>
+<path d="M298 205 q-2 -9 5 -11" fill="none" stroke="#ffe0a0" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="303" cy="211" r="3.6" fill="#ffffff"/>
+<circle cx="302" cy="211" r="1.8" fill="#1b1b1b"/>
+<ellipse cx="300" cy="318" rx="11" ry="6" fill="#7aa86a" transform="rotate(-18 300 318)"/>
+<ellipse cx="334" cy="318" rx="11" ry="6" fill="#7aa86a" transform="rotate(18 334 318)"/>
+<ellipse cx="289" cy="304" rx="12" ry="9" fill="#7aa86a"/>
+<ellipse cx="318" cy="300" rx="30" ry="21" fill="#4a7a4a"/>
+<circle cx="306" cy="295" r="6.5" fill="#35603a"/>
+<circle cx="319" cy="291" r="6.5" fill="#35603a"/>
+<circle cx="332" cy="296" r="6.5" fill="#35603a"/>
+<path d="M292 311 q12 7 26 6 q14 -1 24 -7" fill="none" stroke="#3a6340" stroke-width="3" stroke-linecap="round"/>
+<circle cx="283" cy="301" r="3.8" fill="#ffffff"/>
+<circle cx="282" cy="302" r="1.9" fill="#1b1b1b"/>
+<path d="M281 309 q5 3 9 1" fill="none" stroke="#4a7a4a" stroke-width="1.6" stroke-linecap="round"/>
+<circle cx="238" cy="166" r="3" fill="#a9cdf2" opacity="0.6"/>
+<circle cx="248" cy="152" r="2.2" fill="#a9cdf2" opacity="0.6"/>
+<circle cx="316" cy="186" r="3.2" fill="#a9cdf2" opacity="0.6"/>
+<circle cx="326" cy="170" r="2.2" fill="#a9cdf2" opacity="0.6"/>
+<circle cx="112" cy="166" r="2.6" fill="#a9cdf2" opacity="0.6"/>
+<circle cx="104" cy="150" r="2" fill="#a9cdf2" opacity="0.6"/>
+</svg>

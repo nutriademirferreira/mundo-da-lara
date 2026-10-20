@@ -13,6 +13,8 @@ var App = (function () {
     'espaco-menu':      'screen-espaco-menu',
     'espaco-explorar':  'screen-espaco-explorar',
     'galeria':          'screen-galeria',
+    'historias':        'screen-historias',
+    'leitura':          'screen-leitura',
     'cineminha':        'screen-cineminha',
     'memoria-menu':     'screen-memoria-menu',
     'memoria':          'screen-memoria',
@@ -50,6 +52,10 @@ var App = (function () {
     'velha':            { foto:'fundo-velha',  veu:'meio'   },
     'result':           { foto:'fundo-home',   veu:'claro'  },
     'galeria':          { foto:'fundo-home',   veu:'claro'  },
+    'historias':        { foto:'fundo-inicio', veu:'escuro' },
+    /* a leitura é no escuro, com a criança no colo: o céu da abertura
+       é o fundo certo, e o véu mais pesado tira o brilho da tela */
+    'leitura':          { foto:'fundo-inicio', veu:'escuro' },
     'cineminha':        { foto:'fundo-espaco', veu:'escuro' },
     'memoria-menu':     { foto:'fundo-home',   veu:'claro'  },
     'memoria':          { foto:'fundo-home',   veu:'claro'  },
@@ -224,6 +230,7 @@ var App = (function () {
         if (destino === 'corpo-aprender')    { montarAprender('partes'); ir('corpo-aprender'); return; }
         if (destino === 'espaco-explorar')   { montarExplorar(); ir('espaco-explorar'); return; }
         if (destino === 'galeria')           { montarGaleria(); ir('galeria'); ajustarGaleria(); return; }
+        if (destino === 'historias')         { Contos.montarBiblioteca(); ir('historias'); Contos.ajustar(); return; }
         if (destino === 'cineminha')         { montarCineminha(); ir('cineminha'); ajustarGaleria(); return; }
         if (destino === 'memoria-palavras')  { ir('memoria'); Memoria.iniciar('palavras'); return; }
         if (destino === 'memoria-espaco')    { ir('memoria'); Memoria.iniciar('espaco'); return; }

@@ -25,9 +25,12 @@ python3 ferramentas/servidor.py 8952 .     # servidor local sem cache
 
 ### 1. Nenhuma tela rola na vertical
 
-A Lara tem 5 anos. Conteúdo abaixo da dobra, pra ela, não existe. A única
-exceção é a galeria, onde rolar é o gesto que todo mundo espera de uma
-galeria — e lá a rolagem é **do container**, nunca do `body`.
+A Lara tem 5 anos. Conteúdo abaixo da dobra, pra ela, não existe. São duas
+exceções, e as duas rolam **o container**, nunca o `body`:
+
+- a **galeria**, onde rolar é o gesto que todo mundo espera de uma galeria;
+- a **leitura** de uma história, porque 450 palavras não cabem numa tela e
+  ali quem opera é o adulto lendo em voz alta, não a criança.
 
 ### 2. Nada rola na horizontal no `body`
 
@@ -146,6 +149,8 @@ Módulo novo com temporizador nasce com selo. Não é opcional.
 | **cursiva** | Passar o dedo por cima da letra (maiúscula ou cursiva) | idem | **Maiúscula** é letra de forma, em pé, um caminho por traço na ordem da escola; o começo de cada traço tem número e só o 1 pulsa. Dois traços que nascem no mesmo ponto (pernas do A, haste e teto do E): o 2 anda 16 unidades pelo próprio traço, senão fica em cima do 1. **Cursiva** tem uma bolinha só: número em cima esconderia o pingo do i. **Falas:** abrir a letra → "Vamos fazer a letra bê!"; acertou → "Muito bem, Lara! Você fez a letra bê!" e a próxima entra na **fila** da voz (trocar a letra antes faria o C aparecer ainda falando do B — por isso a espera é 3,4 s: a fala mais longa dura 3,0 s); a última que faltava → "Parabéns, Lara! Você fez o alfabeto inteiro!" e volta pra grade. Testado por traço simulado: as 52 letras completam com o traço inteiro e nenhuma com 60% de cada traço. **Gabarito do Ademir:** cobriu 70% da letra, chegou ao fim de cada traço e pelo menos metade do desenho caiu em cima da letra → tela verde e passa sozinha pra próxima. Mais da metade fora → "Quase! Tenta de novo." (sem X nem vermelho: erro não pune). No meio → silêncio, ela continua. Sem "chegar ao fim" o `t` completava com 31% do traço; sem a precisão, rabiscar a tela toda passava. Tremor de até ±11 unidades passa 100% — dedo de 5 anos treme ~±7. A passagem automática tem selo (regra 8) |
 | **velha** | Contra o app ou a dois | — | A IA é fraca **de propósito** (35% esperta). Não "conserte" |
 | **damas** | 6×6, estrela dela contra planetas | — | Captura **não** é obrigatória e a dama **não** voa: as duas regras fariam o app recusar a jogada dela. 6×6 e não 8×8 porque em 8×8 a casa cai pra 42px. IA fraca de propósito (40%) |
+| **historias** | Biblioteca das 14 histórias de dormir | `Historias.LISTA` (`js/data-historias.js`) | Rola só o container. Altura da linha calculada em JS, igual à galeria (regra 4b) |
+| **leitura** | A história aberta, pro papai ler em voz alta | idem | Painel escuro atrás do texto: sobre o céu estrelado as letras disputavam com as estrelas. Cada 🔊 vira um chip, que é o sinal de parar de ler e fazer o som |
 | **galeria** | As figurinhas dela | `FOTOS` em `js/app.js` | Única tela que rola. `gridAutoRows` calculado em JS |
 | **cineminha** | Animações | `FILMES` em `js/app.js` | Atalho só aparece se houver filme. Vídeo **fora** do cache offline |
 | **result** | Fim de rodada | — | — |
@@ -215,6 +220,8 @@ apontar algo, **meça na mão antes de consertar**.
 ## Depois de mexer
 
 1. `node ferramentas/gerar-vozes.js --faltam` — não custa crédito
+1b. Se mexeu em história: `node ferramentas/compilar-historias.js` e
+    `node ferramentas/validar-historias.js`
 2. Abrir `ferramentas/auditoria.html` — todas as telas, todos os aparelhos
 3. Subir a versão do cache em `sw.js`, senão quem já tem o app instalado
    continua com a versão antiga

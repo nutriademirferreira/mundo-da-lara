@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 380 420" role="img"><title>Algodão, a nuvem mais quietinha do céu, regando a florzinha Dourada</title><desc>Campo ao anoitecer com lua e estrelas. A nuvenzinha Algodão desceu baixinho e para logo em cima da florzinha dourada, fazendo sombra e soltando uma chuva bem fininha, pingo por pingo, até a flor levantar a cabecinha. Zabumba, a nuvem grandona, dorme longe atrás da montanha, a andorinha Riscadinha voa em zigue-zague e a vaquinha Manchinha descansa no capim.</desc>
+<rect x="0" y="0" width="380" height="420" rx="16" fill="#2d2a55"/>
+<circle cx="312" cy="58" r="26" fill="#f6e7b0"/>
+<circle cx="323" cy="50" r="23" fill="#2d2a55"/>
+<circle cx="40" cy="36" r="2" fill="#fff6c8"/>
+<circle cx="108" cy="54" r="1.6" fill="#fff6c8"/>
+<circle cx="150" cy="30" r="2.2" fill="#fff6c8"/>
+<circle cx="232" cy="46" r="1.8" fill="#fff6c8"/>
+<circle cx="262" cy="78" r="1.5" fill="#fff6c8"/>
+<circle cx="352" cy="120" r="1.8" fill="#fff6c8"/>
+<circle cx="76" cy="96" r="1.5" fill="#fff6c8"/>
+<circle cx="348" cy="196" r="1.6" fill="#fff6c8"/>
+<path d="M0 258 Q110 240 200 252 T380 246 L380 302 L0 302 Z" fill="#7a4a6a"/>
+<path d="M0 282 Q120 268 210 278 T380 272 L380 322 L0 322 Z" fill="#d9824a"/>
+<path d="M0 302 Q130 292 220 300 T380 296 L380 332 L0 332 Z" fill="#f0b06a"/>
+<polygon points="0 302 56 234 112 302" fill="#3a3160"/>
+<polygon points="88 302 134 256 180 302" fill="#453a72"/>
+<ellipse cx="62" cy="186" rx="48" ry="24" fill="#7d7aa6"/>
+<circle cx="36" cy="174" r="18" fill="#7d7aa6"/>
+<circle cx="66" cy="164" r="25" fill="#7d7aa6"/>
+<circle cx="96" cy="176" r="17" fill="#7d7aa6"/>
+<circle cx="54" cy="160" r="13" fill="#9a97c4"/>
+<circle cx="86" cy="168" r="9" fill="#9a97c4"/>
+<path d="M48 182 q3 2.5 6 0 M74 182 q3 2.5 6 0" fill="none" stroke="#4a4668" stroke-width="2" stroke-linecap="round"/>
+<path d="M62 196 q6 5 12 0" fill="none" stroke="#4a4668" stroke-width="2" stroke-linecap="round"/>
+<path d="M248 152 q12 -14 24 -4 q12 10 24 -8" fill="none" stroke="#a9c4e8" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+<polygon points="300 118 316 104 312 124" fill="#2e3b63"/>
+<polygon points="286 134 272 148 290 142" fill="#2e3b63"/>
+<ellipse cx="302" cy="130" rx="15" ry="8" fill="#3b4a7a" transform="rotate(-18 302 130)"/>
+<ellipse cx="300" cy="134" rx="8" ry="4" fill="#cfe0f5" transform="rotate(-18 300 134)"/>
+<circle cx="316" cy="122" r="7" fill="#3b4a7a"/>
+<circle cx="318" cy="121" r="2.6" fill="#ffffff"/>
+<circle cx="318.5" cy="121" r="1.4" fill="#1b1b1b"/>
+<polygon points="322 124 330 126 322 128" fill="#f2a33a"/>
+<circle cx="190" cy="186" r="74" fill="#fff3a0" opacity="0.1"/>
+<circle cx="190" cy="186" r="52" fill="#fff3a0" opacity="0.16"/>
+<ellipse cx="190" cy="198" rx="58" ry="26" fill="#e9c3d5"/>
+<circle cx="158" cy="182" r="24" fill="#e9c3d5"/>
+<circle cx="190" cy="170" r="30" fill="#e9c3d5"/>
+<circle cx="222" cy="184" r="22" fill="#e9c3d5"/>
+<circle cx="176" cy="166" r="16" fill="#f9e3ee"/>
+<circle cx="208" cy="172" r="11" fill="#f9e3ee"/>
+<ellipse cx="190" cy="208" rx="44" ry="13" fill="#fbeef4"/>
+<ellipse cx="162" cy="202" rx="7" ry="4.5" fill="#f2a6b8" opacity="0.7"/>
+<ellipse cx="218" cy="202" rx="7" ry="4.5" fill="#f2a6b8" opacity="0.7"/>
+<circle cx="176" cy="190" r="6" fill="#ffffff"/>
+<circle cx="204" cy="190" r="6" fill="#ffffff"/>
+<circle cx="176" cy="191" r="3" fill="#1b1b1b"/>
+<circle cx="204" cy="191" r="3" fill="#1b1b1b"/>
+<circle cx="174.5" cy="189.5" r="1.4" fill="#ffffff"/>
+<circle cx="202.5" cy="189.5" r="1.4" fill="#ffffff"/>
+<path d="M183 204 q7 6 14 0" fill="none" stroke="#b06a86" stroke-width="2" stroke-linecap="round"/>
+<path d="M176 232 l0 10 M190 238 l0 10 M204 230 l0 10 M182 256 l0 10 M196 260 l0 10 M172 278 l0 9 M188 282 l0 10 M202 274 l0 10 M194 296 l0 9 M178 300 l0 9" fill="none" stroke="#8fb3e0" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+<path d="M0 322 Q95 306 190 320 T380 314 L380 404 Q380 420 364 420 L16 420 Q0 420 0 404 Z" fill="#23402b"/>
+<ellipse cx="190" cy="350" rx="30" ry="8" fill="#152a1b" opacity="0.55"/>
+<path d="M190 350 q-5 -18 0 -32" fill="none" stroke="#3d7349" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="176" cy="334" rx="9" ry="5" fill="#3d7349" transform="rotate(-20 176 334)"/>
+<ellipse cx="204" cy="342" rx="8" ry="4.5" fill="#3d7349" transform="rotate(20 204 342)"/>
+<circle cx="190" cy="296" r="8" fill="#f2c54a"/>
+<circle cx="203" cy="303" r="8" fill="#f2c54a"/>
+<circle cx="203" cy="317" r="8" fill="#f2c54a"/>
+<circle cx="190" cy="324" r="8" fill="#f2c54a"/>
+<circle cx="177" cy="317" r="8" fill="#f2c54a"/>
+<circle cx="177" cy="303" r="8" fill="#f2c54a"/>
+<circle cx="190" cy="310" r="9" fill="#ffe066"/>
+<circle cx="186" cy="308" r="2.6" fill="#ffffff"/>
+<circle cx="194" cy="308" r="2.6" fill="#ffffff"/>
+<circle cx="186" cy="308.5" r="1.4" fill="#1b1b1b"/>
+<circle cx="194" cy="308.5" r="1.4" fill="#1b1b1b"/>
+<path d="M186 314 q4 3.5 8 0" fill="none" stroke="#c08a2a" stroke-width="1.6" stroke-linecap="round"/>
+<circle cx="168" cy="326" r="2" fill="#a9cdf2" opacity="0.8"/>
+<circle cx="212" cy="332" r="2" fill="#a9cdf2" opacity="0.8"/>
+<circle cx="214" cy="292" r="2.2" fill="#fff3a0" opacity="0.8"/>
+<circle cx="166" cy="300" r="1.8" fill="#fff3a0" opacity="0.8"/>
+<ellipse cx="292" cy="372" rx="38" ry="20" fill="#f3efe6"/>
+<ellipse cx="270" cy="386" rx="13" ry="7" fill="#f3efe6"/>
+<ellipse cx="278" cy="364" rx="11" ry="7" fill="#4a4a52"/>
+<ellipse cx="304" cy="378" rx="9" ry="5.5" fill="#4a4a52"/>
+<ellipse cx="312" cy="346" rx="7" ry="4.5" fill="#4a4a52" transform="rotate(-25 312 346)"/>
+<circle cx="316" cy="338" r="5" fill="#e3d6b8"/>
+<circle cx="334" cy="338" r="5" fill="#e3d6b8"/>
+<circle cx="327" cy="354" r="17" fill="#f3efe6"/>
+<ellipse cx="336" cy="362" rx="10" ry="7.5" fill="#e9b2bd"/>
+<circle cx="333" cy="361" r="1.6" fill="#c98f9b"/>
+<circle cx="340" cy="363" r="1.6" fill="#c98f9b"/>
+<path d="M318 350 q3 2.5 6 0" fill="none" stroke="#6b5a4a" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="318" cy="358" rx="5" ry="3.5" fill="#f2a6b8" opacity="0.7"/>
+<path d="M40 346 l3 -12 l3 12 M74 336 l3 -11 l3 11 M120 354 l3 -12 l3 12 M240 342 l3 -12 l3 12 M332 352 l3 -12 l3 12 M100 372 l3 -12 l3 12 M58 392 l3 -12 l3 12 M150 388 l3 -12 l3 12" fill="none" stroke="#3d7349" stroke-width="2" stroke-linecap="round"/>
+</svg>

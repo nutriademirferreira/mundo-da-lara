@@ -118,6 +118,16 @@
         <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Jogos"
                 data-falar="Jogos. Jogo da velha, memória e damas."></button>
       </div>
+      <!-- Faixa larga e não quadrado: Histórias é a última parada da noite,
+           não mais um jogo. O papai precisa achar ela de primeira no escuro -->
+      <div class="tile-wrap tile-wrap--largo">
+        <button class="tile tile--faixa tile--contos" data-go="historias" type="button">
+          <span class="tile__art"><img src="img/lara-oi.webp" alt="" class="tile__foto"></span>
+          <strong>Histórias</strong>
+        </button>
+        <button class="som-btn som-btn--nano som-flutuante" type="button" aria-label="Ouvir Histórias"
+                data-falar="Histórias. Histórias pra ouvir na hora de dormir."></button>
+      </div>
       <div class="tile-wrap tile-wrap--largo" id="wrap-fotos">
         <button class="tile tile--faixa tile--fotos" data-go="galeria" type="button">
           <span class="tile__art"><img src="img/lara-festa.webp" alt="" class="tile__foto"></span>
@@ -312,6 +322,26 @@
   </section>
 
   <!-- ============ GALERIA DE FOTOS ============ -->
+  <!-- ============ HISTÓRIAS: a biblioteca ============ -->
+  <section class="screen screen--galeria screen--dark" id="screen-historias">
+    <header class="bar">
+      <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
+      <h2 class="bar__title">Histórias</h2>
+      <span class="bar__stars"><img class="estrela-icone" src="img/estrela.webp" alt=""><b data-star-mirror>0</b></span>
+    </header>
+    <div class="historias" id="historias"></div>
+  </section>
+
+  <!-- ============ HISTÓRIAS: a leitura ============ -->
+  <section class="screen screen--leitura screen--dark" id="screen-leitura">
+    <header class="bar">
+      <button class="icon-btn" data-go="historias" type="button" aria-label="Voltar para as histórias">←</button>
+      <h2 class="bar__title" id="leitura-titulo">Histórias</h2>
+      <span class="bar__spacer"></span>
+    </header>
+    <div class="leitura" id="leitura"></div>
+  </section>
+
   <section class="screen screen--galeria" id="screen-galeria">
     <header class="bar">
       <button class="icon-btn" data-go="home" type="button" aria-label="Voltar">←</button>
@@ -706,6 +736,8 @@
 <script src="js/data-cursiva.js"></script>
 <script src="js/data-maiuscula.js"></script>
 <script src="js/cursiva.js"></script>
+<script src="js/data-historias.js"></script>
+<script src="js/historias.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

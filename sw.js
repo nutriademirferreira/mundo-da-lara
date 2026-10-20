@@ -1,7 +1,7 @@
 /* Service worker — o app abre offline e se atualiza sozinho.
    Estratégia: entrega o que está em cache na hora (rápido pra criança)
    e, em paralelo, baixa a versão nova pro próximo abrir. */
-var CACHE = 'mundo-da-lara-v43';
+var CACHE = 'mundo-da-lara-v45';
 var ARQUIVOS = [
   './',
   'index.html',
@@ -17,6 +17,8 @@ var ARQUIVOS = [
   'js/data-cursiva.js',
   'js/data-maiuscula.js',
   'js/cursiva.js',
+  'js/data-historias.js',
+  'js/historias.js',
   'js/app.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
@@ -30,6 +32,21 @@ var ARQUIVOS = [
   'img/cena-cozinha.webp',
   'img/cena-fazenda.webp',
   'img/estrela.webp',
+  /* ilustrações das histórias */
+  'img/historias/algodao-nuvem.svg',
+  'img/historias/azulina-baleia.svg',
+  'img/historias/bolhinha-polvo.svg',
+  'img/historias/bolota-ursinho.svg',
+  'img/historias/brasa-dragao.svg',
+  'img/historias/caramelo-cachorro.svg',
+  'img/historias/casquinha-tartaruga.svg',
+  'img/historias/castanha-esquilo.svg',
+  'img/historias/juba-leaozinho.svg',
+  'img/historias/lumi-vagalume.svg',
+  'img/historias/pingo-pinguim.svg',
+  'img/historias/pintinha-joaninha.svg',
+  'img/historias/pipoca-estrelinha.svg',
+  'img/historias/trevo-coelha.svg',
   'img/fundo-corpo.webp',
   'img/fundo-espaco.webp',
   'img/fundo-home.webp',

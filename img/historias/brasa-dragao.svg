@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 380 420" role="img"><title>Brasa respirando devagar com a Vovó Fagulha</title><desc>Montanha de pedras redondas no céu laranja do fim da tarde. A Vovó Fagulha, uma dragoa grande, senta nas pedras ao lado do dragãozinho Brasa, com a asa em volta das costas dele, e respira bem devagar junto com ele. A fumacinha sai do nariz do Brasa do tamanho de uma maçã, encolhe até ficar do tamanho de uma uva e sobe para as nuvens. Tufo, o cabritinho, está deitado nas pedras mornas e Pituca, a passarinha, dorme com o biquinho escondido na asa.</desc>
+<rect x="0" y="0" width="380" height="420" rx="16" fill="#2d2a55"/>
+<path d="M0 215 Q120 195 250 212 T380 200 L380 330 L0 330 Z" fill="#7a4a6a"/>
+<path d="M0 258 Q130 240 260 256 T380 246 L380 330 L0 330 Z" fill="#d9824a"/>
+<path d="M0 292 Q120 278 240 290 T380 282 L380 330 L0 330 Z" fill="#f0b06a"/>
+<circle cx="300" cy="266" r="46" fill="#f0b06a" opacity="0.35"/>
+<circle cx="300" cy="266" r="30" fill="#f7d98f"/>
+<circle cx="308" cy="74" r="22" fill="#f6e7b0"/>
+<circle cx="319" cy="66" r="19" fill="#2d2a55"/>
+<circle cx="44" cy="62" r="2" fill="#fff6c8"/>
+<circle cx="118" cy="44" r="2.2" fill="#fff6c8"/>
+<circle cx="206" cy="56" r="1.6" fill="#fff6c8"/>
+<circle cx="262" cy="36" r="2" fill="#fff6c8"/>
+<circle cx="76" cy="112" r="1.4" fill="#fff6c8"/>
+<circle cx="352" cy="124" r="1.8" fill="#fff6c8"/>
+<circle cx="150" cy="86" r="1.5" fill="#fff6c8"/>
+<ellipse cx="192" cy="120" rx="44" ry="14" fill="#e8977a"/>
+<ellipse cx="164" cy="108" rx="24" ry="12" fill="#f0b06a"/>
+<ellipse cx="214" cy="106" rx="28" ry="13" fill="#f0b06a"/>
+<ellipse cx="242" cy="122" rx="20" ry="9" fill="#e8977a"/>
+<ellipse cx="70" cy="192" rx="34" ry="9" fill="#6e4268"/>
+<ellipse cx="84" cy="185" rx="19" ry="8" fill="#6e4268"/>
+<path d="M0 318 L70 262 L128 302 L186 252 L244 300 L300 268 L352 306 L380 288 L380 330 L0 330 Z" fill="#4a3a6a"/>
+<path d="M0 330 L46 296 L108 322 L170 290 L232 318 L292 300 L344 322 L380 306 L380 330 Z" fill="#7a4a6a"/>
+<path d="M0 326 Q95 300 190 318 T380 306 L380 404 Q380 420 364 420 L16 420 Q0 420 0 404 Z" fill="#684b45"/>
+<circle cx="44" cy="372" r="24" fill="#9c7a6e"/>
+<circle cx="102" cy="396" r="20" fill="#7c5c54"/>
+<circle cx="332" cy="360" r="28" fill="#9c7a6e"/>
+<circle cx="300" cy="400" r="18" fill="#7c5c54"/>
+<circle cx="196" cy="402" r="22" fill="#8d6a60"/>
+<ellipse cx="114" cy="352" rx="13" ry="7" fill="#9c7a6e"/>
+<ellipse cx="114" cy="340" rx="10" ry="6" fill="#ae8c7c"/>
+<ellipse cx="114" cy="330" rx="7.5" ry="5" fill="#c09c88"/>
+<path d="M212 348 l3 -12 l3 12 M136 372 l3 -11 l3 11 M266 352 l3 -11 l3 11 M78 388 l3 -11 l3 11" fill="none" stroke="#6b8a4a" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="60" cy="350" rx="24" ry="14" fill="#ece4d6"/>
+<ellipse cx="70" cy="364" rx="11" ry="5" fill="#d8ccb8"/>
+<path d="M84 346 l8 -8" fill="none" stroke="#ece4d6" stroke-width="4" stroke-linecap="round"/>
+<circle cx="38" cy="340" r="12" fill="#ece4d6"/>
+<ellipse cx="28" cy="345" rx="7" ry="5" fill="#d8ccb8"/>
+<ellipse cx="44" cy="330" rx="7" ry="4" fill="#d8ccb8" transform="rotate(-25 44 330)"/>
+<path d="M34 330 q-3 -9 3 -11 M42 329 q0 -9 6 -10" fill="none" stroke="#b89a6a" stroke-width="3" stroke-linecap="round"/>
+<path d="M32 340 q3 2.5 6 0" fill="none" stroke="#4a3f33" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M308 330 q28 12 40 -6" fill="none" stroke="#8e3b4a" stroke-width="10" stroke-linecap="round"/>
+<ellipse cx="258" cy="336" rx="13" ry="8" fill="#75303e"/>
+<ellipse cx="292" cy="338" rx="13" ry="8" fill="#75303e"/>
+<ellipse cx="272" cy="302" rx="44" ry="38" fill="#8e3b4a"/>
+<path d="M258 280 q-62 -24 -116 4 q-6 20 18 25 q54 10 92 -11 z" fill="#75303e"/>
+<ellipse cx="278" cy="314" rx="25" ry="21" fill="#e3a87a"/>
+<circle cx="262" cy="250" r="27" fill="#8e3b4a"/>
+<path d="M250 226 l3 -14 l7 12 Z M270 224 l7 -13 l5 14 Z" fill="#f0cfa0"/>
+<path d="M278 242 l15 -8 l-2 13 Z" fill="#75303e"/>
+<ellipse cx="238" cy="257" rx="14" ry="10" fill="#a84c58"/>
+<circle cx="231" cy="254" r="1.6" fill="#5e2a30"/>
+<path d="M244 248 q3.5 3 7 0 M260 246 q3.5 3 7 0" fill="none" stroke="#5e2a30" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="250" cy="262" rx="5.5" ry="4" fill="#f2a6b8" opacity="0.7"/>
+<circle cx="170" cy="296" r="52" fill="#fff3a0" opacity="0.12"/>
+<circle cx="170" cy="300" r="33" fill="#fff3a0" opacity="0.24"/>
+<path d="M138 316 q-26 10 -32 -6 q-3 -11 8 -12" fill="none" stroke="#e0634e" stroke-width="9" stroke-linecap="round"/>
+<ellipse cx="150" cy="332" rx="12" ry="7" fill="#c04a39"/>
+<ellipse cx="186" cy="334" rx="12" ry="7" fill="#c04a39"/>
+<ellipse cx="168" cy="308" rx="34" ry="28" fill="#e0634e"/>
+<ellipse cx="172" cy="317" rx="22" ry="18" fill="#f9d08a"/>
+<ellipse cx="174" cy="294" rx="16" ry="9" fill="#c04a39" transform="rotate(-20 174 294)"/>
+<circle cx="178" cy="282" r="23" fill="#e0634e"/>
+<path d="M158 272 l-13 -5 l3 12 Z" fill="#c04a39"/>
+<path d="M168 262 l3 -13 l6 11 Z M186 260 l6 -12 l4 13 Z" fill="#ffd98a"/>
+<ellipse cx="197" cy="288" rx="13" ry="10" fill="#ef8f72"/>
+<circle cx="202" cy="284" r="1.6" fill="#8e3326"/>
+<path d="M166 278 q3 2.5 6 0 M182 277 q3 2.5 6 0" fill="none" stroke="#8e3326" stroke-width="2" stroke-linecap="round"/>
+<ellipse cx="162" cy="289" rx="5" ry="3.5" fill="#f2a6b8" opacity="0.7"/>
+<ellipse cx="190" cy="293" rx="4" ry="3" fill="#f2a6b8" opacity="0.7"/>
+<circle cx="204" cy="266" r="8.5" fill="#efe6f2" opacity="0.85"/>
+<circle cx="200" cy="244" r="5" fill="#efe6f2" opacity="0.7"/>
+<circle cx="196" cy="222" r="3.4" fill="#efe6f2" opacity="0.6"/>
+<circle cx="193" cy="200" r="2.6" fill="#efe6f2" opacity="0.5"/>
+<circle cx="191" cy="176" r="2.1" fill="#efe6f2" opacity="0.42"/>
+<circle cx="190" cy="152" r="1.9" fill="#efe6f2" opacity="0.35"/>
+<circle cx="190" cy="136" r="1.6" fill="#efe6f2" opacity="0.3"/>
+<circle cx="140" cy="268" r="2" fill="#ffe066" opacity="0.9"/>
+<circle cx="210" cy="312" r="1.8" fill="#ffe066" opacity="0.9"/>
+<circle cx="132" cy="300" r="1.6" fill="#ffe066" opacity="0.8"/>
+<ellipse cx="330" cy="334" rx="16" ry="13" fill="#8fd0e0"/>
+<path d="M314 330 l-10 -4" fill="none" stroke="#6bb6cc" stroke-width="4" stroke-linecap="round"/>
+<circle cx="342" cy="324" r="9" fill="#8fd0e0"/>
+<path d="M349 323 l7 2 l-7 4 Z" fill="#f2a33a"/>
+<path d="M338 321 q3 2.5 6 0" fill="none" stroke="#2f6b7a" stroke-width="1.8" stroke-linecap="round"/>
+<ellipse cx="337" cy="332" rx="12" ry="7" fill="#6bb6cc" transform="rotate(-18 337 332)"/>
+</svg>

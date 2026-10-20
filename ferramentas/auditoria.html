@@ -49,7 +49,9 @@ const TELAS = [
   ['damas',            ['[data-go="jogos-menu"]','[data-go="damas-menu"]','[data-go="damas-app"]']],
   ['velha-menu',       ['[data-go="jogos-menu"]','[data-go="velha-menu"]']],
   ['velha',            ['[data-go="jogos-menu"]','[data-go="velha-menu"]','[data-go="velha-app"]']],
-  ['galeria',          ['[data-go="galeria"]']]
+  ['galeria',          ['[data-go="galeria"]']],
+  ['historias',        ['[data-go="historias"]']],
+  ['leitura',          ['[data-go="historias"]','#historias .conto-card']]
 ];
 
 const cel = (v, ruim) => `<td class="${ruim ? 'mau' : 'ok'}">${v}</td>`;
@@ -138,7 +140,9 @@ async function auditar(L, A) {
        a pagina nao rolava e nada passava da janela, mas 40px de conteudo
        estavam cortados DENTRO do .modes. */
     const ROLA_DE_PROPOSITO = ['.galeria', '#orbit-scroll', '#tamanho-scroll',
-                               '#viagem-scroll', '#cineminha', '.sheet'];
+                               '#viagem-scroll', '#cineminha', '.sheet',
+                               /* biblioteca e leitura rolam por dentro, igual a galeria */
+                               '.historias', '.leitura'];
     let escondido = 0, quemEsconde = '';
     tela.querySelectorAll('*').forEach(el => {
       if (ROLA_DE_PROPOSITO.some(sel => el.matches(sel) || el.closest(sel))) return;

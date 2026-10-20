@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 380 420" role="img"><title>Pipoca voltando para o céu</title><desc>Num jardim à noite, o Elefante Bolão sopra pela tromba e lança a estrelinha Pipoca de volta ao céu. Na cabeça dele está o gafanhoto Saltitão e, em cima, a passarinha Penugem.</desc>
+<rect x="0" y="0" width="380" height="420" rx="16" fill="#1b2a4a"/>
+<circle cx="60" cy="58" r="24" fill="#f6e7b0"/>
+<circle cx="72" cy="50" r="22" fill="#1b2a4a"/>
+<ellipse cx="160" cy="70" rx="38" ry="12" fill="#2f4270"/>
+<ellipse cx="185" cy="62" rx="22" ry="11" fill="#2f4270"/>
+<ellipse cx="350" cy="160" rx="30" ry="10" fill="#2f4270"/>
+<circle cx="120" cy="120" r="1.8" fill="#fff6c8"/>
+<circle cx="230" cy="40" r="2" fill="#fff6c8"/>
+<circle cx="350" cy="40" r="1.6" fill="#fff6c8"/>
+<circle cx="30" cy="150" r="1.5" fill="#fff6c8"/>
+<circle cx="250" cy="130" r="1.4" fill="#fff6c8"/>
+<circle cx="100" cy="180" r="1.6" fill="#fff6c8"/>
+<circle cx="360" cy="95" r="1.4" fill="#fff6c8"/>
+<circle cx="300" cy="95" r="36" fill="#fff3a0" opacity="0.12"/>
+<circle cx="300" cy="95" r="24" fill="#fff3a0" opacity="0.25"/>
+<polygon points="300,77 304.7,88.5 317.1,89.4 307.6,97.5 310.6,109.6 300,103 289.4,109.6 292.4,97.5 282.9,89.4 295.3,88.5" fill="#ffd84d"/>
+<circle cx="296.5" cy="93" r="1.6" fill="#5a4210"/>
+<circle cx="303.5" cy="93" r="1.6" fill="#5a4210"/>
+<path d="M296.5 98 q3.5 3 7 0" fill="none" stroke="#5a4210" stroke-width="1.2" stroke-linecap="round"/>
+<g fill="#ffe680">
+<circle cx="311" cy="182" r="2.6"/><circle cx="308" cy="164" r="2.3"/><circle cx="305" cy="147" r="2"/><circle cx="303" cy="131" r="1.7"/>
+</g>
+<path d="M322 175 l6 -4 M326 150 l7 -2 M290 160 l-6 -3" stroke="#ffe680" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M0 355 Q190 338 380 355 L380 404 Q380 420 364 420 L16 420 Q0 420 0 404 Z" fill="#23402b"/>
+<path d="M30 360 V335 M60 365 V342 M330 358 V332 M358 364 V340 M290 370 V352" stroke="#3d7349" stroke-width="2"/>
+<circle cx="30" cy="330" r="7" fill="#f28ab2"/><circle cx="30" cy="330" r="2.5" fill="#ffe066"/>
+<circle cx="60" cy="337" r="6" fill="#ffb347"/><circle cx="60" cy="337" r="2.2" fill="#fff6c8"/>
+<circle cx="330" cy="327" r="7" fill="#b39ddb"/><circle cx="330" cy="327" r="2.5" fill="#ffe066"/>
+<circle cx="358" cy="335" r="6" fill="#f28ab2"/><circle cx="358" cy="335" r="2.2" fill="#ffe066"/>
+<circle cx="290" cy="347" r="5.5" fill="#ffb347"/><circle cx="290" cy="347" r="2" fill="#fff6c8"/>
+<path d="M78 298 q-12 6 -10 20" fill="none" stroke="#7d8798" stroke-width="3" stroke-linecap="round"/>
+<rect x="98" y="328" width="22" height="44" rx="6" fill="#7d8798"/>
+<rect x="138" y="333" width="22" height="40" rx="6" fill="#7d8798"/>
+<rect x="178" y="328" width="22" height="44" rx="6" fill="#7d8798"/>
+<ellipse cx="150" cy="305" rx="72" ry="45" fill="#8e98a8"/>
+<path d="M262 282 Q296 286 296 250 Q297 222 310 205" fill="none" stroke="#8e98a8" stroke-width="13" stroke-linecap="round"/>
+<circle cx="228" cy="268" r="38" fill="#8e98a8"/>
+<ellipse cx="207" cy="270" rx="24" ry="32" fill="#a7b0bf"/>
+<ellipse cx="207" cy="270" rx="15" ry="22" fill="#d9a5b3"/>
+<circle cx="243" cy="258" r="3.5" fill="#2a2a35"/>
+<circle cx="244" cy="257" r="1.1" fill="#ffffff"/>
+<ellipse cx="250" cy="270" rx="5" ry="3" fill="#f2a6b8" opacity="0.7"/>
+<path d="M300 228 q3 -3 6 0 M296 240 q3 -3 6 0" fill="none" stroke="#6f7888" stroke-width="1.2"/>
+<path d="M216 222 l8 -12 l9 14" fill="none" stroke="#4e9a3f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="228" cy="226" rx="15" ry="6" fill="#6bbf59"/>
+<circle cx="243" cy="223" r="5" fill="#6bbf59"/>
+<circle cx="244" cy="222" r="1.5" fill="#1b1b1b"/>
+<path d="M245 219 q4 -10 10 -12 M243 219 q0 -10 4 -14" fill="none" stroke="#6bbf59" stroke-width="1.2" stroke-linecap="round"/>
+<ellipse cx="226" cy="208" rx="10" ry="8" fill="#ffd23f"/>
+<circle cx="233" cy="200" r="6" fill="#ffd23f"/>
+<path d="M238 199 L245 201 L238 203 Z" fill="#f2a33a"/>
+<circle cx="234.5" cy="198.5" r="1.4" fill="#1b1b1b"/>
+<ellipse cx="221" cy="205" rx="7" ry="4" fill="#f2b82a" transform="rotate(-30 221 205)"/>
+</svg>

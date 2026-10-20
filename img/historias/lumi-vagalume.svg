@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 380 420" role="img"><title>Lumi, o vagalume, iluminando o caminho</title><desc>Floresta à noite com lua e estrelas. Lumi, um vagalume com a luz brilhando, guia a corujinha bebê até o ninho, onde a mamãe coruja espera. Embaixo, um sapinho e um riacho.</desc>
+<rect x="0" y="0" width="380" height="420" rx="16" fill="#1b2a4a"/>
+<circle cx="66" cy="62" r="28" fill="#f6e7b0"/>
+<circle cx="80" cy="54" r="25" fill="#1b2a4a"/>
+<circle cx="140" cy="40" r="2" fill="#fff6c8"/>
+<circle cx="200" cy="70" r="1.5" fill="#fff6c8"/>
+<circle cx="250" cy="30" r="2.2" fill="#fff6c8"/>
+<circle cx="110" cy="110" r="1.5" fill="#fff6c8"/>
+<circle cx="30" cy="140" r="2" fill="#fff6c8"/>
+<circle cx="175" cy="125" r="1.8" fill="#fff6c8"/>
+<circle cx="350" cy="35" r="1.5" fill="#fff6c8"/>
+<circle cx="225" cy="105" r="1.2" fill="#fff6c8"/>
+<path d="M0 330 Q90 300 190 325 T380 315 L380 404 Q380 420 364 420 L16 420 Q0 420 0 404 Z" fill="#23402b"/>
+<ellipse cx="120" cy="385" rx="85" ry="13" fill="#3c6fa8"/>
+<path d="M60 384 q10 -4 20 0 M110 388 q10 -4 20 0 M155 383 q10 -4 20 0" fill="none" stroke="#a9cdf2" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="292" y="150" width="28" height="190" rx="4" fill="#5a3e2b"/>
+<circle cx="306" cy="105" r="58" fill="#2f5d3a"/>
+<circle cx="258" cy="135" r="38" fill="#2f5d3a"/>
+<circle cx="350" cy="140" r="34" fill="#2f5d3a"/>
+<circle cx="285" cy="80" r="20" fill="#3d7349"/>
+<circle cx="330" cy="120" r="16" fill="#3d7349"/>
+<ellipse cx="303" cy="138" rx="17" ry="21" fill="#a77b52"/>
+<ellipse cx="303" cy="145" rx="10" ry="12" fill="#d8b48a"/>
+<path d="M290 120 L294 110 L298 119 Z M308 119 L312 110 L316 120 Z" fill="#a77b52"/>
+<circle cx="297" cy="130" r="5" fill="#ffffff"/>
+<circle cx="309" cy="130" r="5" fill="#ffffff"/>
+<circle cx="297" cy="131" r="2.5" fill="#1b1b1b"/>
+<circle cx="309" cy="131" r="2.5" fill="#1b1b1b"/>
+<path d="M300 136 L306 136 L303 141 Z" fill="#f2a33a"/>
+<ellipse cx="303" cy="160" rx="34" ry="10" fill="#8b5a2b"/>
+<path d="M272 158 q8 5 16 0 M290 162 q8 5 16 0 M308 162 q8 5 16 0" fill="none" stroke="#6b4320" stroke-width="1.5"/>
+<g fill="#ffe680">
+<circle cx="225" cy="198" r="2.5"/><circle cx="238" cy="188" r="2.5"/><circle cx="252" cy="180" r="2.5"/><circle cx="266" cy="174" r="2.5"/>
+<circle cx="200" cy="232" r="2.5"/><circle cx="188" cy="245" r="2.5"/>
+</g>
+<circle cx="212" cy="214" r="34" fill="#fff3a0" opacity="0.12"/>
+<circle cx="212" cy="214" r="22" fill="#fff3a0" opacity="0.25"/>
+<ellipse cx="204" cy="205" rx="8" ry="5" fill="#ffffff" opacity="0.6" transform="rotate(-30 204 205)"/>
+<ellipse cx="216" cy="203" rx="8" ry="5" fill="#ffffff" opacity="0.6" transform="rotate(30 216 203)"/>
+<ellipse cx="210" cy="214" rx="9" ry="6" fill="#4a3b52"/>
+<circle cx="219" cy="219" r="7" fill="#ffe066"/>
+<circle cx="203" cy="211" r="5.5" fill="#4a3b52"/>
+<circle cx="201" cy="210" r="1.3" fill="#ffffff"/>
+<path d="M199 214 q2 2 4 0" fill="none" stroke="#ffffff" stroke-width="1"/>
+<path d="M202 206 q-3 -8 -7 -9 M205 206 q0 -8 3 -10" fill="none" stroke="#4a3b52" stroke-width="1.2"/>
+<ellipse cx="168" cy="268" rx="15" ry="18" fill="#c9a27a"/>
+<ellipse cx="168" cy="274" rx="9" ry="10" fill="#ecd3b2"/>
+<path d="M156 254 L159 245 L163 253 Z M173 253 L177 245 L180 254 Z" fill="#c9a27a"/>
+<circle cx="163" cy="262" r="4.5" fill="#ffffff"/>
+<circle cx="174" cy="262" r="4.5" fill="#ffffff"/>
+<circle cx="164" cy="261" r="2.2" fill="#1b1b1b"/>
+<circle cx="175" cy="261" r="2.2" fill="#1b1b1b"/>
+<path d="M166 267 L171 267 L168.5 271 Z" fill="#f2a33a"/>
+<ellipse cx="154" cy="272" rx="5" ry="10" fill="#b38b62" transform="rotate(25 154 272)"/>
+<ellipse cx="182" cy="272" rx="5" ry="10" fill="#b38b62" transform="rotate(-25 182 272)"/>
+<ellipse cx="40" cy="352" rx="24" ry="9" fill="#6b6b6b"/>
+<ellipse cx="40" cy="340" rx="15" ry="10" fill="#6bbf59"/>
+<circle cx="32" cy="331" r="5" fill="#6bbf59"/>
+<circle cx="48" cy="331" r="5" fill="#6bbf59"/>
+<circle cx="32" cy="331" r="2" fill="#1b1b1b"/>
+<circle cx="48" cy="331" r="2" fill="#1b1b1b"/>
+<path d="M34 342 q6 4 12 0" fill="none" stroke="#2e5e26" stroke-width="1.2"/>
+<path d="M250 340 l3 -14 l3 14 M262 342 l3 -10 l3 10 M90 330 l3 -12 l3 12" fill="none" stroke="#3d7349" stroke-width="2" stroke-linecap="round"/>
+</svg>
